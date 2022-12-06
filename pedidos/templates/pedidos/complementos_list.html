@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>List</h1>
+<br>
+<table>
+    <tr>
+        <th>nome</th>
+        <th>codigo</th>
+        <th>descrição</th>    
+        <th>preço</th>    
+        <th>foto</th>    
+        <th>status</th>    
+        <td>Deletar</td>
+        <td>Editar</td>
+    </tr>
+    {% for complemento in object_list %}
+        <tr>
+            <th>{{ complemento.nome }}</th>
+            <th>{{ complemento.codigo_complemento }}</th>
+            <th>{{ complemento.descricao }}</th>
+            <th>{{ complemento.preco }}</th>
+            <th>{{ complemento.foto }}</th>
+            <th>{{ complemento.status_venda }}</th>
+        
+
+        
+        <td><a href="{% url 'delete_complemento' complemento.id %}">Deletar</a></td>
+        <td><a href="{% url 'update_complemento' complemento.id %}">Editar</a></td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    <a href="{% url 'create_complemento' %}">Novo</a>
+{% endblock %}

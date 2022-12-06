@@ -1,0 +1,3217 @@
+openapi: 3.0.3
+info:
+  title: ''
+  version: 0.0.0
+paths:
+  /api/adicional/:
+    get:
+      operationId: api_adicional_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Adicional'
+          description: ''
+    post:
+      operationId: api_adicional_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Adicional'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Adicional'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Adicional'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Adicional'
+          description: ''
+  /api/adicional/{id}/:
+    get:
+      operationId: api_adicional_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this adicional.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Adicional'
+          description: ''
+    put:
+      operationId: api_adicional_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this adicional.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Adicional'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Adicional'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Adicional'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Adicional'
+          description: ''
+    patch:
+      operationId: api_adicional_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this adicional.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdicional'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdicional'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdicional'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Adicional'
+          description: ''
+    delete:
+      operationId: api_adicional_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this adicional.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/cardapio/:
+    get:
+      operationId: api_cardapio_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cardapio'
+          description: ''
+    post:
+      operationId: api_cardapio_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cardapio'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cardapio'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cardapio'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cardapio'
+          description: ''
+  /api/cardapio/{id}/:
+    get:
+      operationId: api_cardapio_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cardapio.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cardapio'
+          description: ''
+    put:
+      operationId: api_cardapio_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cardapio.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cardapio'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cardapio'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cardapio'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cardapio'
+          description: ''
+    patch:
+      operationId: api_cardapio_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cardapio.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCardapio'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCardapio'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCardapio'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cardapio'
+          description: ''
+    delete:
+      operationId: api_cardapio_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cardapio.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/categoria_cardapio/:
+    get:
+      operationId: api_categoria_cardapio_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoriaCardapio'
+          description: ''
+    post:
+      operationId: api_categoria_cardapio_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoriaCardapio'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoriaCardapio'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoriaCardapio'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriaCardapio'
+          description: ''
+  /api/categoria_cardapio/{id}/:
+    get:
+      operationId: api_categoria_cardapio_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this categoria cardapio.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriaCardapio'
+          description: ''
+    put:
+      operationId: api_categoria_cardapio_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this categoria cardapio.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoriaCardapio'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoriaCardapio'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoriaCardapio'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriaCardapio'
+          description: ''
+    patch:
+      operationId: api_categoria_cardapio_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this categoria cardapio.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoriaCardapio'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoriaCardapio'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoriaCardapio'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriaCardapio'
+          description: ''
+    delete:
+      operationId: api_categoria_cardapio_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this categoria cardapio.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/cliente/:
+    get:
+      operationId: api_cliente_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cliente'
+          description: ''
+    post:
+      operationId: api_cliente_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+          description: ''
+  /api/cliente/{id}/:
+    get:
+      operationId: api_cliente_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+          description: ''
+    put:
+      operationId: api_cliente_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cliente'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+          description: ''
+    patch:
+      operationId: api_cliente_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCliente'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCliente'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCliente'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+          description: ''
+    delete:
+      operationId: api_cliente_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cliente.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/complemento/:
+    get:
+      operationId: api_complemento_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Complementos'
+          description: ''
+    post:
+      operationId: api_complemento_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Complementos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Complementos'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Complementos'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complementos'
+          description: ''
+  /api/complemento/{id}/:
+    get:
+      operationId: api_complemento_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this complementos.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complementos'
+          description: ''
+    put:
+      operationId: api_complemento_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this complementos.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Complementos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Complementos'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Complementos'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complementos'
+          description: ''
+    patch:
+      operationId: api_complemento_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this complementos.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedComplementos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedComplementos'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedComplementos'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complementos'
+          description: ''
+    delete:
+      operationId: api_complemento_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this complementos.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/cupom/:
+    get:
+      operationId: api_cupom_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cupom'
+          description: ''
+    post:
+      operationId: api_cupom_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cupom'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cupom'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cupom'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cupom'
+          description: ''
+  /api/cupom/{id}/:
+    get:
+      operationId: api_cupom_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cupom.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cupom'
+          description: ''
+    put:
+      operationId: api_cupom_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cupom.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cupom'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Cupom'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Cupom'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cupom'
+          description: ''
+    patch:
+      operationId: api_cupom_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cupom.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCupom'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCupom'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCupom'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cupom'
+          description: ''
+    delete:
+      operationId: api_cupom_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cupom.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/grupo_complemento/:
+    get:
+      operationId: api_grupo_complemento_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GrupoComplementos'
+          description: ''
+    post:
+      operationId: api_grupo_complemento_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GrupoComplementos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GrupoComplementos'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GrupoComplementos'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrupoComplementos'
+          description: ''
+  /api/grupo_complemento/{id}/:
+    get:
+      operationId: api_grupo_complemento_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this grupo complementos.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrupoComplementos'
+          description: ''
+    put:
+      operationId: api_grupo_complemento_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this grupo complementos.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GrupoComplementos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GrupoComplementos'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GrupoComplementos'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrupoComplementos'
+          description: ''
+    patch:
+      operationId: api_grupo_complemento_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this grupo complementos.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedGrupoComplementos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedGrupoComplementos'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedGrupoComplementos'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GrupoComplementos'
+          description: ''
+    delete:
+      operationId: api_grupo_complemento_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this grupo complementos.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/item/:
+    get:
+      operationId: api_item_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+          description: ''
+    post:
+      operationId: api_item_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Item'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+          description: ''
+  /api/item/{id}/:
+    get:
+      operationId: api_item_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this item.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+          description: ''
+    put:
+      operationId: api_item_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Item'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+          description: ''
+    patch:
+      operationId: api_item_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedItem'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+          description: ''
+    delete:
+      operationId: api_item_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this item.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/item_complemento/:
+    get:
+      operationId: api_item_complemento_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItensPedidoComplementos'
+          description: ''
+    post:
+      operationId: api_item_complemento_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItensPedidoComplementos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ItensPedidoComplementos'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ItensPedidoComplementos'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItensPedidoComplementos'
+          description: ''
+  /api/item_complemento/{id}/:
+    get:
+      operationId: api_item_complemento_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this itens pedido complementos.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItensPedidoComplementos'
+          description: ''
+    put:
+      operationId: api_item_complemento_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this itens pedido complementos.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItensPedidoComplementos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ItensPedidoComplementos'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ItensPedidoComplementos'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItensPedidoComplementos'
+          description: ''
+    patch:
+      operationId: api_item_complemento_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this itens pedido complementos.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedItensPedidoComplementos'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedItensPedidoComplementos'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedItensPedidoComplementos'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItensPedidoComplementos'
+          description: ''
+    delete:
+      operationId: api_item_complemento_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this itens pedido complementos.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/item_pedido/:
+    get:
+      operationId: api_item_pedido_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IntensPedido'
+          description: ''
+    post:
+      operationId: api_item_pedido_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntensPedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IntensPedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IntensPedido'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntensPedido'
+          description: ''
+  /api/item_pedido/{id}/:
+    get:
+      operationId: api_item_pedido_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this intens pedido.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntensPedido'
+          description: ''
+    put:
+      operationId: api_item_pedido_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this intens pedido.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntensPedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IntensPedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IntensPedido'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntensPedido'
+          description: ''
+    patch:
+      operationId: api_item_pedido_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this intens pedido.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedIntensPedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedIntensPedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedIntensPedido'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntensPedido'
+          description: ''
+    delete:
+      operationId: api_item_pedido_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this intens pedido.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/pagamento/:
+    get:
+      operationId: api_pagamento_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pagamento'
+          description: ''
+    post:
+      operationId: api_pagamento_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pagamento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pagamento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pagamento'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pagamento'
+          description: ''
+  /api/pagamento/{id}/:
+    get:
+      operationId: api_pagamento_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pagamento.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pagamento'
+          description: ''
+    put:
+      operationId: api_pagamento_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pagamento.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pagamento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pagamento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pagamento'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pagamento'
+          description: ''
+    patch:
+      operationId: api_pagamento_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pagamento.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPagamento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPagamento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPagamento'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pagamento'
+          description: ''
+    delete:
+      operationId: api_pagamento_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pagamento.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/pedido/:
+    get:
+      operationId: api_pedido_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pedido'
+          description: ''
+    post:
+      operationId: api_pedido_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+          description: ''
+  /api/pedido/{id}/:
+    get:
+      operationId: api_pedido_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pedido.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+          description: ''
+    put:
+      operationId: api_pedido_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pedido.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+          description: ''
+    patch:
+      operationId: api_pedido_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pedido.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPedido'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+          description: ''
+    delete:
+      operationId: api_pedido_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pedido.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/profile/:
+    get:
+      operationId: api_profile_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profile'
+          description: ''
+    post:
+      operationId: api_profile_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Profile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Profile'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+  /api/profile/{id}/:
+    get:
+      operationId: api_profile_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this profile.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+    put:
+      operationId: api_profile_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this profile.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Profile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Profile'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+    patch:
+      operationId: api_profile_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this profile.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+    delete:
+      operationId: api_profile_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this profile.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/restaurante/:
+    get:
+      operationId: api_restaurante_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Restaurante'
+          description: ''
+    post:
+      operationId: api_restaurante_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+  /api/restaurante/{id}/:
+    get:
+      operationId: api_restaurante_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this restaurante.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+    put:
+      operationId: api_restaurante_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this restaurante.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+    patch:
+      operationId: api_restaurante_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this restaurante.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRestaurante'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRestaurante'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRestaurante'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+    delete:
+      operationId: api_restaurante_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this restaurante.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/tempo/:
+    get:
+      operationId: api_tempo_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TempoEstimado'
+          description: ''
+    post:
+      operationId: api_tempo_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TempoEstimado'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TempoEstimado'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TempoEstimado'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TempoEstimado'
+          description: ''
+  /api/tempo/{id}/:
+    get:
+      operationId: api_tempo_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tempo estimado.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TempoEstimado'
+          description: ''
+    put:
+      operationId: api_tempo_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tempo estimado.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TempoEstimado'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TempoEstimado'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TempoEstimado'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TempoEstimado'
+          description: ''
+    patch:
+      operationId: api_tempo_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tempo estimado.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTempoEstimado'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTempoEstimado'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTempoEstimado'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TempoEstimado'
+          description: ''
+    delete:
+      operationId: api_tempo_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this tempo estimado.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Adicional:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          maxLength: 100
+        descricao:
+          type: string
+          title: Descrição
+          maxLength: 200
+        valor:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+      required:
+      - descricao
+      - id
+      - valor
+    Cardapio:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          title: Nome do cardapio
+          maxLength: 100
+        itens:
+          type: integer
+          nullable: true
+          title: Itens Para Cardapio
+        categorias:
+          type: integer
+          nullable: true
+          title: Categoria do Cardapio
+        restaurante:
+          type: integer
+          nullable: true
+          title: Nome do Restaurante
+      required:
+      - id
+    CategoriaCardapio:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          title: Nome da Categoria
+          maxLength: 40
+        status:
+          type: boolean
+          title: Está Pausado ?
+      required:
+      - id
+    Cliente:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome_cliente:
+          type: string
+          nullable: true
+          title: Nome do Cliente
+          maxLength: 200
+        cpf:
+          type: string
+          maxLength: 14
+        celular:
+          type: string
+          nullable: true
+          title: Numero Celular
+          maxLength: 17
+        historico_pedido:
+          type: integer
+          nullable: true
+      required:
+      - cpf
+      - id
+    Complementos:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          title: Nome do Complemento
+          maxLength: 40
+        codigo_complemento:
+          type: string
+          nullable: true
+          title: Código do Complemento
+          maxLength: 40
+        descricao:
+          type: string
+          nullable: true
+          title: Descrição do Complemento
+          maxLength: 1000
+        preco:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Preço do Complemento
+        foto:
+          type: string
+          format: uri
+          nullable: true
+        status_venda:
+          type: boolean
+          title: Está Pausado ?
+      required:
+      - id
+    Cupom:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 100
+        descricao:
+          type: string
+          title: Descrição
+          maxLength: 200
+        valor:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        cod_cupom:
+          type: string
+          nullable: true
+          title: Codigo do Cupom
+          maxLength: 200
+        validado_ate:
+          type: string
+          format: date
+          nullable: true
+          title: Validade até
+      required:
+      - descricao
+      - id
+      - nome
+      - valor
+    GrupoComplementos:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          title: Nome do Grupo de Complementos
+          maxLength: 40
+        obrigatoriedade:
+          type: boolean
+          title: Boleano
+        quantidade:
+          type: integer
+          nullable: true
+          title: Quantidade de Complemento
+        complemento:
+          type: integer
+          nullable: true
+          title: Complementos
+      required:
+      - id
+    IntensPedido:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        quantidade:
+          type: integer
+          nullable: true
+          title: Quantidade de Produto
+        valor_unitario:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Valor total do Pedido
+        item:
+          type: integer
+          nullable: true
+          title: Itens
+        complementos:
+          type: integer
+          nullable: true
+      required:
+      - id
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo_item:
+          type: string
+          maxLength: 60
+        preco:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Preço do Produto
+        status_venda:
+          type: boolean
+          title: Está Pauusado ?
+        categoria:
+          type: integer
+          nullable: true
+          title: Categoria do Cardapio
+        complemento:
+          type: integer
+          nullable: true
+          title: Complementos
+      required:
+      - codigo_item
+      - id
+    ItensPedidoComplementos:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        quantidade:
+          type: integer
+          nullable: true
+          title: Quantidade de Produtos Adicionados
+        valor_unitario:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Valor unitario do Produto
+        total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Valor total dos Produtos Adicionados
+        complemento:
+          type: integer
+          nullable: true
+      required:
+      - id
+    Pagamento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo_pagamento:
+          type: string
+          nullable: true
+          title: Cóigo do pagamento
+          maxLength: 100
+        desconto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Valor do Desconto
+        adicionais:
+          type: integer
+          nullable: true
+        cupom:
+          type: integer
+          nullable: true
+      required:
+      - desconto
+      - id
+    PatchedAdicional:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          maxLength: 100
+        descricao:
+          type: string
+          title: Descrição
+          maxLength: 200
+        valor:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+    PatchedCardapio:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          title: Nome do cardapio
+          maxLength: 100
+        itens:
+          type: integer
+          nullable: true
+          title: Itens Para Cardapio
+        categorias:
+          type: integer
+          nullable: true
+          title: Categoria do Cardapio
+        restaurante:
+          type: integer
+          nullable: true
+          title: Nome do Restaurante
+    PatchedCategoriaCardapio:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          title: Nome da Categoria
+          maxLength: 40
+        status:
+          type: boolean
+          title: Está Pausado ?
+    PatchedCliente:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome_cliente:
+          type: string
+          nullable: true
+          title: Nome do Cliente
+          maxLength: 200
+        cpf:
+          type: string
+          maxLength: 14
+        celular:
+          type: string
+          nullable: true
+          title: Numero Celular
+          maxLength: 17
+        historico_pedido:
+          type: integer
+          nullable: true
+    PatchedComplementos:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          title: Nome do Complemento
+          maxLength: 40
+        codigo_complemento:
+          type: string
+          nullable: true
+          title: Código do Complemento
+          maxLength: 40
+        descricao:
+          type: string
+          nullable: true
+          title: Descrição do Complemento
+          maxLength: 1000
+        preco:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Preço do Complemento
+        foto:
+          type: string
+          format: uri
+          nullable: true
+        status_venda:
+          type: boolean
+          title: Está Pausado ?
+    PatchedCupom:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 100
+        descricao:
+          type: string
+          title: Descrição
+          maxLength: 200
+        valor:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        cod_cupom:
+          type: string
+          nullable: true
+          title: Codigo do Cupom
+          maxLength: 200
+        validado_ate:
+          type: string
+          format: date
+          nullable: true
+          title: Validade até
+    PatchedGrupoComplementos:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          title: Nome do Grupo de Complementos
+          maxLength: 40
+        obrigatoriedade:
+          type: boolean
+          title: Boleano
+        quantidade:
+          type: integer
+          nullable: true
+          title: Quantidade de Complemento
+        complemento:
+          type: integer
+          nullable: true
+          title: Complementos
+    PatchedIntensPedido:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        quantidade:
+          type: integer
+          nullable: true
+          title: Quantidade de Produto
+        valor_unitario:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Valor total do Pedido
+        item:
+          type: integer
+          nullable: true
+          title: Itens
+        complementos:
+          type: integer
+          nullable: true
+    PatchedItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo_item:
+          type: string
+          maxLength: 60
+        preco:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Preço do Produto
+        status_venda:
+          type: boolean
+          title: Está Pauusado ?
+        categoria:
+          type: integer
+          nullable: true
+          title: Categoria do Cardapio
+        complemento:
+          type: integer
+          nullable: true
+          title: Complementos
+    PatchedItensPedidoComplementos:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        quantidade:
+          type: integer
+          nullable: true
+          title: Quantidade de Produtos Adicionados
+        valor_unitario:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Valor unitario do Produto
+        total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Valor total dos Produtos Adicionados
+        complemento:
+          type: integer
+          nullable: true
+    PatchedPagamento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        codigo_pagamento:
+          type: string
+          nullable: true
+          title: Cóigo do pagamento
+          maxLength: 100
+        desconto:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Valor do Desconto
+        adicionais:
+          type: integer
+          nullable: true
+        cupom:
+          type: integer
+          nullable: true
+    PatchedPedido:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        numero_pedido:
+          type: integer
+          nullable: true
+          title: Número do Pedido
+        data_criacao:
+          type: string
+          format: date
+          readOnly: true
+          title: Data da Criação
+        numero_mesa:
+          type: integer
+          nullable: true
+          title: Númedo da Mesa
+        sub_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Subtotal do Pedido
+        total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Valor total do Pedido
+        tempo_estimado:
+          type: integer
+          nullable: true
+        itens:
+          type: integer
+          nullable: true
+        cliente:
+          type: integer
+          nullable: true
+    PatchedProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: E-mail do Usuario
+          maxLength: 254
+        senha:
+          type: string
+          maxLength: 100
+        data_registro:
+          type: string
+          format: date
+          readOnly: true
+          title: Data do Registro
+        usuario:
+          type: integer
+          title: Nome de Usuario
+    PatchedRestaurante:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          title: Nome do Restaurante
+          maxLength: 90
+        descricao:
+          type: string
+          nullable: true
+          title: Descrição do Restaurante
+          maxLength: 1000
+        logo:
+          type: string
+          format: uri
+          nullable: true
+          title: Logo do Restaurante
+        total_mesa:
+          type: integer
+          nullable: true
+          title: Total de Mesas
+        horario_abertura:
+          type: string
+          format: time
+          nullable: true
+          title: Horario de Abertura
+        horario_encerramento:
+          type: string
+          format: time
+          nullable: true
+          title: Horario de Encerramento
+    PatchedTempoEstimado:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tempo:
+          type: string
+          nullable: true
+          title: Tempo Estimado
+          maxLength: 100
+    Pedido:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        numero_pedido:
+          type: integer
+          nullable: true
+          title: Número do Pedido
+        data_criacao:
+          type: string
+          format: date
+          readOnly: true
+          title: Data da Criação
+        numero_mesa:
+          type: integer
+          nullable: true
+          title: Númedo da Mesa
+        sub_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+          title: Subtotal do Pedido
+        total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Valor total do Pedido
+        tempo_estimado:
+          type: integer
+          nullable: true
+        itens:
+          type: integer
+          nullable: true
+        cliente:
+          type: integer
+          nullable: true
+      required:
+      - data_criacao
+      - id
+      - total
+    Profile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: E-mail do Usuario
+          maxLength: 254
+        senha:
+          type: string
+          maxLength: 100
+        data_registro:
+          type: string
+          format: date
+          readOnly: true
+          title: Data do Registro
+        usuario:
+          type: integer
+          title: Nome de Usuario
+      required:
+      - data_registro
+      - email
+      - id
+      - senha
+      - usuario
+    Restaurante:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          nullable: true
+          title: Nome do Restaurante
+          maxLength: 90
+        descricao:
+          type: string
+          nullable: true
+          title: Descrição do Restaurante
+          maxLength: 1000
+        logo:
+          type: string
+          format: uri
+          nullable: true
+          title: Logo do Restaurante
+        total_mesa:
+          type: integer
+          nullable: true
+          title: Total de Mesas
+        horario_abertura:
+          type: string
+          format: time
+          nullable: true
+          title: Horario de Abertura
+        horario_encerramento:
+          type: string
+          format: time
+          nullable: true
+          title: Horario de Encerramento
+      required:
+      - id
+    TempoEstimado:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tempo:
+          type: string
+          nullable: true
+          title: Tempo Estimado
+          maxLength: 100
+      required:
+      - id
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

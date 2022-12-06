@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>List</h1>
+<br>
+<table>
+    <tr>
+        <th>Codigo</th>        
+        <th>Desconto</th>
+        <th>Adicionais</th>
+        <th>Cupom</th>
+        
+        <th>Deletar</th>
+        <th>Editar</th>
+    </tr>
+    {% for pagamento in object_list %}
+        <tr>
+            <td>{{ pagamento.codigo_pagamento }}</td>
+            <td>{{ pagamento.desconto }}</td>
+            <td>{{ pagamento.adicionais }}</td>
+            <td>{{ pagamento.cupom }}</td>
+           
+        
+        <td><a href="{% url 'delete_pagamento' pagamento.id %}">Deletar</a></td>
+        <td><a href="{% url 'update_pagamento' pagamento.id %}">Editar</a></td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    <a href="{% url 'create_pagamento' %}">Novo</a>
+{% endblock %}

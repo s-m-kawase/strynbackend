@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>List</h1>
+<br>
+<table>
+    <tr>
+        <th>nome</th>
+        <th>obrigatoriedade</th>        
+        <th>complemento</th>
+        <th>quantidade</th>        
+        <td>Deletar</td>
+        <td>Editar</td>
+    </tr>
+    {% for grupo_complemento in object_list %}
+        <tr>
+            <th>{{ grupo_complemento.nome }}</th>
+            <th>{{ grupo_complemento.obrigatoriedade }}</th>
+            <th>{{ grupo_complemento.complemento }}</th>
+            <th>{{ grupo_complemento.quantidade }}</th>
+           
+        
+
+        
+        <td><a href="{% url 'delete_grupo_complemento' grupo_complemento.id %}">Deletar</a></td>
+        <td><a href="{% url 'update_grupo_complemento' grupo_complemento.id %}">Editar</a></td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    <a href="{% url 'create_grupo_complemento' %}">Novo</a>
+{% endblock %}

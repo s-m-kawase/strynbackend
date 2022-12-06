@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block main %}
+
+   <h1>Itens Pedido Complementos</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        {{form}}
+
+        <button type="submit" class="btn btn-main">Salvar</button>
+    </form>
+
+    <br>
+    
+{% endblock %}

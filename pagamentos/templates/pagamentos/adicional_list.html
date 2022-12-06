@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>List</h1>
+<br>
+<table>
+    <tr>
+        <th>Nome</th>        
+        <th>Decrição</th>
+        <th>Valor</th>
+        
+        <th>Deletar</th>
+        <th>Editar</th>
+    </tr>
+    {% for adicional in object_list %}
+        <tr>
+            <td>{{ adicional.nome }}</td>
+            <td>{{ adicional.descricao }}</td>
+            <td>{{ adicional.valor }}</td>
+           
+        
+        <td><a href="{% url 'delete_adicional' adicional.id %}">Deletar</a></td>
+        <td><a href="{% url 'update_adicional' adicional.id %}">Editar</a></td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    <a href="{% url 'create_adicional' %}">Novo</a>
+{% endblock %}

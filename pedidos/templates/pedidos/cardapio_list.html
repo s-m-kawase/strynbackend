@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>List</h1>
+<br>
+<table>
+    <tr>
+        <th>nome</th>
+        <th>categotia</th>
+        <th>restaurante</th>    
+        <td>Deletar</td>
+        <td>Editar</td>
+    </tr>
+    {% for cardapio in object_list %}
+        <tr>
+            <th>{{ cardapio.nome }}</th>
+            <th>{{ cardapio.categorias }}</th>
+            <th>{{ cardapio.restaurante }}</th>
+        
+
+        
+        <td><a href="{% url 'delete_cardapio' cardapio.id %}">Deletar</a></td>
+        <td><a href="{% url 'update_cardapio' cardapio.id %}">Editar</a></td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    <a href="{% url 'create_cardapio' %}">Novo</a>
+{% endblock %}

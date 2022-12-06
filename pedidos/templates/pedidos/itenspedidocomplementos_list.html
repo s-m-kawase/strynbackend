@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>List</h1>
+<br>
+<table>
+    <tr>
+        <th>Complemento</th>        
+        <th>Quantidade</th>
+        <th>Valor Unitario</th>        
+        <th>valor Total</th>
+        <th>Deletar</th>
+        <th>Editar</th>
+    </tr>
+    {% for iten_pedido_complemento in object_list %}
+        <tr>
+            <td>{{ iten_pedido_complemento.complemento }}</td>
+            <td>{{ iten_pedido_complemento.quantidade }}</td>
+            <td>{{ iten_pedido_complemento.valor_unitario }}</td>
+            <td>{{ iten_pedido_complemento.total }}</td>
+           
+        
+
+        
+        <td><a href="{% url 'delete_iten_complemento' iten_pedido_complemento.id %}">Deletar</a></td>
+        <td><a href="{% url 'update_iten_complemento' iten_pedido_complemento.id %}">Editar</a></td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    <a href="{% url 'create_iten_complemento' %}">Novo</a>
+{% endblock %}

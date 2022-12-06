@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>List</h1>
+<br>
+<table>
+    <tr>
+        <th>Nome</th>        
+        <th>Decrição</th>
+        <th>Valor</th>
+        <th>Validado até</th>
+        
+        <th>Deletar</th>
+        <th>Editar</th>
+    </tr>
+    {% for cupom in object_list %}
+        <tr>
+            <td>{{ cupom.nome }}</td>
+            <td>{{ cupom.descricao }}</td>
+            <td>{{ cupom.valor }}</td>
+            <td>{{ cupom.validado_ate }}</td>
+           
+        
+        <td><a href="{% url 'delete_cupom' cupom.id %}">Deletar</a></td>
+        <td><a href="{% url 'update_cupom' cupom.id %}">Editar</a></td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    <a href="{% url 'create_cupom' %}">Novo</a>
+{% endblock %}

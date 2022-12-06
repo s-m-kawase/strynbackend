@@ -1,0 +1,36 @@
+from django.db import models
+from pedidos.models.complemento import Complementos
+
+
+class GrupoComplementos(models.Model):
+
+    nome = models.CharField(
+        max_length=40,
+        verbose_name='Nome do Grupo de Complementos',
+        blank=True, null=True,
+    )
+
+    obrigatoriedade = models.BooleanField(
+        verbose_name='Boleano',
+        default=False
+    )
+
+    complemento = models.ForeignKey(
+        Complementos,
+        on_delete=models.CASCADE,
+        verbose_name='Complementos',
+        blank=True, null=True,
+    )
+
+    quantidade = models.IntegerField(
+        verbose_name="Quantidade de Complemento",
+        blank=True, null=True,
+    )
+
+
+    def atualizar_catalogo(self, bool):
+        pass
+
+    def __str__(self):
+        return self.nome
+    

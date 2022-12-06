@@ -1,0 +1,110 @@
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <style>
+        
+        .conteudo {
+            display: flex;
+        }
+
+        .menu-lateral {
+            position: absolute;
+            max-width: 180px;
+            height: 100%;
+            background: rgb(137, 211, 180);
+            justify-content: flex-start;
+}
+
+        
+        .menu-itens ul {
+            flex-wrap: wrap;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            flex-direction: column;
+
+            
+        }
+        
+        .menu-itens ul li a {
+            color: #ffffff;
+            font-size: 15px;
+            text-decoration: none;
+            
+        }
+
+        .menu-itens li {
+            list-style: none;
+            
+        }
+        .menu-itens  a {
+            margin: 5px 0;
+            padding: 0 5px;
+            display: flex;
+            flex-direction: column;
+        }
+        .menu-itens details  summary {
+            color: rgba(160, 160, 160, 0.534);
+            list-style: none;
+            padding: 0 5px;
+
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            margin: 0 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="conteudo">
+<aside class="menu-lateral">
+    <div class="menu">
+        <nav class="menu-itens" id="nav">
+          <ul id="menu">
+            
+            <li><details>
+                <summary> Profile </summary>
+               <a href="{% url 'list_profile'%}">Profile</a>
+                </details></li>
+
+            <li><details>
+                <summary> Pagamentos </summary>
+               <a href="{% url 'list_pagamento'%}">Pagamento</a>
+               <a href="{% url 'list_cupom'%}">Cupom</a>
+               <a href="{% url 'list_adicional'%}">Adicional</a>
+                </details></li>
+
+            <li><details>
+                <summary> Pedidos </summary>
+               <a href="{% url 'list_cardapio'%}">Cardapip</a>
+               <a href="{% url 'list_categoria'%}">Categoria Cardapio</a>
+               <a href="{% url 'list_cliente'%}">Clientes</a>
+               <a href="{% url 'list_complemento'%}">Complementos</a>
+               <a href="{% url 'list_grupo_complemento'%}">Grupo Complementos</a>
+               <a href="{% url 'list_itens'%}">Itens</a>
+               <a href="{% url 'list_iten_complemento'%}">Itens Complementos</a>
+               <a href="{% url 'list_iten_pedido'%}">Itens Pedidos</a>
+               <a href="{% url 'list_pedido'%}">Pedido</a>
+               <a href="{% url 'list_restaurante'%}">Restaurante</a>
+               <a href="{% url 'list_tempo'%}">Tempo</a>
+                </details></li>
+
+            
+            
+            
+        
+          </ul>
+        </nav>
+      </div>
+</aside>
+    <div class="container">
+        {% block main %}  {% endblock %}
+    </div>
+
+    </div>
+</body>
+</html>

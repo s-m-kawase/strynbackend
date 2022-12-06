@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>List</h1>
+<br>
+<table>
+    <tr>
+        <th>ID</th>        
+        <th>Tempo Estimado</th>
+        
+        <th>Deletar</th>
+        <th>Editar</th>
+    </tr>
+    {% for tempo in object_list %}
+        <tr>
+            <td>{{ tempo.id }}</td>
+            <td>{{ tempo.tempo }}</td>
+           
+        
+        <td><a href="{% url 'delete_tempo' tempo.id %}">Deletar</a></td>
+        <td><a href="{% url 'update_tempo' tempo.id %}">Editar</a></td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    <a href="{% url 'create_tempo' %}">Novo</a>
+{% endblock %}
