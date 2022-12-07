@@ -17,7 +17,7 @@ class Item(models.Model):
     )
 
     status_venda = models.BooleanField(
-        verbose_name='Está Pauusado ?',
+        verbose_name='Está Pausado ?',
         default=False,
     )
 

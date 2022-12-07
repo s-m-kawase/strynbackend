@@ -1,6 +1,6 @@
 from django.db import models
 from pedidos.models.iten import Item
-from pedidos.models.complemento import Complementos
+from pedidos.models.itens_pedido_complementos import ItensPedidoComplementos
 
 
 class IntensPedido(models.Model):
@@ -33,7 +33,7 @@ class IntensPedido(models.Model):
     )
 
     complementos = models.ForeignKey(
-        Complementos,
+        ItensPedidoComplementos,
         on_delete=models.CASCADE,
         verbose_name='Complementos',
         blank=True, null=True,

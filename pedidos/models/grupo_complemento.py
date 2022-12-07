@@ -11,7 +11,7 @@ class GrupoComplementos(models.Model):
     )
 
     obrigatoriedade = models.BooleanField(
-        verbose_name='Boleano',
+        verbose_name='Obrigatorio ?',
         default=False
     )
 
