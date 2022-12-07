@@ -9,6 +9,12 @@ class Item(models.Model):
         verbose_name='Codigo Item'
     )
 
+    descricao = models.TextField(
+        max_length=1000,
+        verbose_name='Descrição do Item',
+        blank=True, null=True,
+    )
+
     preco = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -17,7 +23,7 @@ class Item(models.Model):
     )
 
     status_venda = models.BooleanField(
-        verbose_name='Está Pauusado ?',
+        verbose_name='Está Pausado ?',
         default=False,
     )
 
@@ -41,6 +47,11 @@ class Item(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Complementos',
         blank=True, null=True,
+    )
+
+    foto = models.ImageField(
+        verbose_name='Foto',
+        blank=True, null=True
     )
 
 
