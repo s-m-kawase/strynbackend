@@ -9,6 +9,8 @@ class ItemAdmin(admin.ModelAdmin):
         'preco',
         'categoria',
         'complemento',
+        'foto',
+        'descricao',
     ]
 
     search_fields = [

@@ -11,7 +11,7 @@ class Item(models.Model):
 
     descricao = models.TextField(
         max_length=1000,
-        verbose_name='Descrição do Complemento',
+        verbose_name='Descrição do Item',
         blank=True, null=True,
     )
 
