@@ -19,4 +19,4 @@ class CardapioAdmin(admin.ModelAdmin):
 
     list_filter = [
         'categorias'
-    ]#}
+    ]
