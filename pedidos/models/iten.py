@@ -9,6 +9,12 @@ class Item(models.Model):
         verbose_name='Codigo Item'
     )
 
+    nome = models.TextField(
+        max_length=100,
+        verbose_name="Nome do Item",
+        blank=True, null=True
+    )
+
     descricao = models.TextField(
         max_length=1000,
         verbose_name='Descrição do Item',
