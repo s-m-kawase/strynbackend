@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     'pedidos',
     'rest_framework',
     'drf_spectacular',
-    
 ]
 
 MIDDLEWARE = [

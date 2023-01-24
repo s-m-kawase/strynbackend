@@ -13,6 +13,7 @@ class Pedido(models.Model):
     data_criacao = models.DateField(
         verbose_name='Data da Criação',
         auto_now=True,
+        blank=True, null=True,
     ) 
     
     status_pedido = (
@@ -59,6 +60,20 @@ class Pedido(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Cliente',
         blank=True, null=True,
+    )
+
+    cupom = models.ForeignKey(
+        'pagamentos.Cupom',
+        on_delete=models.DO_NOTHING,
+        verbose_name='Cupom',
+        blank=True, null=True
+    )
+
+    pagamento = models.ForeignKey(
+        "pagamentos.Pagamento",
+        on_delete=models.DO_NOTHING,
+        verbose_name='Pagamento',
+        blank=True, null=True
     )
 
 
