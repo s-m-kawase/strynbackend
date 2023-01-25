@@ -10,13 +10,20 @@ class Pagamento(models.Model):
         null= True, blank=True    
         )
 
-    tipos_choice = (
-        ('Pagar na mesa', 'Nome da opção'),
-        ('Vale refeição', 'Nome da opção'),
-        ('Vale-alimentação', 'Nome da opção'),
-        ('Pagar com pix,', 'Nome da opção'),
-        ('Cartão de crédito', 'Nome da opção'),
-        ('Cartão de debito', 'Nome da opção'),
+    TIPO_CHOICE = (
+        ('Pagar na mesa', 'Pagar na mesa'),
+        ('Vale refeição', 'Vale refeição'),
+        ('Vale-alimentação', 'Vale-alimentação'),
+        ('Pagar com pix', 'Pagar com pix'),
+        ('Cartão de crédito', 'Cartão de crédito'),
+        ('Cartão de debito', 'Cartão de debito'),
+    )
+
+    pagamento = models.CharField(
+        verbose_name="Tipo pagamento",
+        choices=TIPO_CHOICE,
+        max_length=50,
+        default="Cartão de debito"
     )
 
     desconto = models.DecimalField(
@@ -39,10 +46,10 @@ class Pagamento(models.Model):
         null= True, blank=True    
         )
 
-    def calcular_preco(self):
-        pass
+    # def calcular_preco(self):
+    #     pass
     
 
-def __str__(self):
-    return self.codigo_pagamento
+    def __str__(self):
+        return self.pagamento
 
