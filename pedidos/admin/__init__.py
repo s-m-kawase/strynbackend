@@ -8,6 +8,7 @@ from pedidos.admin.itens_pedido_complementos_admin import ItensPedidoComplemento
 from pedidos.admin.itens_pedido_admin import IntensPedidoAdmin
 from pedidos.admin.restaurante_admin import RestauranteAdmin
 from pedidos.admin.tempo_admin import TempoEstimadoAdmin
+from .pedido_admin import PedidoAdmin
 
 
 
@@ -22,4 +23,5 @@ __all__ = [
     IntensPedidoAdmin,
     RestauranteAdmin,
     TempoEstimadoAdmin,
+    PedidoAdmin,
 ]

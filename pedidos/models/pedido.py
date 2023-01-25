@@ -16,12 +16,19 @@ class Pedido(models.Model):
         blank=True, null=True,
     ) 
     
-    status_pedido = (
+    STATUS_CHOICE = (
         ('Solicitado','solicitado'),
         ('Entregue','entregue'),
         ('Concluído','concluido'),
         ('Cancelado','cancelado'),
     )
+
+    status_pedido = models.CharField(
+        verbose_name="Statu Pedido",
+        choices=STATUS_CHOICE,
+        max_length=20
+    )
+
 
     tempo_estimado = models.ForeignKey(
         TempoEstimado,
