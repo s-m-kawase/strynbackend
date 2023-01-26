@@ -1,9 +1,9 @@
-from pedidos.models.itens_pedido import IntensPedido 
+from pedidos.models.itens_pedido import ItensPedido 
 from django.contrib import admin
 
 
-@admin.register(IntensPedido)
-class IntensPedidoAdmin(admin.ModelAdmin):
+@admin.register(ItensPedido)
+class ItensPedidoAdmin(admin.ModelAdmin):
     list_display = [
         'item',
         'quantidade',

@@ -3,7 +3,7 @@ from pedidos.models.iten import Item
 from pedidos.models.complemento import Complementos
 
 
-class IntensPedido(models.Model):
+class ItensPedido(models.Model):
 
     item = models.ForeignKey(
         Item,
