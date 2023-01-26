@@ -1,8 +1,8 @@
 from rest_framework import serializers 
-from pedidos.models import IntensPedido
+from pedidos.models import ItensPedido
 
 
-class IntensPedidoSerializer((serializers.ModelSerializer)):
+class ItensPedidoSerializer((serializers.ModelSerializer)):
     class Meta:
-        model = IntensPedido
+        model = ItensPedido
         fields = '__all__'

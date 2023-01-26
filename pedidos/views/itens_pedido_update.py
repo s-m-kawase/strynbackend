@@ -1,10 +1,10 @@
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
-from pedidos.models.itens_pedido import IntensPedido
+from pedidos.models.itens_pedido import ItensPedido
 
 
 class ItensPedidoUpdate(UpdateView):
-    model = IntensPedido
+    model = ItensPedido
     fields = '__all__'
 
     def get_success_url(self):

@@ -1386,7 +1386,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IntensPedido'
+                  $ref: '#/components/schemas/ItensPedido'
           description: ''
     post:
       operationId: api_item_pedido_create
@@ -1396,13 +1396,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IntensPedido'
+              $ref: '#/components/schemas/ItensPedido'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/IntensPedido'
+              $ref: '#/components/schemas/ItensPedido'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/IntensPedido'
+              $ref: '#/components/schemas/ItensPedido'
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -1412,7 +1412,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IntensPedido'
+                $ref: '#/components/schemas/ItensPedido'
           description: ''
   /api/item_pedido/{id}/:
     get:
@@ -1435,7 +1435,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IntensPedido'
+                $ref: '#/components/schemas/ItensPedido'
           description: ''
     put:
       operationId: api_item_pedido_update
@@ -1452,13 +1452,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IntensPedido'
+              $ref: '#/components/schemas/ItensPedido'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/IntensPedido'
+              $ref: '#/components/schemas/ItensPedido'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/IntensPedido'
+              $ref: '#/components/schemas/ItensPedido'
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -1468,7 +1468,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IntensPedido'
+                $ref: '#/components/schemas/ItensPedido'
           description: ''
     patch:
       operationId: api_item_pedido_partial_update
@@ -1485,13 +1485,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedIntensPedido'
+              $ref: '#/components/schemas/PatchedItensPedido'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedIntensPedido'
+              $ref: '#/components/schemas/PatchedItensPedido'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedIntensPedido'
+              $ref: '#/components/schemas/PatchedItensPedido'
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -1501,7 +1501,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IntensPedido'
+                $ref: '#/components/schemas/ItensPedido'
           description: ''
     delete:
       operationId: api_item_pedido_destroy
@@ -2607,7 +2607,7 @@ components:
           title: Complementos
       required:
       - id
-    IntensPedido:
+    ItensPedido:
       type: object
       properties:
         id:
@@ -2878,7 +2878,7 @@ components:
           type: integer
           nullable: true
           title: Complementos
-    PatchedIntensPedido:
+    PatchedItensPedido:
       type: object
       properties:
         id:

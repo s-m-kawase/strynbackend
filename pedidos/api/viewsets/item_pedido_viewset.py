@@ -1,11 +1,11 @@
 from rest_framework import generics, serializers, viewsets
-from pedidos.models import IntensPedido
+from pedidos.models import ItensPedido
 from ..serializers.item_pedido_serializer import *
 
 
-class IntensPedidoViewSet(viewsets.ModelViewSet):
+class ItensPedidoViewSet(viewsets.ModelViewSet):
     # authentication_classes = (SessionAuthentication,)
     # permission_classes = (IsAuthenticated,)
-    queryset = IntensPedido.objects.all()
-    serializer_class = IntensPedidoSerializer
+    queryset = ItensPedido.objects.all()
+    serializer_class = ItensPedidoSerializer
    
