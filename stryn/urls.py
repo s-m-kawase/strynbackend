@@ -34,10 +34,10 @@ router.register(r'categoria_cardapio', CategoriaCardapioViewSet, basename='categ
 router.register(r'cliente', ClienteViewSet, basename='cliente'),
 router.register(r'complemento', ComplementosViewSet, basename='complemento'),
 router.register(r'grupo_complemento', GrupoComplementosViewSet, basename='grupo_complemento'),
-router.register(r'item', ItemViewSet, basename='item'),
+router.register(r'item', ItemCardapioViewSet, basename='item'),
 router.register(r'item_complemento', ItensPedidoComplementosViewSet, basename='item_complemento'),
 router.register(r'item_pedido', ItensPedidoViewSet, basename='item_pedido'),
-router.register(r'pedido', PedidoViewSet, basename='pedido'),
+router.register(r'pedido', PedidosViewSet, basename='pedido'),
 router.register(r'restaurante', RestauranteViewSet, basename='restaurante'),
 router.register(r'tempo', TempoEstimadoViewSet, basename='tempo'),
 

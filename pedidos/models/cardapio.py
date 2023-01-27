@@ -1,5 +1,5 @@
 from django.db import models
-from pedidos.models.iten import Item
+from pedidos.models.item_cardapio import ItemCardapio
 from pedidos.models.categoria_cardapio import CategoriaCardapio
 from pedidos.models.restaurante import Restaurante
 
@@ -13,7 +13,7 @@ class Cardapio(models.Model):
         )
 
     itens = models.ForeignKey(
-            Item,
+            ItemCardapio,
             on_delete=models.CASCADE,
             verbose_name='Itens Para Cardapio',
             blank=True, null=True,

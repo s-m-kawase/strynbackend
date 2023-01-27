@@ -1,8 +1,8 @@
 from django.views.generic import ListView
-from pedidos.models.pedido import Pedido
+from pedidos.models.pedido import Pedidos
 
 
 class PedidoList(ListView):
-    model = Pedido
+    model = Pedidos
     fileds = '__all__'
 

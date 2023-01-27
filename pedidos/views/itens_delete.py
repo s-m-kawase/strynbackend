@@ -1,8 +1,8 @@
 from django.shortcuts import redirect
-from pedidos.models.iten import Item
+from pedidos.models.item_cardapio import ItemCardapio
 
 
 def itens_delete(request,pk):
-    iten = Item.objects.get(id=pk)
+    iten = ItemCardapio.objects.get(id=pk)
     iten.delete()
     return redirect('list_itens')

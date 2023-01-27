@@ -1,8 +1,8 @@
 from django.views.generic import ListView
-from pedidos.models.iten import Item
+from pedidos.models.item_cardapio import ItemCardapio
 
 
 class ItensList(ListView):
-    model = Item
+    model = ItemCardapio
     fileds = '__all__'
 

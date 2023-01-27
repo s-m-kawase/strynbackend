@@ -3,10 +3,10 @@ from pedidos.models.categoria_cardapio import CategoriaCardapio
 from pedidos.models.complemento import Complementos
 from pedidos.models.grupo_complemento import GrupoComplementos
 from pedidos.models.clientes import Cliente
-from pedidos.models.iten import Item
+from pedidos.models.item_cardapio import ItemCardapio
 from pedidos.models.itens_pedido import ItensPedido
 from pedidos.models.itens_pedido_complementos import ItensPedidoComplementos
-from pedidos.models.pedido import Pedido
+from pedidos.models.pedido import Pedidos
 from pedidos.models.restaurante import Restaurante
 from pedidos.models.tempo import TempoEstimado
 
@@ -17,10 +17,10 @@ __all__ = [
     Complementos,
     GrupoComplementos,
     Cliente,
-    Item,
+    ItemCardapio,
     ItensPedido,
     ItensPedidoComplementos,
-    Pedido,
+    Pedidos,
     Restaurante,
     TempoEstimado,
 ]
