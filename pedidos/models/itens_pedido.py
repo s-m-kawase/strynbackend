@@ -1,12 +1,12 @@
 from django.db import models
-from pedidos.models.iten import Item
+from pedidos.models.item_cardapio import ItemCardapio
 from pedidos.models.complemento import Complementos
 
 
 class ItensPedido(models.Model):
 
     item = models.ForeignKey(
-        Item,
+        ItemCardapio,
         on_delete=models.CASCADE,
         verbose_name='Itens',
         blank=True, null=True,

@@ -1,9 +1,9 @@
-from pedidos.models.pedido import  Pedido
+from pedidos.models.pedido import  Pedidos
 from django.contrib import admin
 
 
-@admin.register(Pedido)
-class PedidoAdmin(admin.ModelAdmin):
+@admin.register(Pedidos)
+class PedidosAdmin(admin.ModelAdmin):
     list_display = [
         'numero_pedido',
         'pagamento',

@@ -1,9 +1,9 @@
 from django.db import models
 from pedidos.models.tempo import TempoEstimado
-from pedidos.models.iten import Item
+from pedidos.models.item_cardapio import ItemCardapio
 
 
-class Pedido(models.Model):
+class Pedidos(models.Model):
 
     numero_pedido = models.IntegerField(
         verbose_name='Número do Pedido',
@@ -43,7 +43,7 @@ class Pedido(models.Model):
     )
 
     itens = models.ForeignKey(
-        Item,
+        ItemCardapio,
         on_delete=models.CASCADE,
         verbose_name='Itens',
         blank=True, null=True,

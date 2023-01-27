@@ -22,7 +22,7 @@ class Cliente(models.Model):
     )
 
     historico_pedido = models.ForeignKey(
-        'pedidos.Pedido',
+        'pedidos.Pedidos',
         on_delete=models.CASCADE,
         related_name='historico',
         blank=True, null=True

@@ -1,10 +1,10 @@
 from rest_framework import generics, serializers, viewsets 
-from pedidos.models import Pedido  
+from pedidos.models import Pedidos  
 from ..serializers.pedido_serializer import *
 
 
-class PedidoViewSet(viewsets.ModelViewSet):
+class PedidosViewSet(viewsets.ModelViewSet):
     # authentication_classes = (SessionAuthentication,)
     # permission_classes = (IsAuthenticated,)
-    queryset = Pedido.objects.all()
-    serializer_class = PedidoSerializer
+    queryset = Pedidos.objects.all()
+    serializer_class = PedidosSerializer
