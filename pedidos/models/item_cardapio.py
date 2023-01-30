@@ -40,13 +40,20 @@ class ItemCardapio(models.Model):
         blank=True, null=True,
     )
     
-    tamanho_fome = (
+    CHOICE_FOME = (
         ('Nao se aplica','nao se aplica'),
         ('1 pessoa','uma pessoa'),
         ('2 pessoas','duas pessoas'),
         ('3 pessoas','tres pessoas'),
         ('4 pessoas','quatro pessoas'),
     )
+
+    tamanho_fome = models.CharField(
+        verbose_name="Tamanho Fome",
+        choices=CHOICE_FOME,
+        max_length=50
+    )
+
 
     complemento = models.ForeignKey(
         Complementos,
