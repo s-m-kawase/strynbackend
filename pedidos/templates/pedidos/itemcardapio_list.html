@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>List</h1>
+<br>
+<table>
+    <tr>
+        <th>Codigo</th>
+        <th>Preço</th>        
+        <th>Categoria</th>
+        <th>Complemento</th>        
+        <th>Foto</th>        
+        <th>Descricao</th>        
+        <th>Deletar</th>
+        <th>Editar</th>
+    </tr>
+    {% for iten in object_list %}
+        <tr>
+            <td>{{ iten.codigo_item }}</td>
+            <td>{{ iten.preco }}</td>
+            <td>{{ iten.categoria }}</td>
+            <td>{{ iten.complemento }}</td>
+            <td>{{ iten.foto }}</td>
+            <td>{{ iten.descricao }}</td>
+           
+        
+
+        
+        <td><a href="{% url 'delete_itens' iten.id %}">Deletar</a></td>
+        <td><a href="{% url 'update_itens' iten.id %}">Editar</a></td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    <a href="{% url 'create_itens' %}">Novo</a>
+{% endblock %}

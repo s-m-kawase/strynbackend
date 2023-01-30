@@ -16,7 +16,7 @@ from pedidos.api.viewsets.complemento_viewset import *
 from pedidos.api.viewsets.grupo_complemento_viewset import *
 from pedidos.api.viewsets.item_pedido_complemento_viewset import *
 from pedidos.api.viewsets.item_pedido_viewset import *
-from pedidos.api.viewsets.item_viewset import *
+from pedidos.api.viewsets.item_cardapio_viewset import *
 from pedidos.api.viewsets.pedido_viewset import *
 from pedidos.api.viewsets.restaurante_viewset import *
 from pedidos.api.viewsets.tempo_estimado_viewset import *
@@ -47,6 +47,7 @@ urlpatterns = [
     path('', include('pedidos.urls')),
     path('profile/', include('core.urls')),
     path('admin/', admin.site.urls),
+    path ( "accounts/" ,  include ( "django.contrib.auth.urls" )),
  
     path('api/', include(router.urls)),
     # YOUR PATTERNS

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>List</h1>
+<br>
+<table>
+    <tr>
+        <th>Número do pedido</th>        
+        <th>Numero da Mesa</th>
+        <th>Tempo estimado</th>        
+        <th>valor Total</th>
+        <th>Cliente</th>
+        <th>Deletar</th>
+        <th>Editar</th>
+    </tr>
+    {% for pedido in object_list %}
+        <tr>
+            <td>{{ pedido.numero_pedido }}</td>
+            <td>{{ pedido.numero_mesa }}</td>
+            <td>{{ pedido.tempo_estimado }}</td>
+            <td>{{ pedido.total }}</td>
+            <td>{{ pedido.cliente }}</td>
+           
+        
+
+        
+        <td><a href="{% url 'delete_pedido' pedido.id %}">Deletar</a></td>
+        <td><a href="{% url 'update_pedido' pedido.id %}">Editar</a></td>
+        </tr>
+        
+    {% endfor %}
+    </table>
+    <a href="{% url 'create_pedido' %}">Novo</a>
+{% endblock %}

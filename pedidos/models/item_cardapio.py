@@ -1,6 +1,7 @@
 from django.db import models
 from pedidos.models.categoria_cardapio import CategoriaCardapio
-from pedidos.models.complemento import Complementos
+from pedidos.models.grupo_complemento import GrupoComplementos
+
 
 class ItemCardapio(models.Model):
 
@@ -40,7 +41,7 @@ class ItemCardapio(models.Model):
         blank=True, null=True,
     )
     
-    tamanho_fome = (
+    CHOICE_FOME = (
         ('Nao se aplica','nao se aplica'),
         ('1 pessoa','uma pessoa'),
         ('2 pessoas','duas pessoas'),
@@ -48,8 +49,15 @@ class ItemCardapio(models.Model):
         ('4 pessoas','quatro pessoas'),
     )
 
-    complemento = models.ForeignKey(
-        Complementos,
+    tamanho_fome = models.CharField(
+        verbose_name="Tamanho Fome",
+        choices=CHOICE_FOME,
+        max_length=50
+    )
+
+
+    grupo_complemento = models.ForeignKey(
+        GrupoComplementos,
         on_delete=models.CASCADE,
         verbose_name='Complementos',
         blank=True, null=True,
