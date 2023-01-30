@@ -16,7 +16,7 @@ from pedidos.api.viewsets.complemento_viewset import *
 from pedidos.api.viewsets.grupo_complemento_viewset import *
 from pedidos.api.viewsets.item_pedido_complemento_viewset import *
 from pedidos.api.viewsets.item_pedido_viewset import *
-from pedidos.api.viewsets.item_viewset import *
+from pedidos.api.viewsets.item_cardapio_viewset import *
 from pedidos.api.viewsets.pedido_viewset import *
 from pedidos.api.viewsets.restaurante_viewset import *
 from pedidos.api.viewsets.tempo_estimado_viewset import *
