@@ -1,6 +1,7 @@
 from django.db import models
 from pedidos.models.categoria_cardapio import CategoriaCardapio
-from pedidos.models.complemento import Complementos
+from pedidos.models.grupo_complemento import GrupoComplementos
+
 
 class ItemCardapio(models.Model):
 
@@ -55,8 +56,8 @@ class ItemCardapio(models.Model):
     )
 
 
-    complemento = models.ForeignKey(
-        Complementos,
+    grupo_complemento = models.ForeignKey(
+        GrupoComplementos,
         on_delete=models.CASCADE,
         verbose_name='Complementos',
         blank=True, null=True,

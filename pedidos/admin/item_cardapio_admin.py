@@ -8,7 +8,7 @@ class ItemCardapioAdmin(admin.ModelAdmin):
         'codigo_item',
         'preco',
         'categoria',
-        'complemento',
+        "grupo_complemento",
         'foto',
         'descricao',
     ]
