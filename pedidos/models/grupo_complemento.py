@@ -1,5 +1,6 @@
 from django.db import models
 from pedidos.models.complemento import Complementos
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class GrupoComplementos(models.Model):
@@ -25,6 +26,7 @@ class GrupoComplementos(models.Model):
     quantidade = models.IntegerField(
         verbose_name="Quantidade de Complemento",
         blank=True, null=True,
+        validators = [MinValueValidator(1.0),MaxValueValidator(10.0)],
     )
 
 
