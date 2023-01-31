@@ -5,8 +5,11 @@ from .grupo_complemento_item_serializer import GrupoComplementosSerializer
 
 
 class ItemCardapioSerializer((serializers.ModelSerializer)):
+    categoria_get = serializers.ReadOnlyField()
     categoria = CategoriaCardapioSerializer()
     grupo_complemento=GrupoComplementosSerializer()
+
+    
     class Meta:
         model = ItemCardapio
         fields = '__all__'
