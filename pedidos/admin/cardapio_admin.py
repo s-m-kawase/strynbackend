@@ -6,8 +6,7 @@ from django.contrib import admin
 class CardapioAdmin(admin.ModelAdmin):
     list_display = [
         'nome',
-        'itens',
-        'categorias',
+        
         'restaurante',
         
     ]
@@ -18,5 +17,5 @@ class CardapioAdmin(admin.ModelAdmin):
     ]
 
     list_filter = [
-        'categorias'
+        
     ]

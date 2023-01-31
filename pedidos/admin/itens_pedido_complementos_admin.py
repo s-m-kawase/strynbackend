@@ -5,7 +5,7 @@ from django.contrib import admin
 @admin.register(ItensPedidoComplementos)
 class ItensPedidoComplementosAdmin(admin.ModelAdmin):
     list_display = [
-        'complemento',
+        
         'quantidade',
         'valor_unitario',
         
@@ -18,5 +18,5 @@ class ItensPedidoComplementosAdmin(admin.ModelAdmin):
     ]
 
     list_filter = [
-        'complemento'
+        
     ]

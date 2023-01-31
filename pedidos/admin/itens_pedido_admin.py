@@ -5,11 +5,9 @@ from django.contrib import admin
 @admin.register(ItensPedido)
 class ItensPedidoAdmin(admin.ModelAdmin):
     list_display = [
-        'item',
         'quantidade',
         'valor_unitario',
         'total',
-        'complementos',
     ]
 
     search_fields = [

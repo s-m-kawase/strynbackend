@@ -34,9 +34,8 @@ class ItemCardapio(models.Model):
         default=False,
     )
 
-    categoria = models.ForeignKey(
+    categoria = models.ManyToManyField(
         CategoriaCardapio,
-        on_delete=models.CASCADE,
         verbose_name='Categoria do Cardapio',
         blank=False, null=False,
     )
@@ -55,13 +54,12 @@ class ItemCardapio(models.Model):
         max_length=50
     )
 
-
-    grupo_complemento = models.ForeignKey(
+    grupo_complemento = models.ManyToManyField(
         GrupoComplementos,
-        on_delete=models.DO_NOTHING,
         verbose_name='Complementos',
         blank=False, null=False,
     )
+    
 
     foto = models.ImageField(
         verbose_name='Foto',
@@ -70,5 +68,5 @@ class ItemCardapio(models.Model):
 
 
     def __str__(self):
-         return str(self.codigo_item)
+         return str(self.nome)
     

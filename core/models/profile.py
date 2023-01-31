@@ -33,5 +33,10 @@ class Profile(models.Model):
     def atualizar_perfil(self):
         pass
 
-    #def __str__(self) :
-    #    return self
+    def __str__(self) :
+        return str(self.usuario)
+
+    class Meta:
+        app_label = 'core'
+        verbose_name = 'Profile'
+        verbose_name_plural = 'Profiles'

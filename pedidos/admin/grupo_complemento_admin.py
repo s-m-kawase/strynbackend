@@ -6,7 +6,6 @@ from django.contrib import admin
 class GrupoComplementosAdmin(admin.ModelAdmin):
     list_display = [
         'nome',
-        'complemento',
         'quantidade',
     ]
 

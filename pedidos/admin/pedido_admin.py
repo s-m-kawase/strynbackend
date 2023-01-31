@@ -6,7 +6,6 @@ from django.contrib import admin
 class PedidosAdmin(admin.ModelAdmin):
     list_display = [
         'numero_pedido',
-        'pagamento',
         'status_pedido',
         'cupom',
         'sub_total',

@@ -16,12 +16,12 @@ class GrupoComplementos(models.Model):
         default=False
     )
 
-    complemento = models.ForeignKey(
+    complemento = models.ManyToManyField(
         Complementos,
-        on_delete=models.CASCADE,
-        verbose_name='Complementos',
-        blank=True, null=True,
+        verbose_name="Complementos",
+        blank=True, null=True
     )
+
 
     quantidade = models.IntegerField(
         verbose_name="Quantidade de Complemento",
