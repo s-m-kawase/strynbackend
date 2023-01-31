@@ -58,7 +58,7 @@ class ItemCardapio(models.Model):
 
     grupo_complemento = models.ForeignKey(
         GrupoComplementos,
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         verbose_name='Complementos',
         blank=False, null=False,
     )
