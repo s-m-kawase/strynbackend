@@ -68,12 +68,6 @@ class ItemCardapio(models.Model):
         blank=True, null=True
     )
 
-    @property
-    def categoria_get(self):
-        if self.categoria and self.categoria.id:
-            return self.categoria.id
-        else:
-            return None
 
     def __str__(self):
          return str(self.codigo_item)
