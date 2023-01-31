@@ -23,15 +23,17 @@ class ItensPedidoComplementos(models.Model):
         blank=True, null=True,
     )
 
-    total = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name="valor total dos Produtos Adicionados",
-        blank=True, null=True,
-    )
+    # @property
+    # def total(self):
+    #     from .itens_pedido import ItensPedido
 
-    def calcular_preco(self):
-        pass
+    #     for item in ItensPedido.
+    #         total = {
+    #             "quantidade" : item.quantidade,
+    #             "valor": item.valor_unitario,
+    #             "total": item.quantidade * item.valor_unitario
+    #         }
+    #         return total
 
     def __str__(self):
         return str(self.complemento)

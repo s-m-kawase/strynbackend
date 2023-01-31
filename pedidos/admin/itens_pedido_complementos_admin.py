@@ -8,12 +8,11 @@ class ItensPedidoComplementosAdmin(admin.ModelAdmin):
         'complemento',
         'quantidade',
         'valor_unitario',
-        'total',
+        
     ]
 
     search_fields = [
         'valor_unitario',
-        'total',
         'quantidade'
         
     ]
