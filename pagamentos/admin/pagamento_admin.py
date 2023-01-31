@@ -8,7 +8,7 @@ class PagamentoAdmin(admin.ModelAdmin):
         'id',
         'codigo_pagamento',
         'desconto',
-        'adicionais',
+        
         'cupom',
     ]
 

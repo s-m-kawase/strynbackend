@@ -1,16 +1,23 @@
 from django.db import models
 from pedidos.models.item_cardapio import ItemCardapio
-from pedidos.models.complemento import Complementos
+from pedidos.models.itens_pedido_complementos import ItensPedidoComplementos
 
 
 class ItensPedido(models.Model):
 
-    item = models.ForeignKey(
+    item = models.OneToOneField(
         ItemCardapio,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         verbose_name='Itens',
         blank=True, null=True,
     )
+
+    item_complemento = models.ManyToManyField(
+        ItensPedidoComplementos,
+        verbose_name='Itens de complementos pedido',
+        blank=True, null=True,
+    )
+    
 
 
     quantidade = models.IntegerField(
@@ -32,13 +39,7 @@ class ItensPedido(models.Model):
         blank=True, null=True,
     )
 
-    complementos = models.ForeignKey(
-        Complementos,
-        on_delete=models.CASCADE,
-        verbose_name='Complementos',
-        blank=True, null=True,
-
-    )
+    
 
     def calcular_preco(self):
         pass

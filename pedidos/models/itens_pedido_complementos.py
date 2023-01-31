@@ -4,9 +4,8 @@ from pedidos.models.complemento import Complementos
 
 class ItensPedidoComplementos(models.Model):
     
-    complemento = models.ForeignKey(
+    complemento = models.ManyToManyField(
         Complementos,
-        on_delete=models.CASCADE,
         verbose_name='Complemento',
         blank=True, null=True,
     )
@@ -24,16 +23,20 @@ class ItensPedidoComplementos(models.Model):
     )
 
     # @property
-    # def total(self):
+    # def total_get(self):
     #     from .itens_pedido import ItensPedido
-
-    #     for item in ItensPedido.
-    #         total = {
-    #             "quantidade" : item.quantidade,
-    #             "valor": item.valor_unitario,
-    #             "total": item.quantidade * item.valor_unitario
-    #         }
-    #         return total
+    #     items = ItensPedido.objects.itenspedidocomplementos_set.all()
+    #     qtd = 0
+    #     unitario= []
+    #     for item in items:
+    #         qtd += item.quantidade
+            
+    #         unitario.append({
+    #             "quantidade": qtd,
+    #             "valor_unitario":item.valor_unitario,
+    #             "sub_total":qtd * item.valor_unitario,
+    #         })
+    #     return unitario
 
     def __str__(self):
         return str(self.complemento)

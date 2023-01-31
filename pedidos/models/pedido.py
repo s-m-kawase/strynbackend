@@ -29,10 +29,8 @@ class Pedidos(models.Model):
         max_length=20
     )
 
-
-    tempo_estimado = models.ForeignKey(
+    tempo_estimado = models.ManyToManyField(
         TempoEstimado,
-        on_delete=models.CASCADE,
         verbose_name='Tempo Estimado',
         blank=True, null=True,
     )
@@ -44,7 +42,7 @@ class Pedidos(models.Model):
 
     itens = models.ForeignKey(
         ItemCardapio,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         verbose_name='Itens',
         blank=True, null=True,
     )
@@ -76,9 +74,9 @@ class Pedidos(models.Model):
         blank=True, null=True
     )
 
-    pagamento = models.ForeignKey(
+    pagamento = models.OneToOneField(
         "pagamentos.Pagamento",
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
         verbose_name='Pagamento',
         blank=True, null=True
     )

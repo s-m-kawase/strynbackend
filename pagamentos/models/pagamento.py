@@ -32,16 +32,15 @@ class Pagamento(models.Model):
         verbose_name='Valor do Desconto'
     )
 
-    adicionais = models.ForeignKey(
+    adicionais = models.ManyToManyField(
         Adicional,
-         on_delete=models.CASCADE,
         verbose_name='Adicionais',
         null= True, blank=True    
         )
 
     cupom = models.ForeignKey(
         Cupom,
-         on_delete=models.CASCADE,
+         on_delete=models.SET_NULL,
         verbose_name='Cupom',
         null= True, blank=True    
         )

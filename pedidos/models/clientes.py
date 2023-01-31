@@ -1,8 +1,15 @@
 from django.db import models
-
+from core.models.profile import Profile
 
 
 class Cliente(models.Model):
+
+    profile = models.OneToOneField(
+        Profile,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+
     nome_cliente = models.CharField(
         max_length=200,
         verbose_name='Nome do Cliente',

@@ -7,8 +7,8 @@ class ItemCardapioAdmin(admin.ModelAdmin):
     list_display = [
         'codigo_item',
         'preco',
-        'categoria',
-        "grupo_complemento",
+        
+        
         'foto',
         'descricao',
     ]
@@ -19,5 +19,5 @@ class ItemCardapioAdmin(admin.ModelAdmin):
     ]
 
     list_filter = [
-        'categoria'
+        
     ]

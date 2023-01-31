@@ -12,16 +12,14 @@ class Cardapio(models.Model):
         blank=True, null=True,
         )
 
-    itens = models.ForeignKey(
+    itens = models.ManyToManyField(
             ItemCardapio,
-            on_delete=models.CASCADE,
             verbose_name='Itens Para Cardapio',
             blank=True, null=True,
         )
 
-    categorias =  models.ForeignKey(
+    categorias =  models.ManyToManyField(
             CategoriaCardapio,
-            on_delete=models.CASCADE,
             verbose_name='Categoria do Cardapio',
             blank=True, null=True,
         )
