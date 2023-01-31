@@ -38,7 +38,7 @@ class ItemCardapio(models.Model):
         CategoriaCardapio,
         on_delete=models.CASCADE,
         verbose_name='Categoria do Cardapio',
-        blank=True, null=True,
+        blank=False, null=False,
     )
     
     CHOICE_FOME = (
@@ -60,7 +60,7 @@ class ItemCardapio(models.Model):
         GrupoComplementos,
         on_delete=models.CASCADE,
         verbose_name='Complementos',
-        blank=True, null=True,
+        blank=False, null=False,
     )
 
     foto = models.ImageField(
