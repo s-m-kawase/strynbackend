@@ -40,3 +40,8 @@ class Cupom(models.Model):
 
     def __str__(self):
         return self.nome
+
+    class Meta:
+        app_label = 'pagamentos'
+        verbose_name = 'Cupom'
+        verbose_name_plural = 'Cupons'

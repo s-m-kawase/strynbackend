@@ -68,5 +68,10 @@ class ItemCardapio(models.Model):
 
 
     def __str__(self):
-         return str(self.nome)
+        return str(self.nome)
+
+    class Meta:
+        app_label = 'pedidos'
+        verbose_name = 'Item cardapio'
+        verbose_name_plural = 'Itens Cardapios'    
     

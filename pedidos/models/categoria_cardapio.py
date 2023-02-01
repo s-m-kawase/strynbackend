@@ -16,5 +16,10 @@ class CategoriaCardapio(models.Model):
 
 
     def __str__(self):
-         return self.nome
+        return self.nome
+
+    class Meta:
+        app_label = 'pedidos'
+        verbose_name = 'Categoria Cardapio'
+        verbose_name_plural = 'Categorias Cardapios'
     

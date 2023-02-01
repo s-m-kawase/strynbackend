@@ -52,3 +52,7 @@ class Pagamento(models.Model):
     def __str__(self):
         return self.pagamento
 
+    class Meta:
+        app_label = 'pagamentos'
+        verbose_name = 'Pagamento'
+        verbose_name_plural = 'Pagamentos'

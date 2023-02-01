@@ -46,4 +46,8 @@ class ItensPedido(models.Model):
 
     def __str__(self):
         return str(self.item)
+    class Meta:
+        app_label = 'pedidos'
+        verbose_name = 'Item Pedido'
+        verbose_name_plural = 'Itens Pedidos'
     

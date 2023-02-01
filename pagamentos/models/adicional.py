@@ -25,3 +25,7 @@ class Adicional(models.Model):
     def __str__(self):
         return self.nome
     
+    class Meta:
+        app_label = 'pagamentos'
+        verbose_name = 'Adicional'
+        verbose_name_plural = 'Adicionais'
