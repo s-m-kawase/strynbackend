@@ -35,4 +35,9 @@ class GrupoComplementos(models.Model):
 
     def __str__(self):
         return self.nome
+
+    class Meta:
+        app_label = 'pedidos'
+        verbose_name = 'Grupo Complemento'
+        verbose_name_plural = 'Grupos Complementos'
     

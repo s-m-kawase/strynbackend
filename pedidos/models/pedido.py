@@ -105,3 +105,7 @@ class Pedidos(models.Model):
 
     def __str__(self):
         return str(self.numero_pedido)
+    class Meta:
+        app_label = 'pedidos'
+        verbose_name = 'Pedido'
+        verbose_name_plural = 'Pedidos'

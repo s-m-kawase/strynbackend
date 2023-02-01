@@ -38,3 +38,9 @@ class Cliente(models.Model):
 
     def __str__(self):
         return self.nome_cliente
+
+    class Meta:
+        app_label = 'pedidos'
+        verbose_name = 'Cliente'
+        verbose_name_plural = 'Clientes'
+

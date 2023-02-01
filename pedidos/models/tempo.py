@@ -10,3 +10,8 @@ class TempoEstimado(models.Model):
 
     def __str__(self):
         return self.tempo
+
+    class Meta:
+        app_label = 'pedidos'
+        verbose_name = 'Tempo Estimado'
+        verbose_name_plural = 'Tempo Estimados'

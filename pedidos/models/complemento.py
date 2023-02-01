@@ -41,4 +41,9 @@ class Complementos(models.Model):
 
     def __str__(self):
         return self.nome
+
+    class Meta:
+        app_label = 'pedidos'
+        verbose_name = 'Complemento'
+        verbose_name_plural = 'Complementos'
     
