@@ -2,6 +2,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
@@ -47,7 +51,10 @@ urlpatterns = [
     path('', include('pedidos.urls')),
     path('profile/', include('core.urls')),
     path('admin/', admin.site.urls),
-    path ( "accounts/" ,  include ( "django.contrib.auth.urls" )),
+    path ("accounts/",  include ( "django.contrib.auth.urls" ),name='login'),
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
  
     path('api/', include(router.urls)),
     # YOUR PATTERNS

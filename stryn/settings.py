@@ -1,3 +1,4 @@
+from datetime import timedelta
 import os
 from pathlib import Path
 
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'pedidos',
     'rest_framework',
     'drf_spectacular',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +68,8 @@ TEMPLATES = [
         },
     },
 ]
-LOGIN_REDIRECT_URL  =  "/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "login"
 
 WSGI_APPLICATION = 'stryn.wsgi.application'
 
@@ -136,4 +139,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     # YOUR SETTINGS
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # 'DEFAULT_FILTER_BACKENDS': [
+    #     'django_filters.rest_framework.DjangoFilterBackend'
+    # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+#     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",  # noqa E501
+#     "PAGE_SIZE": 10,
+    }
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(weeks=1),
 }
