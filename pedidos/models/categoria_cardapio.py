@@ -17,6 +17,7 @@ class CategoriaCardapio(models.Model):
 
     def __str__(self):
         return self.nome
+    
 
     class Meta:
         app_label = 'pedidos'
