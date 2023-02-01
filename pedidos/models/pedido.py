@@ -5,27 +5,23 @@ from pedidos.models.item_cardapio import ItemCardapio
 
 class Pedidos(models.Model):
 
-    numero_pedido = models.IntegerField(
-        verbose_name='Número do Pedido',
-        blank=True, null=True,
-    )
-
-    data_criacao = models.DateField(
+    data_criacao = models.DateTimeField(
         verbose_name='Data da Criação',
         auto_now=True,
         blank=True, null=True,
     ) 
     
     STATUS_CHOICE = (
-        ('Solicitado','solicitado'),
-        ('Entregue','entregue'),
-        ('Concluído','concluido'),
-        ('Cancelado','cancelado'),
+        ('Solicitado','Solicitado'),
+        ('Entregue','Entregue'),
+        ('Concluído','Concluído'),
+        ('Cancelado','Cancelado'),
     )
 
     status_pedido = models.CharField(
-        verbose_name="Statu Pedido",
+        verbose_name="Status do Pedido",
         choices=STATUS_CHOICE,
+        default='Solicitado',
         max_length=20
     )
 
@@ -40,31 +36,12 @@ class Pedidos(models.Model):
         blank=True, null=True,
     )
 
-    itens = models.ForeignKey(
-        ItemCardapio,
-        on_delete=models.SET_NULL,
-        verbose_name='Itens',
-        blank=True, null=True,
-    )
-
-    sub_total = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name='Subtotal do Pedido',
-        blank=True, null=True       
-    )
-
-    total = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name="Valor total do Pedido"
-    )
-
     cliente = models.ForeignKey(
         'pedidos.Cliente',
         on_delete=models.CASCADE,
         verbose_name='Cliente',
-        blank=True, null=True,
+        blank=True, 
+        null=True
     )
 
     cupom = models.ForeignKey(
@@ -74,14 +51,22 @@ class Pedidos(models.Model):
         blank=True, null=True
     )
 
-    pagamento = models.OneToOneField(
-        "pagamentos.Pagamento",
-        on_delete=models.SET_NULL,
-        verbose_name='Pagamento',
-        blank=True, null=True
-    )
+    @property
+    def subtotal(self):
+        subtotal = 0
+        for pagamento in self.pagamento_set.all():
+            subtotal += pagamento.total
 
+        return subtotal
 
+    @property
+    def total(self):
+        
+        total = 0
+        for item in self.itenspedido_set.all():
+            total += item.total
+        
+        return total
 
     def efetuar_pedido(self):
         pass

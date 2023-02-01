@@ -9,7 +9,7 @@ class CupomAdmin(admin.ModelAdmin):
         'nome',
         'valor',
         'cod_cupom',
-        'validado_ate',
+        #'validado_ate',
         
     ]
 

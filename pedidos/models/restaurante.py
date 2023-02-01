@@ -7,7 +7,7 @@ class Restaurante(models.Model):
         max_length=90,
         verbose_name='Nome do Restaurante',
         blank=True, null=True,
-        )
+    )
 
     descricao = models.TextField(
         max_length=1000,

@@ -5,19 +5,13 @@ from pedidos.models.grupo_complemento import GrupoComplementos
 
 class ItemCardapio(models.Model):
 
-    codigo_item = models.CharField(
-        max_length=60,
-        verbose_name='Codigo Item'
-    )
-
-    nome = models.TextField(
+    nome = models.CharField(
         max_length=100,
         verbose_name="Nome do Item",
-        blank=True, null=True
+        blank=False, null=True
     )
-
+    
     descricao = models.TextField(
-        max_length=1000,
         verbose_name='Descrição do Item',
         blank=True, null=True,
     )

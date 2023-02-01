@@ -7,36 +7,26 @@ class ItensPedidoComplementos(models.Model):
     complemento = models.ManyToManyField(
         Complementos,
         verbose_name='Complemento',
-        blank=True, null=True,
+        null=True,
+        blank=True
     )
 
     quantidade = models.IntegerField(
         verbose_name='Quantidade de Produtos Adicionados',
-        blank=True, null=True,   
+        null=True
     )
 
     valor_unitario = models.DecimalField(
+        verbose_name='Valor unitário do Produto',
         max_digits=10,
         decimal_places=2,
-        verbose_name='Valor unitario do Produto',
-        blank=True, null=True,
+        null=True
     )
 
-    # @property
-    # def total_get(self):
-    #     from .itens_pedido import ItensPedido
-    #     items = ItensPedido.objects.itenspedidocomplementos_set.all()
-    #     qtd = 0
-    #     unitario= []
-    #     for item in items:
-    #         qtd += item.quantidade
-            
-    #         unitario.append({
-    #             "quantidade": qtd,
-    #             "valor_unitario":item.valor_unitario,
-    #             "sub_total":qtd * item.valor_unitario,
-    #         })
-    #     return unitario
+    @property
+    def total(self):
+        
+        return float(self.valor_unitario) * float(self.quantidade)
 
     def __str__(self):
         return str(self.complemento)

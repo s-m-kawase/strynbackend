@@ -6,9 +6,11 @@ from pedidos.admin.grupo_complemento_admin import GrupoComplementosAdmin
 from pedidos.admin.item_cardapio_admin import ItemCardapioAdmin
 from pedidos.admin.itens_pedido_complementos_admin import ItensPedidoComplementosAdmin
 from pedidos.admin.itens_pedido_admin import ItensPedidoAdmin
+from pedidos.admin.itens_pedido_inline import ItensPedidoInline
 from pedidos.admin.restaurante_admin import RestauranteAdmin
 from pedidos.admin.tempo_admin import TempoEstimadoAdmin
-from .pedido_admin import PedidosAdmin
+from pedidos.admin.pedido_admin import PedidosAdmin
+from pedidos.admin.pedidos_inline import PedidosInline
 
 
 
@@ -21,7 +23,9 @@ __all__ = [
     ItemCardapioAdmin,
     ItensPedidoComplementosAdmin,
     ItensPedidoAdmin,
+    ItensPedidoInline,
     RestauranteAdmin,
     TempoEstimadoAdmin,
     PedidosAdmin,
+    PedidosInline
 ]

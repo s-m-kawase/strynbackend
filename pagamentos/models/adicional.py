@@ -5,17 +5,20 @@ class Adicional(models.Model):
     nome = models.CharField(
         max_length=100,
         verbose_name="Nome",
-        null= True, blank=True
+        null= True
     )
 
     descricao = models.TextField(
         max_length=200,
-        verbose_name="Descrição"
+        verbose_name="Descrição",
+        null=True,
+        blank=True
     )
 
     valor = models.DecimalField(
+        verbose_name="Valor",
         max_digits=10,
-        decimal_places=2,
+        decimal_places=2
     )
 
 

@@ -4,15 +4,16 @@ from django.db import models
 class Complementos(models.Model):
 
     nome = models.CharField(
-        max_length=40,
         verbose_name='Nome do Complemento',
-        blank=True, null=True,
+        max_length=40,
+        null=True
     )
 
     codigo_complemento = models.CharField(
         max_length=40,
         verbose_name='Código do Complemento',
-        blank=True, null=True,
+        null=True,
+        unique=True
     )
 
     descricao = models.TextField(

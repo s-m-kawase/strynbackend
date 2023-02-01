@@ -1,7 +1,7 @@
 from django.db import models
 from pedidos.models.item_cardapio import ItemCardapio
 from pedidos.models.itens_pedido_complementos import ItensPedidoComplementos
-
+from pedidos.models.pedido import Pedidos
 
 class ItensPedido(models.Model):
 
@@ -9,7 +9,14 @@ class ItensPedido(models.Model):
         ItemCardapio,
         on_delete=models.SET_NULL,
         verbose_name='Itens',
-        blank=True, null=True,
+        null=True
+    )
+
+    pedido = models.ForeignKey(
+        Pedidos,
+        verbose_name="Pedido",
+        on_delete=models.SET_NULL,
+        null=True
     )
 
     item_complemento = models.ManyToManyField(
@@ -17,29 +24,19 @@ class ItensPedido(models.Model):
         verbose_name='Itens de complementos pedido',
         blank=True, null=True,
     )
-    
-
 
     quantidade = models.IntegerField(
         verbose_name='Quantidade de Produto',
-        blank=True, null=True,
+        null=True
     )
 
-    valor_unitario = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name='Valor Unitario',
-        blank=True, null=True,
-    )
+    @property
+    def total(self):
+        
+        total = 0
+        total = float(self.quantidade) * (float(self.item.preco) if self.item else 0)
 
-    total = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name='Valor total do Pedido',
-        blank=True, null=True,
-    )
-
-    
+        return total
 
     def calcular_preco(self):
         pass

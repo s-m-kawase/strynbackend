@@ -10,26 +10,26 @@ class Cardapio(models.Model):
         max_length=100,
         verbose_name='Nome do cardapio',
         blank=True, null=True,
-        )
+    )
 
     itens = models.ManyToManyField(
-            ItemCardapio,
-            verbose_name='Itens Para Cardapio',
-            blank=True, null=True,
-        )
+        ItemCardapio,
+        verbose_name='Itens Para Cardapio',
+        blank=True, null=True,
+    )
 
     categorias =  models.ManyToManyField(
-            CategoriaCardapio,
-            verbose_name='Categoria do Cardapio',
-            blank=True, null=True,
-        )
+        CategoriaCardapio,
+        verbose_name='Categoria do Cardapio',
+        blank=True, null=True,
+    )
 
     restaurante =  models.ForeignKey(
-            Restaurante,
-            on_delete=models.Case,
-            verbose_name='Nome do Restaurante',
-            blank=True, null=True,
-        )
+        Restaurante,
+        on_delete=models.Case,
+        verbose_name='Nome do Restaurante',
+        blank=True, null=True,
+    )
 
 
 
