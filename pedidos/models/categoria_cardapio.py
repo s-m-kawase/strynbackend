@@ -6,12 +6,13 @@ class CategoriaCardapio(models.Model):
     nome = models.CharField(
         max_length=40,
         verbose_name='Nome da Categoria',
-        blank=True, null=True,
-        )
+        null=True,
+        unique=True
+    )
 
     status = models.BooleanField(
-        verbose_name='Está Pausado ?',
-        default=False,
+        verbose_name='Está pausado ?',
+        default=False
     )
 
 
