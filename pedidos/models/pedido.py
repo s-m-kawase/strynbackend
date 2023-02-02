@@ -1,6 +1,5 @@
 from django.db import models
 from pedidos.models.tempo import TempoEstimado
-from pedidos.models.item_cardapio import ItemCardapio
 
 
 class Pedidos(models.Model):
@@ -89,7 +88,7 @@ class Pedidos(models.Model):
         pass
 
     def __str__(self):
-        return str(self.numero_pedido)
+        return str(self.id)
     class Meta:
         app_label = 'pedidos'
         verbose_name = 'Pedido'
