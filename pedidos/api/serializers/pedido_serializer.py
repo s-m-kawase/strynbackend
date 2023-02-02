@@ -14,7 +14,7 @@ class PedidosSerializer(serializers.ModelSerializer):
          return [TempoEstimadoSerializer(instance=tempo_estimado).data for tempo_estimado in obj.tempo_estimado.all()]
 
 
-    def get_cliente(self, obj):    
+    def get_cliente_read(self, obj):    
         return ClienteSerializer(instance=obj.cliente).data
 
     class Meta:
