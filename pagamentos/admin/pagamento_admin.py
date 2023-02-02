@@ -21,3 +21,7 @@ class PagamentoAdmin(admin.ModelAdmin):
         'codigo_pagamento',
         'desconto'
     ]
+
+    filter_horizontal = [
+        'adicionais'
+    ]

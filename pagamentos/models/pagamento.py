@@ -7,7 +7,7 @@ class Pagamento(models.Model):
     codigo_pagamento = models.CharField(
         max_length=100,
         verbose_name='Cóigo do pagamento',
-        null= True, blank=True,
+        null= True,
         unique=True 
     )
 
@@ -30,7 +30,9 @@ class Pagamento(models.Model):
     desconto = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name='Valor do Desconto'
+        verbose_name='Valor do Desconto',
+        null=True,
+        default=0
     )
 
     adicionais = models.ManyToManyField(
