@@ -33,7 +33,8 @@ class ItensPedido(models.Model):
     def total(self):
         
         total = 0
-        total = float(self.quantidade) * (float(self.item.preco) if self.item else 0)
+        if self.item:
+            total = float(self.quantidade) * (float(self.item.preco) if self.item else 0)
 
         return total
 

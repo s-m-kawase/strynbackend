@@ -12,6 +12,7 @@ class ItensPedidoAdmin(admin.ModelAdmin):
     search_fields = [
         'id',
     ]
+    autocomplete_fields = ['item', 'pedido']
 
     readonly_fields = [
         'total'
