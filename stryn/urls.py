@@ -10,6 +10,7 @@ from rest_framework_simplejwt.views import (
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from core.api.viewsets.profile_viewset import *
+from core.api.viewsets.user_viewset import *
 from pagamentos.api.viewsets.adicional_viewset import *
 from pagamentos.api.viewsets.cupom_viewset import *
 from pagamentos.api.viewsets.pagamento_viewset import *
@@ -26,6 +27,7 @@ from pedidos.api.viewsets.restaurante_viewset import *
 from pedidos.api.viewsets.tempo_estimado_viewset import *
 
 router = routers.DefaultRouter()
+router.register(r'user', UserViewSet, basename='user'),
 router.register(r'profile', ProfileViewSet, basename='profile'),
 
 router.register(r'pagamento', PagamentoViewSet, basename='pagamento'),
