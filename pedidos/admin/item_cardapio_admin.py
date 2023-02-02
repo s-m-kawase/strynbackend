@@ -6,8 +6,8 @@ from django.contrib import admin
 class ItemCardapioAdmin(admin.ModelAdmin):
     list_display = [
         'id',
+        'nome',
         'preco',
-        'foto',
         'descricao',
     ]
 
