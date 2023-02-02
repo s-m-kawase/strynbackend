@@ -33,7 +33,7 @@ class ItensPedido(models.Model):
     def total(self):
         
         total = 0
-        total = float(self.quantidade) * (float(self.item.preco) if self.item else 0)
+        #total = float(self.quantidade) * (float(self.item.preco) if self.item else 0)
 
         return total
 
@@ -41,7 +41,7 @@ class ItensPedido(models.Model):
         pass
 
     def __str__(self):
-        return str(self.item)
+        return str(self.id)
     class Meta:
         app_label = 'pedidos'
         verbose_name = 'Item Pedido'
