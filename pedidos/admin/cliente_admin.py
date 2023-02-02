@@ -8,7 +8,7 @@ class ClienteAdmin(admin.ModelAdmin):
         'nome_cliente',
         'usuario',
         'cpf',
-        'numero_celular'
+        'celular'
 
     ]
 
