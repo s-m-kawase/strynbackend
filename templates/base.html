@@ -66,33 +66,6 @@
         <nav class="menu-itens" id="nav">
           <ul id="menu">
             
-            <li><details>
-                <summary> Profile </summary>
-               <a href="{% url 'list_profile'%}">Profile</a>
-                </details></li>
-
-            <li><details>
-                <summary> Pagamentos </summary>
-               <a href="{% url 'list_pagamento'%}">Pagamento</a>
-               <a href="{% url 'list_cupom'%}">Cupom</a>
-               <a href="{% url 'list_adicional'%}">Adicional</a>
-                </details></li>
-
-            <li><details>
-                <summary> Pedidos </summary>
-               <a href="{% url 'list_cardapio'%}">Cardapip</a>
-               <a href="{% url 'list_categoria'%}">Categoria Cardapio</a>
-               <a href="{% url 'list_cliente'%}">Clientes</a>
-               <a href="{% url 'list_complemento'%}">Complementos</a>
-               <a href="{% url 'list_grupo_complemento'%}">Grupo Complementos</a>
-               <a href="{% url 'list_itens'%}">Itens</a>
-               <a href="{% url 'list_iten_complemento'%}">Itens Complementos</a>
-               <a href="{% url 'list_iten_pedido'%}">Itens Pedidos</a>
-               <a href="{% url 'list_pedido'%}">Pedido</a>
-               <a href="{% url 'list_restaurante'%}">Restaurante</a>
-               <a href="{% url 'list_tempo'%}">Tempo</a>
-                </details></li>
-
             <li>
                 {% block content %}
                 {% if user.is_authenticated %}

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic.base import TemplateView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -49,11 +50,9 @@ router.register(r'tempo', TempoEstimadoViewSet, basename='tempo'),
 
 
 urlpatterns = [
-    path('pagamentos/', include('pagamentos.urls')),
-    path('', include('pedidos.urls')),
-    path('profile/', include('core.urls')),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path ("accounts/",  include ( "django.contrib.auth.urls" ),name='login'),
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
