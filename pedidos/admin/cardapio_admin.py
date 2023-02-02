@@ -18,6 +18,8 @@ class CardapioAdmin(admin.ModelAdmin):
         'categorias'
     ]
 
+    autocomplete_fields = ['restaurante']
+
     list_filter = [
         
     ]
