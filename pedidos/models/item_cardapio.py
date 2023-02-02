@@ -35,11 +35,11 @@ class ItemCardapio(models.Model):
     )
     
     CHOICE_FOME = (
-        ('Nao se aplica','nao se aplica'),
-        ('1 pessoa','uma pessoa'),
-        ('2 pessoas','duas pessoas'),
-        ('3 pessoas','tres pessoas'),
-        ('4 pessoas','quatro pessoas'),
+        ('Nao se aplica','Nãoo se aplica'),
+        ('1 pessoa','1 pessoa'),
+        ('2 pessoas','2 pessoas'),
+        ('3 pessoas','3 pessoas'),
+        ('4 pessoas','4 pessoas'),
     )
 
     tamanho_fome = models.CharField(

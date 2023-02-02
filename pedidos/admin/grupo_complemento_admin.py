@@ -6,7 +6,8 @@ from django.contrib import admin
 class GrupoComplementosAdmin(admin.ModelAdmin):
     list_display = [
         'nome',
-        'quantidade',
+        'quantidade_minima',
+        'quantidade_maxima'
     ]
 
     search_fields = [

@@ -8,7 +8,8 @@ class GrupoComplementos(models.Model):
     nome = models.CharField(
         max_length=40,
         verbose_name='Nome do Grupo de Complementos',
-        blank=True, null=True,
+        null=True,
+        unique=True
     )
 
     obrigatoriedade = models.BooleanField(
@@ -19,12 +20,18 @@ class GrupoComplementos(models.Model):
     complemento = models.ManyToManyField(
         Complementos,
         verbose_name="Complementos",
-        blank=True, null=True
+        null=True
     )
 
 
-    quantidade = models.IntegerField(
-        verbose_name="Quantidade de Complemento",
+    quantidade_minima = models.IntegerField(
+        verbose_name="Quantidade Mínima",
+        blank=True, null=True,
+        validators = [MinValueValidator(1.0),MaxValueValidator(10.0)],
+    )
+
+    quantidade_maxima = models.IntegerField(
+        verbose_name="Quantidade Máxima",
         blank=True, null=True,
         validators = [MinValueValidator(1.0),MaxValueValidator(10.0)],
     )

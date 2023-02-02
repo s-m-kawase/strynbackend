@@ -16,17 +16,10 @@ class ItensPedidoComplementos(models.Model):
         null=True
     )
 
-    valor_unitario = models.DecimalField(
-        verbose_name='Valor unitário do Produto',
-        max_digits=10,
-        decimal_places=2,
-        null=True
-    )
-
     @property
     def total(self):
-        
-        return float(self.valor_unitario) * float(self.quantidade)
+        return 0
+        #total+= float(self.complemento.) * float(self.quantidade)
 
     def __str__(self):
         return str(self.complemento)

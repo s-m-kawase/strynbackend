@@ -7,12 +7,11 @@ class ItensPedidoComplementosAdmin(admin.ModelAdmin):
     list_display = [
         
         'quantidade',
-        'valor_unitario',
+        
         
     ]
 
     search_fields = [
-        'valor_unitario',
         'quantidade'
         
     ]
