@@ -15,6 +15,9 @@ class GrupoComplementosAdmin(admin.ModelAdmin):
         
     ]
 
+    autocomplete_fields = [
+        'complemento'
+    ]
     list_filter = [
         'complemento'
     ]

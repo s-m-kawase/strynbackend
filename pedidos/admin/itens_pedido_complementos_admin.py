@@ -15,7 +15,8 @@ class ItensPedidoComplementosAdmin(admin.ModelAdmin):
         'quantidade'
         
     ]
-
-    list_filter = [
-        
+    autocomplete_fields = [
+        'item_pedido',
+        'complemento'
     ]
+    
