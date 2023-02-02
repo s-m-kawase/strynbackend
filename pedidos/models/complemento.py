@@ -26,12 +26,12 @@ class Complementos(models.Model):
         max_digits=10,
         decimal_places=2,
         verbose_name='Preço do Complemento',
-        blank=True, null=True,
+        null=True,
     )
 
     foto = models.ImageField(
         verbose_name='Foto',
-        blank=True, null=True,
+        null=True,
     )
 
     status_venda = models.BooleanField(

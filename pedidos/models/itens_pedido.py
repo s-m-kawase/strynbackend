@@ -1,6 +1,5 @@
 from django.db import models
 from pedidos.models.item_cardapio import ItemCardapio
-from pedidos.models.itens_pedido_complementos import ItensPedidoComplementos
 from pedidos.models.pedido import Pedidos
 
 class ItensPedido(models.Model):
@@ -19,11 +18,11 @@ class ItensPedido(models.Model):
         null=True
     )
 
-    item_complemento = models.ManyToManyField(
+    """ item_complemento = models.ManyToManyField(
         ItensPedidoComplementos,
         verbose_name='Itens de complementos pedido',
         blank=True, null=True,
-    )
+    ) """
 
     quantidade = models.IntegerField(
         verbose_name='Quantidade de Produto',
