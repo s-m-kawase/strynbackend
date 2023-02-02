@@ -62,7 +62,7 @@ class Pagamento(models.Model):
     def total(self):
 
         adicionais = 0
-        for adicional in self.adicional_set.all():
+        for adicional in self.adicionais_set.all():
             adicionais +=adicional.valor
 
         cupons = 0
