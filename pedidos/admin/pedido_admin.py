@@ -21,6 +21,8 @@ class PedidosAdmin(admin.ModelAdmin):
 
     readonly_fields = [
         'data_criacao',
+        'subtotal',
+        'total'
     ]
 
     autocomplete_fields = [
