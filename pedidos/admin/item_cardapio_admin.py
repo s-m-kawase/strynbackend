@@ -5,19 +5,12 @@ from django.contrib import admin
 @admin.register(ItemCardapio)
 class ItemCardapioAdmin(admin.ModelAdmin):
     list_display = [
-        'codigo_item',
+        'id',
         'preco',
-        
-        
         'foto',
         'descricao',
     ]
 
     search_fields = [
-        'preco',
-        'codigo_item'
-    ]
-
-    list_filter = [
-        
+        'id'
     ]

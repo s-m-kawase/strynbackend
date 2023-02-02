@@ -1,39 +1,35 @@
 from django.db import models
 from core.models.profile import Profile
-
+from django.contrib.auth.models import User
 
 class Cliente(models.Model):
 
-    profile = models.OneToOneField(
-        Profile,
+    usuario = models.OneToOneField(
+        User,
+        verbose_name="Usuário",
         on_delete=models.SET_NULL,
         null=True
     )
 
     nome_cliente = models.CharField(
-        max_length=200,
         verbose_name='Nome do Cliente',
-        blank=True, null=True,
+        max_length=200,
+        null=True
     )
 
     cpf = models.CharField(
-        max_length=14,
         verbose_name="CPF",
+        max_length=14,
+        unique=True,
+        null=True,
+        blank=True
     )
 
     celular = models.CharField(
-        max_length=17,
         verbose_name="Numero Celular",
+        max_length=17,
         blank=True,
-        null=True,
-    )
-
-    historico_pedido = models.ForeignKey(
-        'pedidos.Pedidos',
-        on_delete=models.CASCADE,
-        related_name='historico',
-        blank=True, null=True
-        
+        null=True
     )
 
     def __str__(self):

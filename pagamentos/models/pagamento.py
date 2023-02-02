@@ -1,14 +1,15 @@
 from django.db import models
 from pagamentos.models.cupom import Cupom
 from pagamentos.models.adicional import Adicional
-
+from pedidos.models.pedido import Pedidos
 
 class Pagamento(models.Model):
     codigo_pagamento = models.CharField(
         max_length=100,
         verbose_name='Cóigo do pagamento',
-        null= True, blank=True    
-        )
+        null= True, blank=True,
+        unique=True 
+    )
 
     TIPO_CHOICE = (
         ('Pagar na mesa', 'Pagar na mesa'),
@@ -36,18 +37,43 @@ class Pagamento(models.Model):
         Adicional,
         verbose_name='Adicionais',
         null= True, blank=True    
-        )
+    )
 
     cupom = models.ForeignKey(
         Cupom,
          on_delete=models.SET_NULL,
         verbose_name='Cupom',
-        null= True, blank=True    
-        )
+        null= True, blank=True
+    )
+
+    pedido = models.ForeignKey(
+        Pedidos,
+        verbose_name="Pedido",
+        on_delete=models.SET_NULL,
+        null=True
+    )
 
     # def calcular_preco(self):
     #     pass
     
+    @property
+    def total(self):
+
+        adicionais = 0
+        for adicional in self.adicional_set.all():
+            adicionais +=adicional.valor
+
+        cupons = 0
+        for cupom in self.cupom_set.all():
+            cupons +=cupom.valor
+
+        total = 0
+        total += float(self.pedidos.total if self.pedidos else 0)
+        total -= float(self.desconto)
+        total -= float(cupons)
+        total += float(adicionais)
+
+        return total
 
     def __str__(self):
         return self.pagamento

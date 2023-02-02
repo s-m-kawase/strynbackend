@@ -1,24 +1,30 @@
 from pedidos.models.pedido import  Pedidos
 from django.contrib import admin
-
+from .itens_pedido_inline import ItensPedidoInline
 
 @admin.register(Pedidos)
 class PedidosAdmin(admin.ModelAdmin):
     list_display = [
-        'numero_pedido',
+        'id',
         'status_pedido',
         'cupom',
-        'sub_total',
-        'total',
+        'subtotal',
+        'total'
     ]
 
     search_fields = [
-        'numero_pedido',
-        
-        
+        'id',
     ]
 
     list_filter = [
         'cupom',
         
+    ]
+
+    filter_horizontal = [
+        'tempo_estimado'
+    ]
+
+    inlines = [
+        ItensPedidoInline
     ]

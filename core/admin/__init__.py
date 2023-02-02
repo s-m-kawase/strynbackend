@@ -1,6 +1,8 @@
-from .profile_admin import ProfileAdmin
 
-__all__ = [ 
-    ProfileAdmin,
-    
+from .profile_inline import ProfileInline
+from .user_admin import UserAdmin
+
+__all__ = [
+    ProfileInline,
+    UserAdmin
 ]

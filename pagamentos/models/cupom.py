@@ -5,26 +5,28 @@ class Cupom(models.Model):
     nome = models.CharField(
         max_length=100,
         verbose_name='Nome',
-        )
+    )
 
     descricao = models.TextField(
-            max_length=200,
-            verbose_name='Descrição',
-        )
+        max_length=200,
+        verbose_name='Descrição',
+        null=True, blank=True
+    )
 
     valor = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
         verbose_name='Valor',
+        max_digits=10,
+        decimal_places=2
     )
 
     cod_cupom = models.CharField(
         max_length=200,
         verbose_name='Codigo do Cupom',
-        null= True, blank=True
+        null=True,
+        unique=True
     )
 
-    validado_ate = models.DateField(
+    validado_ate = models.DateTimeField(
         verbose_name='Validade até',
         null= True, blank=True
     )

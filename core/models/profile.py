@@ -3,13 +3,14 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
 
-    usuario = models.ForeignKey(
+    usuario = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        verbose_name='Nome de Usuario',
-        )
+        verbose_name='Usuário',
+        null=True
+    )
 
-    email = models.EmailField(
+    """ email = models.EmailField(
         verbose_name='E-mail do Usuario'
     )
 
@@ -21,7 +22,7 @@ class Profile(models.Model):
     data_registro = models.DateField(
         verbose_name='Data do Registro',
         auto_now=True,
-    )
+    ) """
 
 
     def registrar(self):

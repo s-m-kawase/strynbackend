@@ -6,16 +6,13 @@ from django.contrib import admin
 class ItensPedidoAdmin(admin.ModelAdmin):
     list_display = [
         'quantidade',
-        'valor_unitario',
         'total',
     ]
 
     search_fields = [
-        'valor_unitario',
-        'total',
-        
+        'id',
     ]
 
-    list_filter = [
-        'valor_unitario'
+    readonly_fields = [
+        'total'
     ]
