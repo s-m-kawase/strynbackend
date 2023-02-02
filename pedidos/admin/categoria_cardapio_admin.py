@@ -15,4 +15,4 @@ class CategoriaCardapioAdmin(admin.ModelAdmin):
 
     list_filter = [
         'status'
-    ]#}
+    ]

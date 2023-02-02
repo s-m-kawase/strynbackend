@@ -6,14 +6,16 @@ from django.contrib import admin
 class CardapioAdmin(admin.ModelAdmin):
     list_display = [
         'nome',
-        
         'restaurante',
         
     ]
 
     search_fields = [
         'nome'
-        
+    ]
+
+    filter_horizontal = [
+        'categorias'
     ]
 
     list_filter = [
