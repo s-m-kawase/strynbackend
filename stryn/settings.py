@@ -28,9 +28,13 @@ INSTALLED_APPS = [
     'core',
     'pagamentos',
     'pedidos',
-    'rest_framework',
+    'emails',
     'drf_spectacular',
     'rest_framework_simplejwt',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    'djrichtextfield'
 ]
 
 MIDDLEWARE = [
@@ -147,10 +151,26 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ],
-#     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",  # noqa E501
-#     "PAGE_SIZE": 10,
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",  # noqa E501
+    "PAGE_SIZE": 10,
     }
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(weeks=1),
 }
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'EMAIL': {
+        'password_reset': 'emails.views_djoser.password_reset_email.PasswordResetEmail'
+    }
+}
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS=True
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER=config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD=config('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL='Hub Nova Data <hub@novadata.com.br>'
