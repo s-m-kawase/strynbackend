@@ -29,3 +29,7 @@ class PagamentoAdmin(admin.ModelAdmin):
         'cupom',
         'pedido'
     ]
+    
+    readonly_fields = [
+        'total'
+    ]

@@ -63,18 +63,16 @@ class Pagamento(models.Model):
 
         adicionais = 0
         for adicional in self.adicionais.all():
-            adicionais +=adicional.valor
+            adicionais += float(adicional.valor)
 
-        cupons = 0
-        for cupom in self.cupom_set.all():
-            cupons +=cupom.valor
+        cupom = float(self.cupom.valor) if self.cupom else 0
 
         total = 0
-        total += float(self.pedidos.total if self.pedidos else 0)
+        total += float(self.pedido.total if self.pedido else 0)
         total -= float(self.desconto)
-        total -= float(cupons)
+        total -= float(cupom)
         total += float(adicionais)
-
+        
         return total
 
     def __str__(self):
