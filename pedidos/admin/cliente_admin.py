@@ -9,7 +9,6 @@ class ClienteAdmin(admin.ModelAdmin):
         'usuario',
         'cpf',
         'celular'
-
     ]
 
     search_fields = [

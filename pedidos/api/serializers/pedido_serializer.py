@@ -6,11 +6,11 @@ from .tempo_estimado_serializer import TempoEstimadoSerializer
 
 class PedidosSerializer(serializers.ModelSerializer):
     
-    cliente = serializers.SerializerMethodField()
-    tempo_estimado = serializers.SerializerMethodField()
+    cliente_read = serializers.SerializerMethodField()
+    tempo_estimado_read = serializers.SerializerMethodField()
     
 
-    def get_tempo_estimado(self, obj):
+    def get_tempo_estimado_read(self, obj):
          return [TempoEstimadoSerializer(instance=tempo_estimado).data for tempo_estimado in obj.tempo_estimado.all()]
 
 

@@ -5,9 +5,9 @@ from core.api.serializers.user_serializer import UserSerializer
 
 class ClienteSerializer(serializers.ModelSerializer):
 
-    usuario = serializers.SerializerMethodField()
+    usuario_read = serializers.SerializerMethodField()
 
-    def get_usuario(self, obj):    
+    def get_usuario_read(self, obj):    
         return UserSerializer(instance=obj.usuario).data
     class Meta:
         model = Cliente

@@ -5,10 +5,10 @@ from .grupo_complemento_item_serializer import GrupoComplementosSerializer
 
 
 class ItemCardapioSerializer(serializers.ModelSerializer):
-    categoria_get = serializers.SerializerMethodField()
+    categoria_read = serializers.SerializerMethodField()
     
 
-    def get_categoria_get(self, obj):
+    def get_categoria_read(self, obj):
         return CategoriaCardapioSerializer(instance=obj.categoria).data if obj.categoria else None
     
     class Meta:
