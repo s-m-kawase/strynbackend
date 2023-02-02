@@ -7,9 +7,9 @@ from .cupom_serializers import CupomSerializer
 
 class PagamentoSerializer(serializers.ModelSerializer):
 
-    adicionais = serializers.SerializerMethodField()
-    cupom = serializers.SerializerMethodField()
-    pedido = serializers.SerializerMethodField()
+    adicionais_read = serializers.SerializerMethodField()
+    cupom_read = serializers.SerializerMethodField()
+    pedido_read = serializers.SerializerMethodField()
 
     def get_adicionais_read(self, obj):
         return [AdicionalSerializer(instance=adicionais).data for adicionais in obj.adicionais.all()]
