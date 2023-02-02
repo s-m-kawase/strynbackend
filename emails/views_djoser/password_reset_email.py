@@ -8,5 +8,5 @@ class PasswordResetEmail(email.PasswordResetEmail):
         # PasswordResetEmail can be deleted
         context = super().get_context_data()
         context['domain'] = config('DOMAIN_FRONT', default=context['domain'])
-        context['site_name'] = "VPS"
+        context['site_name'] = "Stryn"
         return context
