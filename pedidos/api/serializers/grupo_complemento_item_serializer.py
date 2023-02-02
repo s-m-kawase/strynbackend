@@ -4,7 +4,7 @@ from pedidos.models import GrupoComplementos
 from .complemento_serializer import ComplementosSerializer
 
 
-class GrupoComplementosSerializer((serializers.ModelSerializer)):
+class GrupoComplementosSerializer(serializers.ModelSerializer):
     complemento = ComplementosSerializer()
     class Meta:
         model = GrupoComplementos
