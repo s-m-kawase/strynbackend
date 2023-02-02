@@ -3,7 +3,7 @@ from pedidos.models import Cliente
 from core.api.serializers.user_serializer import UserSerializer
 
 
-class ClienteSerializer((serializers.ModelSerializer)):
+class ClienteSerializer(serializers.ModelSerializer):
 
     usuario = serializers.SerializerMethodField()
 
