@@ -14,3 +14,5 @@ class ItemCardapioAdmin(admin.ModelAdmin):
     search_fields = [
         'id'
     ]
+
+    autocomplete_fields = ['categoria','grupo_complemento']
