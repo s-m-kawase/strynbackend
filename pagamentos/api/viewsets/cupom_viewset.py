@@ -13,42 +13,35 @@ class CupomViewSet(viewsets.ModelViewSet):
     serializer_class = CupomSerializer
 
 
-    # @action(methods=['get'], detail=False)
-    # def cupom_valido_ate(self, request):
+    @action(methods=['get'], detail=False)
+    def cupom_valido_ate(self, request):
+        cod_cupom = request.query_params.get('cod_cupom',None)
+        data_atual =datetime.today()
+        mensagem = ''
 
-    #     validos = Cupom.objects.get()
-    #     cupom = []
-    #     for valido in validos:
+        try: 
+            cupom = Cupom.objects.get(cod_cupom=cod_cupom)
+            cupom_serializado = CupomSerializer(cupom).data
+        except:
+            cupom = None
+            cupom_serializado = None
 
-    #         try:
-    #             tempo = valido.validado_ate
-    #             mensagem = 'Cumpom ainda é valido'
+        if cupom and cupom.validado_ate >= data_atual:
+            mensagem = 'Válido'
+            
+        elif cupom:
+            mensagem ='Expirado'
+        
+        else:
+            mensagem = 'Cupom não encontrado'
 
-    #         except:
-    #             tempo = 0
-    #             mensagem = 'Tempo de cupom excedido'
-    #             return JsonResponse(
-    #                 {
-    #                     "cupom": mensagem
-    #                 }, 
-    #                 content_type="application/json",
-    #                 status=400
-    #             )
-    #         data_atual = datetime.today()
-    #         if data_atual <= tempo :
-    #             return mensagem
-
-    #         cupom.append({
-    #                 "data": valido.validado_ate,
-    #                 "cupom":mensagem
-    #             })
-    #     context = {
-    #         "cupom_valido": cupom,
-    #     }
-
-    #     return JsonResponse(
-    #         context, 
-    #         content_type="application/json"
-    #     )
-
+            
+        return JsonResponse(
+            {
+                "mensagem":mensagem,
+                "cupom":cupom_serializado
+            }, 
+            content_type="application/json",
+        )
+      
 
