@@ -36,7 +36,7 @@ class ItemCardapio(models.Model):
     )
     
     CHOICE_FOME = (
-        ('Nao se aplica','Nãoo se aplica'),
+        ('Nao se aplica','Não se aplica'),
         ('1 pessoa','1 pessoa'),
         ('2 pessoas','2 pessoas'),
         ('3 pessoas','3 pessoas'),

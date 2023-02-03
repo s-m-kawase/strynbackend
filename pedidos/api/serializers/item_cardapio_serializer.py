@@ -6,7 +6,10 @@ from .grupo_complemento_item_serializer import GrupoComplementosSerializer
 
 class ItemCardapioSerializer(serializers.ModelSerializer):
     categoria_read = serializers.SerializerMethodField()
+    grupo_complemento_read = serializers.SerializerMethodField()
     
+    def get_grupo_complemento_read(self, obj):
+        return [GrupoComplementosSerializer(instance=grupo_complemento).data for grupo_complemento in obj.grupo_complemento.all()]
 
     def get_categoria_read(self, obj):
         return CategoriaCardapioSerializer(instance=obj.categoria).data if obj.categoria else None
