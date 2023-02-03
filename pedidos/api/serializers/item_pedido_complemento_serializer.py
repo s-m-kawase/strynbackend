@@ -5,11 +5,11 @@ from .complemento_serializer import ComplementosSerializer
 
 
 class ItensPedidoComplementosSerializer(serializers.ModelSerializer):
+    # property
+    total = serializers.ReadOnlyField()
+
     complemento_read = serializers.SerializerMethodField()
     item_pedido_read = serializers.SerializerMethodField()
-
-    total=serializers.ReadOnlyField()
-
 
     def get_item_pedido_read(self,obj):
         return ItensPedidoSerializer(instance=obj.item_pedido).data
