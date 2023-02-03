@@ -3,6 +3,9 @@ from pedidos.models import ItensPedido
 from .pedido_serializer import PedidosSerializer
 from .item_cardapio_serializer import ItemCardapioSerializer
 class ItensPedidoSerializer(serializers.ModelSerializer):
+    #  property
+    total = serializers.ReadOnlyField()
+
     item_read = serializers.SerializerMethodField()
     pedido_read = serializers.SerializerMethodField()
 

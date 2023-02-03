@@ -6,6 +6,8 @@ from .cupom_serializers import CupomSerializer
 
 
 class PagamentoSerializer(serializers.ModelSerializer):
+    # property
+    total = serializers.ReadOnlyField()
 
     adicionais_read = serializers.SerializerMethodField()
     cupom_read = serializers.SerializerMethodField()
