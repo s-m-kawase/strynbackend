@@ -1,10 +1,47 @@
+from rest_framework.decorators import action
+from django.http.response import JsonResponse
 from rest_framework import generics, serializers, viewsets
 from pagamentos.models import Cupom
 from ..serializers.cupom_serializers import *
 from rest_framework.permissions import IsAuthenticated
+from datetime import date, datetime
 
 
 class CupomViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Cupom.objects.all()
     serializer_class = CupomSerializer
+
+
+    @action(methods=['get'], detail=False)
+    def cupom_valido_ate(self, request):
+        cod_cupom = request.query_params.get('cod_cupom',None)
+        data_atual =datetime.today()
+        mensagem = ''
+
+        try: 
+            cupom = Cupom.objects.get(cod_cupom=cod_cupom)
+            cupom_serializado = CupomSerializer(cupom).data
+        except:
+            cupom = None
+            cupom_serializado = None
+
+        if cupom and cupom.validado_ate >= data_atual:
+            mensagem = 'Válido'
+            
+        elif cupom:
+            mensagem ='Expirado'
+        
+        else:
+            mensagem = 'Cupom não encontrado'
+
+            
+        return JsonResponse(
+            {
+                "mensagem":mensagem,
+                "cupom":cupom_serializado
+            }, 
+            content_type="application/json",
+        )
+      
+
