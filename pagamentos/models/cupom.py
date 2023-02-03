@@ -28,7 +28,7 @@ class Cupom(models.Model):
 
     validado_ate = models.DateTimeField(
         verbose_name='Validade até',
-        null= True, blank=True
+        null=True
     )
 
 

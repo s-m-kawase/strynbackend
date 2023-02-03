@@ -6,11 +6,13 @@ from django.contrib import admin
 class ItemCardapioAdmin(admin.ModelAdmin):
     list_display = [
         'id',
+        'nome',
         'preco',
-        'foto',
         'descricao',
     ]
 
     search_fields = [
         'id'
     ]
+    
+    filter_horizontal = ['categoria','grupo_complemento']

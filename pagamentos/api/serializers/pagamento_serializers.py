@@ -11,13 +11,13 @@ class PagamentoSerializer(serializers.ModelSerializer):
     cupom = serializers.SerializerMethodField()
     pedido = serializers.SerializerMethodField()
 
-    def get_adicionais(self, obj):
+    def get_adicionais_read(self, obj):
         return [AdicionalSerializer(instance=adicionais).data for adicionais in obj.adicionais.all()]
         
-    def get_cupom(self, obj):
+    def get_cupom_read(self, obj):
         return CupomSerializer(instance=obj.cupom).data 
         
-    def get_pedido(self, obj):
+    def get_pedido_read(self, obj):
         return PedidosSerializer(instance=obj.pedido).data 
 
     class Meta:

@@ -43,13 +43,6 @@ class Pedidos(models.Model):
         null=True
     )
 
-    cupom = models.ForeignKey(
-        'pagamentos.Cupom',
-        on_delete=models.DO_NOTHING,
-        verbose_name='Cupom',
-        blank=True, null=True
-    )
-
     @property
     def subtotal(self):
         subtotal = 0

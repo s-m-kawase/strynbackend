@@ -10,25 +10,25 @@ from rest_framework_simplejwt.views import (
 
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
-from core.api.viewsets.profile_viewset import *
-from core.api.viewsets.user_viewset import *
-from pagamentos.api.viewsets.adicional_viewset import *
-from pagamentos.api.viewsets.cupom_viewset import *
-from pagamentos.api.viewsets.pagamento_viewset import *
-from pedidos.api.viewsets.cardapio_viewset import *
-from pedidos.api.viewsets.categoria_cadarpio_viewset import *
-from pedidos.api.viewsets.cliente_viewset import *
-from pedidos.api.viewsets.complemento_viewset import *
-from pedidos.api.viewsets.grupo_complemento_viewset import *
-from pedidos.api.viewsets.item_pedido_complemento_viewset import *
-from pedidos.api.viewsets.item_pedido_viewset import *
-from pedidos.api.viewsets.item_cardapio_viewset import *
-from pedidos.api.viewsets.pedido_viewset import *
-from pedidos.api.viewsets.restaurante_viewset import *
-from pedidos.api.viewsets.tempo_estimado_viewset import *
+from core.api.viewsets.profile_viewset import ProfileViewSet
+from core.api.viewsets.user_viewset import UserViewSet
+from pagamentos.api.viewsets.adicional_viewset import AdicionalViewSet
+from pagamentos.api.viewsets.cupom_viewset import CupomViewSet
+from pagamentos.api.viewsets.pagamento_viewset import PagamentoViewSet
+from pedidos.api.viewsets.cardapio_viewset import CardapioViewSet
+from pedidos.api.viewsets.categoria_cadarpio_viewset import CategoriaCardapioViewSet
+from pedidos.api.viewsets.cliente_viewset import ClienteViewSet
+from pedidos.api.viewsets.complemento_viewset import ComplementosViewSet
+from pedidos.api.viewsets.grupo_complemento_viewset import GrupoComplementosViewSet
+from pedidos.api.viewsets.item_pedido_complemento_viewset import ItensPedidoComplementosViewSet
+from pedidos.api.viewsets.item_pedido_viewset import ItensPedidoViewSet
+from pedidos.api.viewsets.item_cardapio_viewset import ItemCardapioViewSet
+from pedidos.api.viewsets.pedido_viewset import PedidosViewSet
+from pedidos.api.viewsets.restaurante_viewset import RestauranteViewSet
+from pedidos.api.viewsets.tempo_estimado_viewset import TempoEstimadoViewSet
 
 router = routers.DefaultRouter()
-router.register(r'user', UserViewSet, basename='user'),
+router.register(r'usuario', UserViewSet, basename='usuario'),
 router.register(r'profile', ProfileViewSet, basename='profile'),
 
 router.register(r'pagamento', PagamentoViewSet, basename='pagamento'),

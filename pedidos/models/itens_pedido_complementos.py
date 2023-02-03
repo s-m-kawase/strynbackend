@@ -1,14 +1,21 @@
 from django.db import models
 from pedidos.models.complemento import Complementos
-
+from pedidos.models.itens_pedido import ItensPedido
 
 class ItensPedidoComplementos(models.Model):
     
-    complemento = models.ManyToManyField(
+    complemento = models.ForeignKey(
         Complementos,
+        on_delete=models.SET_NULL,
         verbose_name='Complemento',
-        null=True,
-        blank=True
+        null=True
+    )
+
+    item_pedido = models.ForeignKey(
+        ItensPedido,
+        on_delete=models.SET_NULL,
+        verbose_name='Item do Pedido',
+        null=True
     )
 
     quantidade = models.IntegerField(

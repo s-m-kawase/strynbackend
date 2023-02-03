@@ -6,6 +6,9 @@ from .pedidos_inline import PedidosInline
 class ClienteAdmin(admin.ModelAdmin):
     list_display = [
         'nome_cliente',
+        'usuario',
+        'cpf',
+        'celular'
     ]
 
     search_fields = [

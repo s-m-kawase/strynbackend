@@ -7,7 +7,6 @@ class PedidosAdmin(admin.ModelAdmin):
     list_display = [
         'id',
         'status_pedido',
-        'cupom',
         'subtotal',
         'total'
     ]
@@ -16,13 +15,18 @@ class PedidosAdmin(admin.ModelAdmin):
         'id',
     ]
 
-    list_filter = [
-        'cupom',
-        
-    ]
-
     filter_horizontal = [
         'tempo_estimado'
+    ]
+
+    readonly_fields = [
+        'data_criacao',
+        'subtotal',
+        'total'
+    ]
+
+    autocomplete_fields = [
+        'cliente'
     ]
 
     inlines = [

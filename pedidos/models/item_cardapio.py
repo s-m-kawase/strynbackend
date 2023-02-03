@@ -20,7 +20,8 @@ class ItemCardapio(models.Model):
         max_digits=10,
         decimal_places=2,
         verbose_name='Preço do Produto',
-        blank=True, null=True,
+        null=True,
+        default=0
     )
 
     status_venda = models.BooleanField(
@@ -50,7 +51,7 @@ class ItemCardapio(models.Model):
 
     grupo_complemento = models.ManyToManyField(
         GrupoComplementos,
-        verbose_name='Complementos',
+        verbose_name='Grupo de Complementos',
         blank=False, null=False,
     )
     
