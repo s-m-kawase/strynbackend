@@ -12,7 +12,7 @@ class ItemCardapioSerializer(serializers.ModelSerializer):
         return [GrupoComplementosSerializer(instance=grupo_complemento).data for grupo_complemento in obj.grupo_complemento.all()]
 
     def get_categoria_read(self, obj):
-        return CategoriaCardapioSerializer(instance=obj.categoria).data if obj.categoria else None
+        return [CategoriaCardapioSerializer(instance=categoria).data for categoria in obj.categoria.all()]
     
     class Meta:
         model = ItemCardapio
