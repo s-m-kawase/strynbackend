@@ -6,18 +6,15 @@ from django.contrib import admin
 class PagamentoAdmin(admin.ModelAdmin):
     list_display = [
         'id',
-        'codigo_pagamento',
-        'desconto',
+        'codigo_pagamento'
     ]
 
     search_fields = [
         'id',
-        'desconto',
     ]
 
     list_filter = [
-        'codigo_pagamento',
-        'desconto'
+        'codigo_pagamento'
     ]
 
     """ filter_horizontal = [

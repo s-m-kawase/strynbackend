@@ -9,6 +9,8 @@ class PedidosInline(admin.StackedInline):
     filter_horizontal = ['tempo_estimado', 'adicionais']
     autocomplete_fields = ['cupom']
     readonly_fields = [
-        'data_criacao'
+        'data_criacao',
+        'total',
+        'subtotal'
     ]
     extra = 0

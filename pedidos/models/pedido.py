@@ -58,11 +58,20 @@ class Pedidos(models.Model):
         blank=True
     )
 
+    desconto = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Valor do Desconto',
+        null=True,
+        default=0
+    )
+
     cupom = models.ForeignKey(
         Cupom,
         on_delete=models.SET_NULL,
         verbose_name='Cupom',
-        null= True, blank=True
+        null=True,
+        blank=True
     )
 
     adicionais = models.ManyToManyField(
@@ -73,9 +82,17 @@ class Pedidos(models.Model):
 
     @property
     def subtotal(self):
+        adicionais = 0
+        for adicional in self.adicionais.all():
+            adicionais += float(adicional.valor)
+
+        cupom = float(self.cupom.valor) if self.cupom else 0
+
         subtotal = 0
-        for pagamento in self.pagamento_set.all():
-            subtotal += pagamento.total
+        subtotal += float(self.total if self.total else 0)
+        subtotal -= float(self.desconto)
+        subtotal -= float(cupom)
+        subtotal += float(adicionais)
 
         return subtotal
 
