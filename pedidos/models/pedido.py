@@ -6,6 +6,12 @@ class Pedidos(models.Model):
 
     data_criacao = models.DateTimeField(
         verbose_name='Data da Criação',
+        auto_now_add=True,
+        blank=True, null=True,
+    ) 
+
+    data_atualizacao = models.DateTimeField(
+        verbose_name='Data de Atualização',
         auto_now=True,
         blank=True, null=True,
     ) 
@@ -66,6 +72,14 @@ class Pedidos(models.Model):
             total += item.total
         
         return total
+
+    @property
+    def itens_quantidade(self):
+        quantidade = 0
+        for item in self.itenspedido_set.all():
+            quantidade+=item.quantidade if item.quantidade else 0
+
+        return quantidade
 
     def efetuar_pedido(self):
         pass
