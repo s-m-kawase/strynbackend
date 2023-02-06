@@ -7,7 +7,7 @@ from .tempo_estimado_serializer import TempoEstimadoSerializer
 class PedidosSerializer(serializers.ModelSerializer):
     #  property
     total = serializers.ReadOnlyField()
-    subtotal_read = serializers.ReadOnlyField()
+    subtotal = serializers.ReadOnlyField()
     
     cliente_read = serializers.SerializerMethodField()
     tempo_estimado_read = serializers.SerializerMethodField()
