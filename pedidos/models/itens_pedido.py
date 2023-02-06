@@ -4,7 +4,7 @@ from pedidos.models.pedido import Pedidos
 
 class ItensPedido(models.Model):
 
-    item = models.OneToOneField(
+    item = models.ForeignKey(
         ItemCardapio,
         on_delete=models.SET_NULL,
         verbose_name='Itens',
