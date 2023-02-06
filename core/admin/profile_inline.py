@@ -6,5 +6,5 @@ class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False,
     verbose_name_plural = 'Profiles'
-    readonly_fields = ['restaurante']
+    autocomplete_fields = ['restaurante']
     extra = 1
