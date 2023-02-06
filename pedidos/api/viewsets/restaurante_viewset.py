@@ -6,6 +6,8 @@ from rest_framework.decorators import action
 from django.http.response import JsonResponse
 from datetime import date
 from dateutil.relativedelta import relativedelta
+
+
 class RestauranteViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Restaurante.objects.all()

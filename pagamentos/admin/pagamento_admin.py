@@ -8,7 +8,6 @@ class PagamentoAdmin(admin.ModelAdmin):
         'id',
         'codigo_pagamento',
         'desconto',
-        'cupom'
     ]
 
     search_fields = [
@@ -21,12 +20,11 @@ class PagamentoAdmin(admin.ModelAdmin):
         'desconto'
     ]
 
-    filter_horizontal = [
+    """ filter_horizontal = [
         'adicionais'
-    ]
+    ] """
 
     autocomplete_fields = [
-        'cupom',
         'pedido'
     ]
     

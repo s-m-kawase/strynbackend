@@ -1,6 +1,8 @@
 from django.db import models
 from pedidos.models.tempo import TempoEstimado
 from .restaurante import Restaurante
+from pagamentos.models.cupom import Cupom
+from pagamentos.models.adicional import Adicional
 
 class Pedidos(models.Model):
 
@@ -54,6 +56,19 @@ class Pedidos(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True
+    )
+
+    cupom = models.ForeignKey(
+        Cupom,
+        on_delete=models.SET_NULL,
+        verbose_name='Cupom',
+        null= True, blank=True
+    )
+
+    adicionais = models.ManyToManyField(
+        Adicional,
+        verbose_name='Adicionais',
+        null= True, blank=True    
     )
 
     @property
