@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Profile(models.Model):
 
     usuario = models.OneToOneField(
@@ -10,20 +11,12 @@ class Profile(models.Model):
         null=True
     )
 
-    """ email = models.EmailField(
-        verbose_name='E-mail do Usuario'
+    restaurante = models.ForeignKey(
+        'pedidos.Restaurante',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
-
-    senha = models.CharField(
-        max_length=100,
-        verbose_name='Senha',
-    )
-
-    data_registro = models.DateField(
-        verbose_name='Data do Registro',
-        auto_now=True,
-    ) """
-
 
     def registrar(self):
         pass

@@ -1,6 +1,6 @@
 from django.db import models
 from pedidos.models.tempo import TempoEstimado
-
+from .restaurante import Restaurante
 
 class Pedidos(models.Model):
 
@@ -41,6 +41,13 @@ class Pedidos(models.Model):
         verbose_name='Cliente',
         blank=True, 
         null=True
+    )
+
+    restaurante = models.ForeignKey(
+        Restaurante,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
 
     @property
