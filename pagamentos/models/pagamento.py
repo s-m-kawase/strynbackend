@@ -1,6 +1,4 @@
 from django.db import models
-from pagamentos.models.cupom import Cupom
-from pagamentos.models.adicional import Adicional
 from pedidos.models.pedido import Pedidos
 
 class Pagamento(models.Model):
@@ -27,27 +25,6 @@ class Pagamento(models.Model):
         default="Cartão de debito"
     )
 
-    desconto = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        verbose_name='Valor do Desconto',
-        null=True,
-        default=0
-    )
-
-    adicionais = models.ManyToManyField(
-        Adicional,
-        verbose_name='Adicionais',
-        null= True, blank=True    
-    )
-
-    cupom = models.ForeignKey(
-        Cupom,
-         on_delete=models.SET_NULL,
-        verbose_name='Cupom',
-        null= True, blank=True
-    )
-
     pedido = models.ForeignKey(
         Pedidos,
         verbose_name="Pedido",
@@ -55,25 +32,19 @@ class Pagamento(models.Model):
         null=True
     )
 
-    # def calcular_preco(self):
-    #     pass
+    valor_pago = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Valor Pago',
+        null=True,
+        default=0
+    )
+
     
     @property
     def total(self):
-
-        adicionais = 0
-        for adicional in self.adicionais.all():
-            adicionais += float(adicional.valor)
-
-        cupom = float(self.cupom.valor) if self.cupom else 0
-
-        total = 0
-        total += float(self.pedido.total if self.pedido else 0)
-        total -= float(self.desconto)
-        total -= float(cupom)
-        total += float(adicionais)
         
-        return total
+        return self.pedido.subtotal
 
     def __str__(self):
         return self.pagamento

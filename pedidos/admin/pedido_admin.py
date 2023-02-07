@@ -16,7 +16,8 @@ class PedidosAdmin(admin.ModelAdmin):
     ]
 
     filter_horizontal = [
-        'tempo_estimado'
+        'tempo_estimado',
+        'adicionais'
     ]
 
     readonly_fields = [
@@ -26,7 +27,9 @@ class PedidosAdmin(admin.ModelAdmin):
     ]
 
     autocomplete_fields = [
-        'cliente'
+        'cliente',
+        'cupom',
+        
     ]
 
     inlines = [

@@ -1,11 +1,19 @@
 from django.db import models
 from pedidos.models.tempo import TempoEstimado
 from .restaurante import Restaurante
+from pagamentos.models.cupom import Cupom
+from pagamentos.models.adicional import Adicional
 
 class Pedidos(models.Model):
 
     data_criacao = models.DateTimeField(
         verbose_name='Data da Criação',
+        auto_now_add=True,
+        blank=True, null=True,
+    ) 
+
+    data_atualizacao = models.DateTimeField(
+        verbose_name='Data de Atualização',
         auto_now=True,
         blank=True, null=True,
     ) 
@@ -50,11 +58,41 @@ class Pedidos(models.Model):
         blank=True
     )
 
+    desconto = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Valor do Desconto',
+        null=True,
+        default=0
+    )
+
+    cupom = models.ForeignKey(
+        Cupom,
+        on_delete=models.SET_NULL,
+        verbose_name='Cupom',
+        null=True,
+        blank=True
+    )
+
+    adicionais = models.ManyToManyField(
+        Adicional,
+        verbose_name='Adicionais',
+        null= True, blank=True    
+    )
+
     @property
     def subtotal(self):
+        adicionais = 0
+        for adicional in self.adicionais.all():
+            adicionais += float(adicional.valor)
+
+        cupom = float(self.cupom.valor) if self.cupom else 0
+
         subtotal = 0
-        for pagamento in self.pagamento_set.all():
-            subtotal += pagamento.total
+        subtotal += float(self.total if self.total else 0)
+        subtotal -= float(self.desconto)
+        subtotal -= float(cupom)
+        subtotal += float(adicionais)
 
         return subtotal
 
@@ -66,6 +104,14 @@ class Pedidos(models.Model):
             total += item.total
         
         return total
+
+    @property
+    def itens_quantidade(self):
+        quantidade = 0
+        for item in self.itenspedido_set.all():
+            quantidade+=item.quantidade if item.quantidade else 0
+
+        return quantidade
 
     def efetuar_pedido(self):
         pass
