@@ -5,9 +5,16 @@ from pagamentos.models import Cupom
 from ..serializers.cupom_serializers import *
 from rest_framework.permissions import IsAuthenticated
 from datetime import date, datetime
+from rest_framework.pagination import PageNumberPagination
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 
 class CupomViewSet(viewsets.ModelViewSet):
+    pagination_class = StandardResultsSetPagination
     permission_classes = (IsAuthenticated,)
     queryset = Cupom.objects.all()
     serializer_class = CupomSerializer

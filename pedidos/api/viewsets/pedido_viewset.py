@@ -4,13 +4,16 @@ from ..serializers.pedido_serializer import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from django.http.response import JsonResponse
+from rest_framework.pagination import PageNumberPagination
 
-from datetime import date, datetime
-from dateutil.relativedelta import relativedelta
-
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 
 class PedidosViewSet(viewsets.ModelViewSet):
+    pagination_class = StandardResultsSetPagination
     permission_classes = (IsAuthenticated,)
     queryset = Pedidos.objects.all()
     serializer_class = PedidosSerializer
