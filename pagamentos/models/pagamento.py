@@ -4,7 +4,7 @@ from pedidos.models.pedido import Pedidos
 class Pagamento(models.Model):
     codigo_pagamento = models.CharField(
         max_length=100,
-        verbose_name='Cóigo do pagamento',
+        verbose_name='Código do pagamento',
         null= True,
         unique=True 
     )
