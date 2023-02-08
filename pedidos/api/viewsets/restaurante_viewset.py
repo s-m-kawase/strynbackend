@@ -129,6 +129,7 @@ class RestauranteViewSet(viewsets.ModelViewSet):
             data = {
                 "nome__restaurante": restaurante.nome,
                 "id__restaurante": restaurante.id,
+                "imagem":restaurante.logo.url if restaurante.logo else None,
                 "mes": data_atual.month,
                 "total_pedidos_hoje": total_pedidos_hoje,
                 "total_ticket_medio_hoje": total_ticket_medio_hoje,
