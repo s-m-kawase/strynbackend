@@ -26,16 +26,49 @@ class RestauranteViewSet(viewsets.ModelViewSet):
 
             restaurante = Restaurante.objects.get(id=pk)
             pedidos = Pedidos.objects.filter(restaurante=restaurante)
-
+            data_atual = date.today()
             quantidade_kda_hora = []
             pedidos_dia = []
             vendas_dia = []
             vendas_mes = []
-            data_atual = date.today()
             data_inicial_semanal = data_atual - relativedelta(days=7)
             data_final_semanal = data_atual
             data_inicial_mensal = data_atual - relativedelta(months=6)
             data_final_mensal = data_atual
+
+            ### 1
+            pedidos_hoje = pedidos.filter(
+                data_criacao__year=data_atual.year,
+                data_criacao__month=data_atual.month,
+                data_criacao__day=data_atual.day
+            )
+            valor = 0
+            for pedido in pedidos_hoje:
+                valor += pedido.total
+
+            total_pedidos_hoje = {
+                "quantidade": pedidos_hoje.count(),
+                "valor": valor
+            }
+            total_ticket_medio_hoje = round(float(total_pedidos_hoje.get('valor')) / (float(total_pedidos_hoje.get("quantidade")) if total_pedidos_hoje.get("quantidade") != 0 else 1), 2)
+
+            ### 2
+            pedidos_mes_atual = pedidos.filter(
+                data_criacao__year=data_atual.year,
+                data_criacao__month=data_atual.month
+            )
+
+            valor = 0
+            for pedido in pedidos_mes_atual:
+                valor += pedido.total
+            
+            total_pedidos_mes = {
+                "quantidade": pedidos_mes_atual.count(),
+                "valor": valor
+            }
+            total_ticket_medio_mes = round(float(total_pedidos_mes.get('valor')) / (float(total_pedidos_mes.get("quantidade")) if total_pedidos_mes.get("quantidade") != 0 else 1), 2)
+
+            
             
             for pedido in pedidos:
                 encontrado = False
@@ -94,6 +127,13 @@ class RestauranteViewSet(viewsets.ModelViewSet):
                 data_base_mensal += relativedelta(months=1)
             
             data = {
+                "nome__restaurante": restaurante.nome,
+                "id__restaurante": restaurante.id,
+                "mes": data_atual.month,
+                "total_pedidos_hoje": total_pedidos_hoje,
+                "total_ticket_medio_hoje": total_ticket_medio_hoje,
+                "total_pedidos_mes": total_pedidos_mes,
+                "total_ticket_medio_mes": total_ticket_medio_mes,
                 "relatorios": {
                     "quantidade_kda_hora": quantidade_kda_hora,
                     "quantidade_pedidos_dia": pedidos_dia,
