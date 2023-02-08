@@ -11,6 +11,7 @@ class PedidosSerializer(serializers.ModelSerializer):
     #  property
     total = serializers.ReadOnlyField()
     subtotal = serializers.ReadOnlyField()
+    itens_quantidade = serializers.ReadOnlyField()
     
     adicionais_read = serializers.SerializerMethodField()
     cupom_read = serializers.SerializerMethodField()
