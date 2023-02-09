@@ -1,4 +1,5 @@
-from rest_framework import generics, serializers, viewsets 
+from rest_framework import viewsets ,filters
+import django_filters.rest_framework
 from pedidos.models import Pedidos  
 from ..serializers.pedido_serializer import *
 from rest_framework.permissions import IsAuthenticated
@@ -17,6 +18,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Pedidos.objects.all()
     serializer_class = PedidosSerializer
+
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = ['status_pedido','restaurante']
+
+    search_fields = ['id']
 
 
     def get_queryset(self):
