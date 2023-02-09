@@ -1,6 +1,7 @@
 from rest_framework.decorators import action
 from django.http.response import JsonResponse
-from rest_framework import generics, serializers, viewsets
+from rest_framework import viewsets, filters
+import django_filters.rest_framework
 from pagamentos.models import Cupom
 from ..serializers.cupom_serializers import *
 from rest_framework.permissions import IsAuthenticated
@@ -18,6 +19,12 @@ class CupomViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Cupom.objects.all()
     serializer_class = CupomSerializer
+
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = ['validado_ate']
+
+    search_fields = ['nome']
 
 
     @action(methods=['get'], detail=False)

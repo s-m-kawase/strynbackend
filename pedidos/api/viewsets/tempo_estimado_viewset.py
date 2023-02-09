@@ -1,4 +1,5 @@
-from rest_framework import generics, serializers, viewsets
+from rest_framework import viewsets, filters
+import django_filters.rest_framework
 from pedidos.models import TempoEstimado
 from ..serializers.tempo_estimado_serializer import *
 from rest_framework.permissions import IsAuthenticated
@@ -14,3 +15,9 @@ class TempoEstimadoViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = TempoEstimado.objects.all()
     serializer_class = TempoEstimadoSerializer
+
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = ['tempo']
+
+    search_fields = ['tempo']

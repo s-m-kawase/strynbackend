@@ -1,4 +1,5 @@
-from rest_framework import generics, serializers, viewsets
+from rest_framework import viewsets, filters
+import django_filters.rest_framework
 from pagamentos.models import Pagamento
 from ..serializers.pagamento_serializers import *
 from rest_framework.permissions import IsAuthenticated
@@ -14,3 +15,9 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Pagamento.objects.all()
     serializer_class = PagamentoSerializer
+
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = ['pagamento']
+
+    search_fields = ['valor_pago']

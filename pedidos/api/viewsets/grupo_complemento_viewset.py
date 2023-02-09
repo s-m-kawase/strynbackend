@@ -1,4 +1,5 @@
-from rest_framework import generics, serializers, viewsets
+from rest_framework import viewsets , filters
+import django_filters.rest_framework
 from pedidos.models import GrupoComplementos
 from ..serializers.grupo_complemento_item_serializer import *
 from rest_framework.permissions import IsAuthenticated
@@ -16,3 +17,9 @@ class GrupoComplementosViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = GrupoComplementos.objects.all()
     serializer_class = GrupoComplementosSerializer
+
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = ['obrigatoriedade','quantidade_minima','quantidade_maxima']
+
+    search_fields = ['nome']
