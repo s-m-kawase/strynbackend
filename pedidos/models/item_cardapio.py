@@ -61,6 +61,10 @@ class ItemCardapio(models.Model):
         blank=True, null=True
     )
 
+    opcao = models.BooleanField(
+        verbose_name='Não, este item não tem complementos',
+        default=True,
+    )
 
     def __str__(self):
         return str(self.nome)
