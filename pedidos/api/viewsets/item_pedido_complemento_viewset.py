@@ -1,4 +1,5 @@
-from rest_framework import generics, serializers, viewsets
+from rest_framework import viewsets, filters
+import django_filters.rest_framework
 from pedidos.models import ItensPedidoComplementos
 from ..serializers.item_pedido_complemento_serializer import *
 from rest_framework.permissions import IsAuthenticated
@@ -15,3 +16,9 @@ class ItensPedidoComplementosViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = ItensPedidoComplementos.objects.all()
     serializer_class = ItensPedidoComplementosSerializer
+
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = ['complemento']
+
+    search_fields = ['complemento__nome']

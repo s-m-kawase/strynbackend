@@ -1,4 +1,5 @@
-from rest_framework import generics, serializers, viewsets
+from rest_framework import viewsets, filters
+import django_filters.rest_framework
 from pedidos.models import Cardapio
 from ..serializers.cardapio_serializers import *
 from rest_framework.permissions import IsAuthenticated
@@ -15,3 +16,9 @@ class CardapioViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Cardapio.objects.all()
     serializer_class = CardapioSerializer
+
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = ['restaurante']
+
+    search_fields = ['nome']

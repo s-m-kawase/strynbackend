@@ -1,4 +1,5 @@
-from rest_framework import generics, serializers, viewsets
+from rest_framework import viewsets, filters
+import django_filters.rest_framework
 from pedidos.models import Restaurante
 from ..serializers.restaurante_serializer import RestauranteSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -18,6 +19,12 @@ class RestauranteViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Restaurante.objects.all()
     serializer_class = RestauranteSerializer
+
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = ['horario_abertura','horario_encerramento']
+
+    search_fields = ['nome']
 
     @action(methods=['get'], detail=True)
     def relatorio_inicial(self, request, pk):

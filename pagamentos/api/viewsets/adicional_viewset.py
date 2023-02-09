@@ -1,4 +1,5 @@
-from rest_framework import generics, serializers, viewsets
+from rest_framework import viewsets, filters
+import django_filters.rest_framework
 from pagamentos.models import Adicional
 from ..serializers.adicional_serializers import *
 
@@ -15,3 +16,9 @@ class AdicionalViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Adicional.objects.all()
     serializer_class = AdicionalSerializer
+
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+
+    filterset_fields = ['valor']
+
+    search_fields = ['nome','valor']
