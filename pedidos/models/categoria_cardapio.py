@@ -15,6 +15,11 @@ class CategoriaCardapio(models.Model):
         default=False
     )
 
+    em_promocao = models.BooleanField(
+        verbose_name="Está na Promoção?",
+        default=False
+    )
+
 
     def __str__(self):
         return self.nome

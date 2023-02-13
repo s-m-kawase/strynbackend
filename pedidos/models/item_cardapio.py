@@ -65,6 +65,20 @@ class ItemCardapio(models.Model):
         verbose_name='Não, este item não tem complementos',
         default=True,
     )
+    preco_promocao = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Preço da Promoção',
+        null=True,
+        default=0
+    )
+
+
+    def promocao(self):
+        if self.categoria and self.categoria.em_promocao == True:
+            return self.preco_promocao
+        else:
+            return self.preco
 
     def __str__(self):
         return str(self.nome)
