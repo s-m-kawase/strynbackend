@@ -5,6 +5,8 @@ from .grupo_complemento_item_serializer import GrupoComplementosSerializer
 
 
 class ItemCardapioSerializer(serializers.ModelSerializer):
+    # property
+    promocao = serializers.ReadOnlyField()
     categoria_read = serializers.SerializerMethodField()
     grupo_complemento_read = serializers.SerializerMethodField()
     
