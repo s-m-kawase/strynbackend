@@ -73,7 +73,7 @@ class ItemCardapio(models.Model):
         default=0
     )
 
-
+    @property
     def promocao(self):
         if self.categoria and self.categoria.em_promocao == True:
             return self.preco_promocao
