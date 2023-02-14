@@ -18,10 +18,16 @@ class PedidosSerializer(serializers.ModelSerializer):
     cliente_read = serializers.SerializerMethodField()
     tempo_estimado_read = serializers.SerializerMethodField()
     restaurante_read = serializers.SerializerMethodField()
+    pagamentos_read = serializers.SerializerMethodField()
 
 
     def get_adicionais_read(self, obj):
         return [AdicionalSerializer(instance=adicionais).data for adicionais in obj.adicionais.all()]
+
+    def get_pagamentos_read(self, obj):
+        from pagamentos.api.serializers.pagamento_serializers import PagamentoSerializer
+        return [PagamentoSerializer(instance=pagamento).data for pagamento in obj.pagamento_set.all()]
+
 
     def get_cupom_read(self, obj):
         return CupomSerializer(instance=obj.cupom).data if obj.cupom else None
