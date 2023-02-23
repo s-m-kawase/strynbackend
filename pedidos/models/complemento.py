@@ -41,7 +41,7 @@ class Complementos(models.Model):
 
 
     def __str__(self):
-        return self.nome
+        return f'{self.nome}'
 
     class Meta:
         app_label = 'pedidos'
