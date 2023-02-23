@@ -41,7 +41,7 @@ class GrupoComplementos(models.Model):
         pass
 
     def __str__(self):
-        return self.nome
+        return self.nome if self.nome else f'{self.id}'
 
     class Meta:
         app_label = 'pedidos'
