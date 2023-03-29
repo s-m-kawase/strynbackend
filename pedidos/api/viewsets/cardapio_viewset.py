@@ -5,7 +5,6 @@ from ..serializers.cardapio_serializers import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 
-
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
@@ -22,3 +21,11 @@ class CardapioViewSet(viewsets.ModelViewSet):
     filterset_fields = ['restaurante']
 
     search_fields = ['nome']
+
+    def get_queryset(self):
+        query = super().get_queryset()
+
+        usuario = self.request.user
+        query = query.filter(restaurante__usuario=usuario)
+
+        return query
