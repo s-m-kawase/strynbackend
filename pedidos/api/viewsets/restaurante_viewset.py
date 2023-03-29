@@ -156,4 +156,12 @@ class RestauranteViewSet(viewsets.ModelViewSet):
                 "errors": "Restaurante inválido."
             }
         return JsonResponse(data, content_type="application/json", safe=False)
+    
+    def get_queryset(self):
+        query = super().get_queryset()
+
+        usuario = self.request.user
+        query = query.filter(usuario=usuario)
+
+        return query
 
