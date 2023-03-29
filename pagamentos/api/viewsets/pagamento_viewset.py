@@ -4,6 +4,7 @@ from pagamentos.models import Pagamento
 from ..serializers.pagamento_serializers import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
+from django.db.models import Q
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -21,3 +22,12 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     filterset_fields = ['pagamento']
 
     search_fields = ['valor_pago']
+
+    def get_queryset(self):
+        query = super().get_queryset()
+
+        usuario = self.request.user
+        query = query.filter(Q(pedido__cliente__usuario=usuario) |
+                             Q(pedido__restaurante__usuario=usuario))
+
+        return query

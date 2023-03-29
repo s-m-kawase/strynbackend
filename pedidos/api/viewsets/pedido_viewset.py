@@ -1,6 +1,7 @@
 from rest_framework import viewsets ,filters
 import django_filters.rest_framework
-from pedidos.models import Pedidos  
+from pedidos.models import Pedidos,Restaurante
+from django.db.models import Q
 from ..serializers.pedido_serializer import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
@@ -29,6 +30,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         query = super().get_queryset()
 
+        usuario = self.request.user
+        query = query.filter(Q(cliente__usuario=usuario) |
+                             Q(restaurante__usuario=usuario))
+
         restaurante = self.request.query_params.get('restaurante',None)
         status = self.request.query_params.get('status_pedido',None)
         data_inicial =  self.request.query_params.get('data_inicial',None)
@@ -45,5 +50,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         if status:
             query = query.filter(status_pedido=status)
+        
+        if usuario:
+            query = query.filter(restaurante__usuario=usuario)
     
         return query
