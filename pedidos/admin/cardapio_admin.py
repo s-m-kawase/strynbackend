@@ -13,6 +13,7 @@ class CardapioAdmin(admin.ModelAdmin):
     search_fields = [
         'nome'
     ]
+    
 
     filter_horizontal = [
         'categorias'
