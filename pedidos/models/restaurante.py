@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Restaurante(models.Model):
 
@@ -7,6 +7,12 @@ class Restaurante(models.Model):
         max_length=90,
         verbose_name='Nome do Restaurante',
         null=True,
+    )
+
+    usuario = models.ManyToManyField(
+        User,
+        verbose_name='Usuários',
+        null=True
     )
 
     descricao = models.TextField(

@@ -22,3 +22,7 @@ class RestauranteAdmin(admin.ModelAdmin):
     list_filter = [
         'horario_encerramento'
     ]
+
+    filter_horizontal=[
+        'usuario',
+    ]
