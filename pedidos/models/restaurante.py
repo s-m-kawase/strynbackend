@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from pedidos.models.categoria_cardapio import CategoriaCardapio
 
 class Restaurante(models.Model):
 
@@ -13,6 +14,13 @@ class Restaurante(models.Model):
         User,
         verbose_name='Usuários',
         null=True
+    )
+
+    categoria = models.ForeignKey(
+        CategoriaCardapio,
+        on_delete=models.SET_NULL,
+        verbose_name='Categoria do Cardapio',
+        null=True,
     )
 
     descricao = models.TextField(

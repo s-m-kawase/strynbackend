@@ -163,5 +163,10 @@ class RestauranteViewSet(viewsets.ModelViewSet):
         usuario = self.request.user
         query = query.filter(usuario=usuario)
 
+        categoria = self.request.query_params.get('categoria',None)
+
+        if categoria:
+            query = query.filter(categoria=categoria)
+
         return query
 
