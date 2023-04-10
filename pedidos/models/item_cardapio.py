@@ -52,7 +52,7 @@ class ItemCardapio(models.Model):
     grupo_complemento = models.ManyToManyField(
         GrupoComplementos,
         verbose_name='Grupo de Complementos',
-        blank=False, null=False,
+        blank=True, null=True,
     )
     
 
