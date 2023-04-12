@@ -20,7 +20,7 @@ class GrupoComplementos(models.Model):
     complemento = models.ManyToManyField(
         Complementos,
         verbose_name="Complementos",
-        null=True
+        blank=True, null=True
     )
 
 
