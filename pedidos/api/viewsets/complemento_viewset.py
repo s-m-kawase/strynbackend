@@ -23,3 +23,11 @@ class ComplementosViewSet(viewsets.ModelViewSet):
     filterset_fields = ['status_venda']
 
     search_fields = ['nome']
+    
+    def get_queryset(self):
+        query = super().get_queryset()
+        usuario = self.request.user.id
+        #usuario = usuario.get_username()
+        query = query.filter(grupocomplementos__cardapio__restaurante__usuario=usuario)
+
+        return query

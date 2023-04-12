@@ -23,3 +23,11 @@ class GrupoComplementosViewSet(viewsets.ModelViewSet):
     filterset_fields = ['obrigatoriedade','quantidade_minima','quantidade_maxima']
 
     search_fields = ['nome']
+    
+    def get_queryset(self):
+        query = super().get_queryset()
+        usuario = self.request.user.id
+        #usuario = usuario.get_username()
+        query = query.filter(cardapio__restaurante__usuario=usuario)
+
+        return query

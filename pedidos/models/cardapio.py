@@ -2,6 +2,7 @@ from django.db import models
 from pedidos.models.item_cardapio import ItemCardapio
 from pedidos.models.categoria_cardapio import CategoriaCardapio
 from pedidos.models.restaurante import Restaurante
+from pedidos.models.grupo_complemento import GrupoComplementos
 
 
 class Cardapio(models.Model):
@@ -24,6 +25,12 @@ class Cardapio(models.Model):
         on_delete=models.SET_NULL,
         verbose_name='Restaurante',
         null=True
+    )
+    
+    grupo_complementos = models.ManyToManyField(
+        GrupoComplementos,
+        verbose_name='Grupo Complementos',
+        blank=True, null=True
     )
 
 
