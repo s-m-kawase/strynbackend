@@ -16,7 +16,7 @@ class Cardapio(models.Model):
     categorias =  models.ManyToManyField(
         CategoriaCardapio,
         verbose_name='Categorias do Cardapio',
-        null=True
+        blank=True, null=True
     )
 
     restaurante =  models.ForeignKey(
