@@ -13,30 +13,30 @@ class Restaurante(models.Model):
     usuario = models.ManyToManyField(
         User,
         verbose_name='Usuários',
-        null=True
+        blank=True, null=True
     )
 
     categoria = models.ForeignKey(
         CategoriaCardapio,
         on_delete=models.SET_NULL,
         verbose_name='Categoria do Cardapio',
-        null=True,
+        blank=True, null=True,
     )
 
     descricao = models.TextField(
         max_length=1000,
         verbose_name="Descrição do Restaurante",
-        null=True
+        blank=True, null=True
     )
 
     logo = models.ImageField(
         verbose_name='Logo do Restaurante',
-        null=True,
+        blank=True, null=True,
     )
 
     total_mesa = models.IntegerField(
         verbose_name="Total de Mesas",
-        null=True,
+        blank=True, null=True,
     )
 
     horario_abertura = models.TimeField(

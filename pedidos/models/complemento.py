@@ -12,8 +12,8 @@ class Complementos(models.Model):
     codigo_complemento = models.CharField(
         max_length=40,
         verbose_name='Código do Complemento',
-        null=True,
-        unique=True
+        blank=True,null=True,
+        
     )
 
     descricao = models.TextField(
