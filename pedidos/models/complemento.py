@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Complementos(models.Model):
@@ -37,6 +38,18 @@ class Complementos(models.Model):
     status_venda = models.BooleanField(
         verbose_name="Está Pausado ?",
         default=False,
+    )
+    
+    quantidade_minima = models.IntegerField(
+        verbose_name="Quantidade Mínima",
+        blank=True, null=True,
+        validators = [MinValueValidator(1.0),MaxValueValidator(10.0)],
+    )
+
+    quantidade_maxima = models.IntegerField(
+        verbose_name="Quantidade Máxima",
+        blank=True, null=True,
+        validators = [MinValueValidator(1.0),MaxValueValidator(10.0)],
     )
 
 

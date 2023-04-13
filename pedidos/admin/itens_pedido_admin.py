@@ -5,8 +5,9 @@ from django.contrib import admin
 @admin.register(ItensPedido)
 class ItensPedidoAdmin(admin.ModelAdmin):
     list_display = [
+        'item',
         'quantidade',
-        'total',
+        
     ]
 
     search_fields = [
@@ -14,4 +15,8 @@ class ItensPedidoAdmin(admin.ModelAdmin):
     ]
     autocomplete_fields = ['item', 'pedido']
 
-    readonly_fields = ['total']
+    readonly_fields = [
+        'total_item',
+        'total_complementos',
+        'preco',
+        ]

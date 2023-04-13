@@ -82,27 +82,30 @@ class Pedidos(models.Model):
 
     @property
     def subtotal(self):
+        subtotal = 0
+        
+        for item in self.itenspedido_set.all():
+            subtotal += item.preco
+        return subtotal
+        
+        
+        
+
+    @property
+    def total(self):
+        
         adicionais = 0
         for adicional in self.adicionais.all():
             adicionais += float(adicional.valor)
 
         cupom = float(self.cupom.valor) if self.cupom else 0
 
-        subtotal = 0
-        subtotal += float(self.total if self.total else 0)
-        subtotal -= float(self.desconto)
-        subtotal -= float(cupom)
-        subtotal += float(adicionais)
-
-        return subtotal
-
-    @property
-    def total(self):
-        
         total = 0
-        for item in self.itenspedido_set.all():
-            total += item.total
-        
+        total += float(self.subtotal if self.subtotal else 0)
+        total -= float(self.desconto)
+        total -= float(cupom)
+        total += float(adicionais)
+
         return total
 
     @property

@@ -1,9 +1,11 @@
 from pedidos.models.pedido import  Pedidos
 from django.contrib import admin
 from .itens_pedido_inline import ItensPedidoInline
+from nested_admin import nested, NestedStackedInline, NestedModelAdmin
+
 
 @admin.register(Pedidos)
-class PedidosAdmin(admin.ModelAdmin):
+class PedidosAdmin(NestedModelAdmin):
     list_display = [
         'id',
         'status_pedido',
