@@ -28,6 +28,6 @@ class ComplementosViewSet(viewsets.ModelViewSet):
         query = super().get_queryset()
         usuario = self.request.user.id
         #usuario = usuario.get_username()
-        query = query.filter(grupocomplementos__cardapio__restaurante__usuario=usuario)
+        query = query.filter(grupocomplementos__cardapio__restaurante__usuario=usuario).distinct()
 
         return query
