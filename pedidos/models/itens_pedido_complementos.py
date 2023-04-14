@@ -25,11 +25,12 @@ class ItensPedidoComplementos(models.Model):
 
     @property
     def total(self):
-        return 0
-        #total+= float(self.complemento.) * float(self.quantidade)
+        total = 0
+        total+= float(self.complemento.preco) * float(self.quantidade)
+        return total
 
     def __str__(self):
-        return str(self.complemento)
+        return f'{self.item_pedido} - {self.complemento}'
 
     class Meta:
         app_label = 'pedidos'

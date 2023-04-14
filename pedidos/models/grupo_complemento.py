@@ -35,6 +35,18 @@ class GrupoComplementos(models.Model):
         blank=True, null=True,
         validators = [MinValueValidator(1.0),MaxValueValidator(10.0)],
     )
+    
+    CHOICES_OPCAO = (
+        ('Single', 'Single'),
+        ('Multiplo', 'Multiplo'),
+    )
+    
+    opcao = models.CharField(
+        verbose_name="Opção",
+        max_length=100,
+        choices=CHOICES_OPCAO,
+        blank=True, null=True,
+    )
 
 
     def atualizar_catalogo(self, bool):

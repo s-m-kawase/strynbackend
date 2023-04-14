@@ -16,7 +16,6 @@ class ItensPedidoComplementosAdmin(admin.ModelAdmin):
         
     ]
     autocomplete_fields = [
-        'item_pedido',
         'complemento'
     ]
     
