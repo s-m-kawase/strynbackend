@@ -30,4 +30,4 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         query = query.filter(Q(pedido__cliente__usuario=usuario) |
                              Q(pedido__restaurante__usuario=usuario))
 
-        return query
+        return query.distinct()
