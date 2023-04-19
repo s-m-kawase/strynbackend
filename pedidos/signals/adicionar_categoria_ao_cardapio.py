@@ -12,4 +12,4 @@ def adicionar_categoria_ao_cardapio(sender, instance, created, **kwargs):
         cardapios = Cardapio.objects.filter(restaurante__usuario=usuario)
         for cardapio in cardapios:
             cardapio.categorias.add(instance)
-        cardapio.save()
+            cardapio.save()

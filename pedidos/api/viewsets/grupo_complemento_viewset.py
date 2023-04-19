@@ -30,4 +30,4 @@ class GrupoComplementosViewSet(viewsets.ModelViewSet):
         #usuario = usuario.get_username()
         query = query.filter(cardapio__restaurante__usuario=usuario).distinct()
 
-        return query
+        return query 
