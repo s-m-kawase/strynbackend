@@ -85,7 +85,8 @@ class Pedidos(models.Model):
         subtotal = 0
         
         for item in self.itenspedido_set.all():
-            subtotal += item.preco
+            if item.preco is not None:
+                subtotal += item.preco
         return subtotal
         
         
