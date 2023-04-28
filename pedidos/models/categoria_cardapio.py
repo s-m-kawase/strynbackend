@@ -20,14 +20,8 @@ class CategoriaCardapio(models.Model):
         default=False
     )
 
-    ordem =  models.IntegerField(
-        verbose_name='Ordem categoria',
-        null=True, blank=False)
-
-
-    def __str__(self):
-        return self.nome
-    
+    ordem = models.AutoField(default=1, primary_key=True, serialize=False, verbose_name='Ordem categoria'),
+        
 
     class Meta:
         app_label = 'pedidos'
