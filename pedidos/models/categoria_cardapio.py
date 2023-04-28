@@ -21,7 +21,7 @@ class CategoriaCardapio(models.Model):
     )
 
     ordem =  models.IntegerField(
-        verbose_name='Ordem',
+        verbose_name='Ordem categoria',
         null=True, blank=False)
 
 
