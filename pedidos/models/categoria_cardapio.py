@@ -20,11 +20,14 @@ class CategoriaCardapio(models.Model):
         default=False
     )
 
-    ordem = models.AutoField(default=1, primary_key=True, serialize=False, verbose_name='Ordem categoria'),
+    ordem = models.IntegerField(verbose_name="Ordem", null=True, blank=True)
+
         
 
     class Meta:
         app_label = 'pedidos'
         verbose_name = 'Categoria Cardapio'
         verbose_name_plural = 'Categorias Cardapios'
+
+    
     
