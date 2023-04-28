@@ -20,6 +20,10 @@ class CategoriaCardapio(models.Model):
         default=False
     )
 
+    ordem =  models.IntegerField(
+        verbose_name='Ordem categoria',
+        null=True, blank=False)
+
 
     def __str__(self):
         return self.nome

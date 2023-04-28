@@ -30,7 +30,7 @@ class PedidosSerializer(serializers.ModelSerializer):
             "id": item.id if item.item else None,
             "item": item.item.nome if item.item else None,
             "quantidade": item.quantidade,
-            "total": item.total,
+            "total": item.total_item,
             "preco": item.item.preco if item.item else None,
             "preco_promocao": item.item.preco_promocao if item.item else None
 
