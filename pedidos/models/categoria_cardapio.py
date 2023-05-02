@@ -15,7 +15,22 @@ class CategoriaCardapio(models.Model):
         default=False
     )
 
-    ordem = models.IntegerField(verbose_name="Ordem", null=True, blank=True)
+    em_promocao = models.BooleanField(
+        default=False,
+        verbose_name='Em promoção ?'
+    )
+
+    ordem = models.IntegerField(
+        verbose_name="Ordem",
+        unique=True,
+        null=True, blank=True
+        )
+    
+
+    def save(self, *args, **kwargs):
+        if self.em_promocao is None:
+            self.em_promocao = False
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nome    

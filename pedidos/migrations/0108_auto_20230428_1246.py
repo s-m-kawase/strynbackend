@@ -14,15 +14,15 @@ class Migration(migrations.Migration):
             model_name='categoriacardapio',
             name='em_promocao',
         ),
-        migrations.AddField(
-            model_name='categoriacardapio',
-            name='id',
-            field=models.BigAutoField(auto_created=True, default=1, primary_key=True, serialize=False, verbose_name='ID'),
-            preserve_default=False,
-        ),
-        migrations.AlterField(
-            model_name='categoriacardapio',
-            name='ordem',
-            field=models.IntegerField(blank=True, null=True, verbose_name='Ordem'),
-        ),
+        # migrations.AddField(
+        #     model_name='categoriacardapio',
+        #     name='id',
+        #     field=models.BigAutoField(auto_created=True, default=1, primary_key=True, serialize=False, verbose_name='ID'),
+        #     preserve_default=False,
+        # ),
+        # migrations.AlterField(
+        #     model_name='categoriacardapio',
+        #     name='ordem',
+        #     field=models.IntegerField(blank=True, null=True, verbose_name='Ordem'),
+        # ),
     ]

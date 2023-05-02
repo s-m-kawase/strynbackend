@@ -14,10 +14,10 @@ class Migration(migrations.Migration):
             model_name='categoriacardapio',
             name='id',
         ),
-        migrations.AlterField(
-            model_name='categoriacardapio',
-            name='ordem',
-            field=models.AutoField(default=1, primary_key=True, serialize=False, verbose_name='Ordem categoria'),
-            preserve_default=False,
-        ),
+        # migrations.AlterField(
+        #     model_name='categoriacardapio',
+        #     name='ordem',
+        #     field=models.AutoField(default=1, primary_key=True, serialize=False, verbose_name='Ordem categoria'),
+        #     preserve_default=False,
+        # ),
     ]
