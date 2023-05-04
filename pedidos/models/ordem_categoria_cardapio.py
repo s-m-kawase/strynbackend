@@ -27,7 +27,7 @@ class OrdemCategoriaCardapio(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.ordem and self.cardapio: # verifica se o valor da ordem já foi definido
-            last_order = OrdemCategoriaCardapio.objects.filter(cardapio=self.cardapio).order_by('-ordem').last()
+            last_order = OrdemCategoriaCardapio.objects.filter(cardapio=self.cardapio).order_by('-ordem').first()
             if last_order:
                 self.ordem = last_order.ordem + 1
             else:
