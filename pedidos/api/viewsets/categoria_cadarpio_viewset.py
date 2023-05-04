@@ -20,7 +20,7 @@ class CategoriaCardapioViewSet(viewsets.ModelViewSet):
 
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
 
-    filterset_fields = ['status','restaurante']
+    filterset_fields = ['status','restaurante','cardapio']
 
     search_fields = ['nome']
 
