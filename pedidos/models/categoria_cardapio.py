@@ -16,18 +16,22 @@ class CategoriaCardapio(models.Model):
     )
 
     em_promocao = models.BooleanField(
-        verbose_name="Está na Promoção?",
-        default=False
+        default=False,
+        verbose_name='Em promoção ?'
     )
 
-    ordem = models.IntegerField(verbose_name="Ordem", null=True, blank=True)
+    
 
-        
+    def save(self, *args, **kwargs):
+        if self.em_promocao is None:
+            self.em_promocao = False
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nome    
 
     class Meta:
         app_label = 'pedidos'
         verbose_name = 'Categoria Cardapio'
         verbose_name_plural = 'Categorias Cardapios'
-
-    
     

@@ -168,5 +168,5 @@ class RestauranteViewSet(viewsets.ModelViewSet):
         if categoria:
             query = query.filter(categoria=categoria)
 
-        return query.distinct()
+        return query
 

@@ -12,6 +12,7 @@ from pedidos.admin.tempo_admin import TempoEstimadoAdmin
 from pedidos.admin.pedido_admin import PedidosAdmin
 from pedidos.admin.pedidos_inline import PedidosInline
 from pedidos.admin.item_complemento_inline import ItensPedidoComplementosInline
+from .ordem_categoria_cardapio_inline import OrdemCategoriaCardapioInline
 
 
 
@@ -30,4 +31,5 @@ __all__ = [
     PedidosAdmin,
     PedidosInline,
     ItensPedidoComplementosInline,
+    OrdemCategoriaCardapioInline
 ]

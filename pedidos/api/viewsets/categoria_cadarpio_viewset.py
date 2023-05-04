@@ -35,6 +35,6 @@ class CategoriaCardapioViewSet(viewsets.ModelViewSet):
                     ids_categorias.append(categoria.id)
             ids_categorias = list(set(ids_categorias))
 
-            query = query.filter(id__in=ids_categorias).distinct()
+            query = query.filter(id__in=ids_categorias)
         
         return query

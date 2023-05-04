@@ -26,6 +26,6 @@ class CardapioViewSet(viewsets.ModelViewSet):
         query = super().get_queryset()
 
         usuario = self.request.user
-        query = query.filter(restaurante__usuario=usuario).distinct()
+        query = query.filter(restaurante__usuario=usuario)
 
         return query

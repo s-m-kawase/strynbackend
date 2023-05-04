@@ -54,4 +54,4 @@ class PedidosViewSet(viewsets.ModelViewSet):
         if usuario:
             query = query.filter(restaurante__usuario=usuario)
     
-        return query.distinct()
+        return query
