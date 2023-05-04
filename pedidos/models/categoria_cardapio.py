@@ -20,11 +20,6 @@ class CategoriaCardapio(models.Model):
         verbose_name='Em promoção ?'
     )
 
-    ordem = models.IntegerField(
-        verbose_name="Ordem",
-        unique=True,
-        null=True, blank=True
-        )
     
 
     def save(self, *args, **kwargs):

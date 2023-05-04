@@ -14,7 +14,6 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='OrdemCategoriaCardapio',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('ordem', models.IntegerField(blank=True, null=True, verbose_name='Ordem')),
                 ('cardapio', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='pedidos.cardapio', verbose_name='Cardapio')),
                 ('categoria', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='pedidos.categoriacardapio', verbose_name='Categoria')),

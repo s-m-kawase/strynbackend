@@ -10,9 +10,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='categoriacardapio',
-            name='ordem',
-            field=models.IntegerField(auto_created=True, null=True, unique=True, verbose_name='Ordem categoria'),
-        ),
+        # migrations.AlterField(
+        #     model_name='categoriacardapio',
+        #     name='ordem',
+        #     field=models.IntegerField(auto_created=True, null=True, unique=True, verbose_name='Ordem categoria'),
+        # ),
     ]

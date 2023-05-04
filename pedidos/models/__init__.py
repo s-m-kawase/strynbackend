@@ -9,6 +9,7 @@ from pedidos.models.itens_pedido_complementos import ItensPedidoComplementos
 from pedidos.models.pedido import Pedidos
 from pedidos.models.restaurante import Restaurante
 from pedidos.models.tempo import TempoEstimado
+from .ordem_categoria_cardapio import OrdemCategoriaCardapio
 
 
 __all__ = [
@@ -23,4 +24,5 @@ __all__ = [
     Pedidos,
     Restaurante,
     TempoEstimado,
+    OrdemCategoriaCardapio
 ]

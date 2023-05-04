@@ -10,10 +10,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='categoriacardapio',
-            name='id',
-        ),
+        # migrations.RemoveField(
+        #     model_name='categoriacardapio',
+        # ),
         # migrations.AlterField(
         #     model_name='categoriacardapio',
         #     name='ordem',
