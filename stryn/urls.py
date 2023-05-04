@@ -27,6 +27,7 @@ from pedidos.api.viewsets.pedido_viewset import PedidosViewSet
 from pedidos.api.viewsets.restaurante_viewset import RestauranteViewSet
 from pedidos.api.viewsets.tempo_estimado_viewset import TempoEstimadoViewSet
 from pedidos.api.viewsets.ordem_categoria_cardapio_view import OrdemCategoriaCardapioViewSet
+from pedidos.api.viewsets.cardapio_com_ordem_viewset import CardapioComOrdemViewSet
 
 router = routers.DefaultRouter()
 router.register(r'usuario', UserViewSet, basename='usuario'),
@@ -49,6 +50,7 @@ router.register(r'pedido', PedidosViewSet, basename='pedido'),
 router.register(r'restaurante', RestauranteViewSet, basename='restaurante'),
 router.register(r'tempo', TempoEstimadoViewSet, basename='tempo'),
 router.register(r'ordem_categoria_cardapio', OrdemCategoriaCardapioViewSet, basename='ordem_categoria_cardapio'),
+router.register(r'cardapio_com_ordem', CardapioComOrdemViewSet, basename='cardapio_com_ordem'),
 
 
 urlpatterns = [
