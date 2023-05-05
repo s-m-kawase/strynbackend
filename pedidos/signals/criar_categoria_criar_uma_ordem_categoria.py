@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from pedidos.models import CategoriaCardapio, Cardapio
+from pedidos.models import CategoriaCardapio, Cardapio, OrdemCategoriaCardapio
 from pedidos.models.ordem_categoria_cardapio import OrdemCategoriaCardapio
 
 
@@ -14,6 +14,7 @@ def criar_ordem_categoria_cardapio(sender, instance, created, **kwargs):
                 ordem = OrdemCategoriaCardapio.objects.create(categoria=instance, cardapio=cardapio)
                 ordem.save()
 
+
 @receiver(post_save, sender=Cardapio)
 def criar_ordem_categoria_cardapio2(sender, instance, created, **kwargs):
     if created:
@@ -23,3 +24,16 @@ def criar_ordem_categoria_cardapio2(sender, instance, created, **kwargs):
             if not ordem_existe:
                 ordem = OrdemCategoriaCardapio.objects.create(categoria=categoria, cardapio=instance)
                 ordem.save()
+
+
+@receiver(post_save, sender=OrdemCategoriaCardapio)
+def criar_ordem_categoria_cardapio3(sender, instance, created, **kwargs):
+    if created:
+        if not instance.ordem and instance.cardapio: # verifica se o valor da ordem já foi definido
+            last_order = OrdemCategoriaCardapio.objects.filter(cardapio=instance.cardapio).order_by('-ordem').first()
+            if last_order:
+                instance.ordem = last_order.ordem + 1
+            else:
+                instance.ordem = 0
+        
+
