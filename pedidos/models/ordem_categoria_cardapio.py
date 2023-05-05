@@ -25,14 +25,7 @@ class OrdemCategoriaCardapio(models.Model):
         )
 
 
-    def save(self, *args, **kwargs):
-        if not self.ordem and self.cardapio: # verifica se o valor da ordem já foi definido
-            last_order = OrdemCategoriaCardapio.objects.filter(cardapio=self.cardapio).order_by('-ordem').first()
-            if last_order:
-                self.ordem = last_order.ordem + 1
-            else:
-                self.ordem = 0
-        super().save(*args, **kwargs)
+    
 
     def __str__(self):
         '''Método que retorna a representação do objeto como string.'''

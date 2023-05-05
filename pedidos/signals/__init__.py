@@ -4,6 +4,7 @@ from .adicionar_grupo_complemento_ao_cardapio import adicionar_grupo_complemento
 from .atualizar_valor_item_pedido import atualizar_valor_item_pedido
 from .criar_categoria_criar_uma_ordem_categoria import criar_ordem_categoria_cardapio
 from .criar_categoria_criar_uma_ordem_categoria import criar_ordem_categoria_cardapio2
+from .criar_categoria_criar_uma_ordem_categoria import criar_ordem_categoria_cardapio3
 __all__ = [
     adicionar_categoria_ao_cardapio,
     adicionar_cardapio_ao_restaurante,
@@ -11,4 +12,5 @@ __all__ = [
     atualizar_valor_item_pedido,
     criar_ordem_categoria_cardapio,
     criar_ordem_categoria_cardapio2,
+    criar_ordem_categoria_cardapio3,
 ]
