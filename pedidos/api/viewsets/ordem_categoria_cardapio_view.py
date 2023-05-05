@@ -18,7 +18,7 @@ class OrdemCategoriaCardapioViewSet(viewsets.ModelViewSet):
     ]
 
 
-    @action(methods=['get'], detail=False)
+    @action(methods=['post'], detail=False)
     def alterar_ordem(request):
         cardapio = request.POST.get('id_cardapio')
         categoria_ids = request.POST.getlist('id_categorias', [])
