@@ -9,7 +9,7 @@ from ..serializers.ordem_categoria_serializers import OrdemCategoriaCardapioSeri
 class OrdemCategoriaCardapioViewSet(viewsets.ModelViewSet):
     queryset = OrdemCategoriaCardapio.objects.all()
     serializer_class = OrdemCategoriaCardapioSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
 
     filter_backends = [filters.SearchFilter]
 
@@ -27,4 +27,11 @@ class OrdemCategoriaCardapioViewSet(viewsets.ModelViewSet):
         for ordem, categoria_id in enumerate(categoria_ids):
             OrdemCategoriaCardapio.objects.filter(categoria=categoria_id, cardapio=cardapio).update(ordem=ordem)
 
-        return JsonResponse(novas_ordens)
+        
+
+        return JsonResponse(
+            {
+                "ordens": OrdemCategoriaCardapioSerializer(OrdemCategoriaCardapio.objects.filter(cardapio=cardapio).order_by('ordem'), many=True).data
+            }, 
+            content_type="application/json",
+        )

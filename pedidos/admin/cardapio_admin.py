@@ -1,6 +1,6 @@
 from pedidos.models.cardapio import Cardapio
 from django.contrib import admin
-
+from .ordem_categoria_cardapio_inline import OrdemCategoriaCardapioInline
 
 @admin.register(Cardapio)
 class CardapioAdmin(admin.ModelAdmin):
@@ -21,6 +21,6 @@ class CardapioAdmin(admin.ModelAdmin):
 
     autocomplete_fields = ['restaurante']
 
-    list_filter = [
-        
-    ]
+    list_filter = []
+
+    inlines = [OrdemCategoriaCardapioInline]

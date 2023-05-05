@@ -31,7 +31,7 @@ class OrdemCategoriaCardapio(models.Model):
             if last_order:
                 self.ordem = last_order.ordem + 1
             else:
-                self.ordem = 1
+                self.ordem = 0
         super().save(*args, **kwargs)
 
     def __str__(self):
