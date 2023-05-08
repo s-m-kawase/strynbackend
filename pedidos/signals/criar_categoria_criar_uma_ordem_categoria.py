@@ -19,18 +19,20 @@ def criar_ordem_categoria_cardapio(sender, instance, created, **kwargs):
 def criar_ordem_categoria_cardapio2(sender, instance, created, **kwargs):
     if created:
         categorias = CategoriaCardapio.objects.all()
-        for categoria in categorias:
-            ordem_existe = OrdemCategoriaCardapio.objects.filter(categoria=categoria, cardapio=instance).exists()
-            if not ordem_existe:
-                ordem = OrdemCategoriaCardapio.objects.create(categoria=categoria, cardapio=instance)
-                ordem.save()
+        for cardapio in Cardapio.objects.all():
+
+            for categoria in categorias:
+                ordem_existe = OrdemCategoriaCardapio.objects.filter(categoria=categoria, cardapio=cardapio).exists()
+                if not ordem_existe:
+                    ordem = OrdemCategoriaCardapio.objects.create(categoria=categoria, cardapio=cardapio)
+                    ordem.save()
 
 
 @receiver(post_save, sender=OrdemCategoriaCardapio)
 def criar_ordem_categoria_cardapio3(sender, instance, created, **kwargs):
     if created:
         if not instance.ordem and instance.cardapio: # verifica se o valor da ordem já foi definido
-            last_order = OrdemCategoriaCardapio.objects.filter(cardapio=instance.cardapio).order_by('-ordem').first()          
+            last_order = OrdemCategoriaCardapio.objects.filter(cardapio=instance.cardapio).exclude(id=instance.id).order_by('-ordem').first()          
             try:
                 instance.ordem = last_order.ordem + 1
             except:
