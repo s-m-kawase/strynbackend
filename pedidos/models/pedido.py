@@ -20,6 +20,7 @@ class Pedidos(models.Model):
     
     STATUS_CHOICE = (
         ('Solicitado','Solicitado'),
+        ('Confirmado','Confirmado'),
         ('Entregue','Entregue'),
         ('Concluído','Concluído'),
         ('Cancelado','Cancelado'),

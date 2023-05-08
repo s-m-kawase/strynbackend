@@ -17,6 +17,13 @@ class OrdemCategoriaCardapioViewSet(viewsets.ModelViewSet):
         
     ]
 
+    def get_queryset(self):
+            query = super().get_queryset()
+
+            usuario = self.request.user
+            query = query.filter(restaurante__usuario=usuario)
+
+            return query
 
     @action(methods=['post'], detail=False)
     def alterar_ordem(self, request):
@@ -27,3 +34,5 @@ class OrdemCategoriaCardapioViewSet(viewsets.ModelViewSet):
             OrdemCategoriaCardapio.objects.filter(cardapio=cardapio_id, categoria=categoria_id).update(ordem=ordem)
 
         return Response({'status': 'success'})
+    
+    
