@@ -15,3 +15,12 @@ class CardapioComOrdemViewSet(viewsets.ModelViewSet):
     search_fields = [
         
     ]
+
+
+    def get_queryset(self):
+            query = super().get_queryset()
+
+            usuario = self.request.user
+            query = query.filter(restaurante__usuario=usuario)
+
+            return query
