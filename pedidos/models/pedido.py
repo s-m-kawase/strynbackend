@@ -117,6 +117,27 @@ class Pedidos(models.Model):
             quantidade+=item.quantidade if item.quantidade else 0
 
         return quantidade
+    
+    #  método para mudar o status de Solicitado para Confirmado
+    def confirmar_pedido(self):
+        if self.status == 'Solicitado':
+            self.status = 'Confirmado'
+            self.save()
+
+    def entregar_pedido(self):
+        if self.status == 'Confirmado':
+            self.status = 'Entregue'
+            self.save()
+
+    def concluir_pedido(self):
+        if self.status == 'Entregue':
+            self.status = 'Concluído'
+            self.save()
+
+    def cancelar_pedido(self):
+        if self.status in ['Solicitado','Confirmado','Entregue']:
+            self.status = 'Cancelado'
+            self.save()
 
     def efetuar_pedido(self):
         pass
