@@ -30,10 +30,10 @@ def criar_ordem_categoria_cardapio2(sender, instance, created, **kwargs):
 def criar_ordem_categoria_cardapio3(sender, instance, created, **kwargs):
     if created:
         if not instance.ordem and instance.cardapio: # verifica se o valor da ordem já foi definido
-            last_order = OrdemCategoriaCardapio.objects.filter(cardapio=instance.cardapio).order_by('-ordem').first()
-            if last_order:
+            last_order = OrdemCategoriaCardapio.objects.filter(cardapio=instance.cardapio).order_by('-ordem').first()          
+            try:
                 instance.ordem = last_order.ordem + 1
-            else:
+            except:
                 instance.ordem = 0
         
 
