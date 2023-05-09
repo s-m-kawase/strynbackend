@@ -2,7 +2,7 @@ from rest_framework import serializers
 from pedidos.models import Pedidos
 from pagamentos.api.serializers.adicional_serializers import AdicionalSerializer
 from pagamentos.api.serializers.cupom_serializers import CupomSerializer
-
+from datetime import datetime
 from .cliente_serializers import ClienteSerializer
 from .tempo_estimado_serializer import TempoEstimadoSerializer
 from .restaurante_serializer import RestauranteSerializer
@@ -16,6 +16,7 @@ class PedidosSerializer(serializers.ModelSerializer):
     adicionais_read = serializers.SerializerMethodField()
     cupom_read = serializers.SerializerMethodField()
     cliente_read = serializers.SerializerMethodField()
+    cliente_info = serializers.SerializerMethodField()
     tempo_estimado_read = serializers.SerializerMethodField()
     restaurante_read = serializers.SerializerMethodField()
     pagamentos_read = serializers.SerializerMethodField()
@@ -49,9 +50,15 @@ class PedidosSerializer(serializers.ModelSerializer):
 
     def get_cliente_read(self, obj):    
         return ClienteSerializer(instance=obj.cliente).data if obj.cliente else None
+   
 
     def get_restaurante_read(self, obj):    
         return RestauranteSerializer(instance=obj.restaurante).data
+    
+    def get_cliente_info(self, obj):
+        serialized_cliente = ClienteSerializer(instance=obj.cliente).data if obj.cliente else None
+        pedido_horario = obj.data_criacao.strftime('%H:%M:%S')
+        return {'cliente': serialized_cliente, 'horario_pedido': pedido_horario}
 
     class Meta:
         model = Pedidos
