@@ -58,7 +58,7 @@ class ItensPedido(models.Model):
         self.save()
 
     def __str__(self):
-        return self.item.nome
+        return str(self.item)
     class Meta:
         app_label = 'pedidos'
         verbose_name = 'Item Pedido'

@@ -55,3 +55,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
             query = query.filter(restaurante__usuario=usuario)
     
         return query
+
+
+    
