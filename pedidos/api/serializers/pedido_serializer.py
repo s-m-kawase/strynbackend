@@ -16,7 +16,6 @@ class PedidosSerializer(serializers.ModelSerializer):
     adicionais_read = serializers.SerializerMethodField()
     cupom_read = serializers.SerializerMethodField()
     cliente_read = serializers.SerializerMethodField()
-    cliente_info = serializers.SerializerMethodField()
     tempo_estimado_read = serializers.SerializerMethodField()
     restaurante_read = serializers.SerializerMethodField()
     pagamentos_read = serializers.SerializerMethodField()
@@ -48,14 +47,14 @@ class PedidosSerializer(serializers.ModelSerializer):
     def get_tempo_estimado_read(self, obj):
          return [TempoEstimadoSerializer(instance=tempo_estimado).data for tempo_estimado in obj.tempo_estimado.all()]
 
-    def get_cliente_read(self, obj):    
-        return ClienteSerializer(instance=obj.cliente).data if obj.cliente else None
+    # def get_cliente_read(self, obj):    
+    #     return ClienteSerializer(instance=obj.cliente).data if obj.cliente else None
    
 
     def get_restaurante_read(self, obj):    
         return RestauranteSerializer(instance=obj.restaurante).data
     
-    def get_cliente_info(self, obj):
+    def get_cliente_read(self, obj):
         serialized_cliente = ClienteSerializer(instance=obj.cliente).data if obj.cliente else None
         pedido_horario = obj.data_criacao.strftime('%H:%M:%S')
         return {'cliente': serialized_cliente, 'horario_pedido': pedido_horario}
