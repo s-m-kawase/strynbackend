@@ -104,7 +104,7 @@ class Pedidos(models.Model):
 
         total = 0
         total += float(self.subtotal if self.subtotal else 0)
-        total -= float(self.desconto)
+        total -= float(self.desconto if self.desconto else 0) 
         total -= float(cupom)
         total += float(adicionais)
 
