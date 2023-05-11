@@ -100,6 +100,10 @@ class Pedidos(models.Model):
         for adicional in self.adicionais.all():
             adicionais += float(adicional.valor)
 
+        taxa_atendimento = 0
+        if self.restaurante and self.restaurante.taxa_serviço:
+            taxa_atendimento = float(self.restaurante.taxa_serviço / 100)
+
         cupom = float(self.cupom.valor) if self.cupom else 0
 
         total = 0
@@ -107,6 +111,7 @@ class Pedidos(models.Model):
         total -= float(self.desconto if self.desconto else 0) 
         total -= float(cupom)
         total += float(adicionais)
+        total += float(total * taxa_atendimento)
 
         return total
 
