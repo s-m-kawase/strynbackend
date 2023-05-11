@@ -49,6 +49,12 @@ class Restaurante(models.Model):
         blank=True, null=True,
     )
 
+    taxa_serviço = models.IntegerField(
+        verbose_name="Taxa de serviço",
+        blank=True, null=True,
+        default=10
+        )
+
     def __str__(self):
         return self.nome
 
