@@ -8,6 +8,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from core.api.viewsets.profile_viewset import ProfileViewSet
@@ -28,6 +29,8 @@ from pedidos.api.viewsets.restaurante_viewset import RestauranteViewSet
 from pedidos.api.viewsets.tempo_estimado_viewset import TempoEstimadoViewSet
 from pedidos.api.viewsets.ordem_categoria_cardapio_view import OrdemCategoriaCardapioViewSet
 from pedidos.api.viewsets.cardapio_com_ordem_viewset import CardapioComOrdemViewSet
+from pedidos.api.viewsets.create_checkout_session import create_checkout_session
+
 
 router = routers.DefaultRouter()
 router.register(r'usuario', UserViewSet, basename='usuario'),
@@ -52,7 +55,6 @@ router.register(r'tempo', TempoEstimadoViewSet, basename='tempo'),
 router.register(r'ordem_categoria_cardapio', OrdemCategoriaCardapioViewSet, basename='ordem_categoria_cardapio'),
 router.register(r'cardapio_com_ordem', CardapioComOrdemViewSet, basename='cardapio_com_ordem'),
 
-
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path ("accounts/",  include ( "django.contrib.auth.urls" ),name='login'),
@@ -69,4 +71,6 @@ urlpatterns = [
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('api/v1/', include('djoser.urls')),
     path(r'^_nested_admin/', include('nested_admin.urls')),
+    # path('create-checkout-session/', create_checkout_session, name='create_checkout_session'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
