@@ -5,6 +5,7 @@ from django.contrib import admin
 @admin.register(TempoEstimado)
 class TempoEstimadoAdmin(admin.ModelAdmin):
     list_display = [
+        'id',
         'tempo',
     ]
 

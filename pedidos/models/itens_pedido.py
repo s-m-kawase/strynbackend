@@ -31,7 +31,7 @@ class ItensPedido(models.Model):
     )
     
     preco = models.DecimalField(
-        verbose_name="Preço",
+        verbose_name="Preço Unitário",
         decimal_places=2,
         max_digits=12,
         blank=True, null=True,
