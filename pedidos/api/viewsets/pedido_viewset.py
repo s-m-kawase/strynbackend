@@ -1,13 +1,19 @@
 from rest_framework import viewsets ,filters
 import django_filters.rest_framework
-from pedidos.models import Pedidos,Restaurante
+from pedidos.models import Pedidos,Restaurante, ItensPedido
 from django.db.models import Q
 from ..serializers.pedido_serializer import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from django.http.response import JsonResponse
 from rest_framework.pagination import PageNumberPagination
+from django.shortcuts import redirect
+from django.contrib import messages
+import stripe
+from decouple import config
 
+stripe_secret_key = config('STRIPE_SECRET_KEY')
+stripe.api_key = stripe_secret_key
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
@@ -16,7 +22,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class PedidosViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = Pedidos.objects.all()
     serializer_class = PedidosSerializer
 
@@ -55,6 +61,39 @@ class PedidosViewSet(viewsets.ModelViewSet):
             query = query.filter(restaurante__usuario=usuario)
     
         return query
+    
+    @action(detail=True, methods=['get'])
+    def create_checkout_session(self, request, pk):
+        # Pega o pedido de acordo com o id
+        pedido = Pedidos.objects.get(id=pk)
 
+        # itens_pedido = ItensPedido.objects.filter(pedido=pedido)
+
+        # Cria uma lista de pedido criando chave no stripe
+        line_items = []
+        for item_pedido in pedido.itenspedido_set.all():
+            # Cria um objeto com todos os item no stripe
+            line_item = {
+                'price_data': {
+                    'currency': 'brl',
+                    'unit_amount': int(item_pedido.preco) * 100,
+                    'product_data': {
+                        'name': item_pedido.item.nome,
+                    },
+                },
+                'quantity': item_pedido.quantidade,
+            }
+            line_items.append(line_item)
+
+        # Cria o checkout session do Stripe
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='payment',
+            success_url='http://localhost:8000/success',
+            cancel_url='http://localhost:8000/cancel',
+        )
+        # messages.success(request, 'Redirecionamento realizado com sucesso.')
+        return redirect(checkout_session.url)
 
     
