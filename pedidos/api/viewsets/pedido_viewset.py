@@ -62,17 +62,17 @@ class PedidosViewSet(viewsets.ModelViewSet):
     
         return query
     
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['get'])
     def create_checkout_session(self, request, pk):
-        # Obtenha o objeto do pedido com base no ID do pedido (pk)
+        # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
 
-        # Crie uma lista de itens do pedido para o line_items do Stripe
-        itens_pedido = ItensPedido.objects.filter(pedido=pedido)
+        # itens_pedido = ItensPedido.objects.filter(pedido=pedido)
 
+        # Cria uma lista de pedido criando chave no stripe
         line_items = []
-        for item_pedido in itens_pedido:
-            # Crie o objeto de item de linha para o line_items do Stripe
+        for item_pedido in pedido.itenspedido_set.all():
+            # Cria um objeto com todos os item no stripe
             line_item = {
                 'price_data': {
                     'currency': 'brl',
@@ -85,7 +85,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             }
             line_items.append(line_item)
 
-        # Crie o checkout session do Stripe
+        # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=line_items,
@@ -93,9 +93,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             success_url='http://localhost:8000/success',
             cancel_url='http://localhost:8000/cancel',
         )
-
-        # Redirecione para a URL do checkout session do Stripe
-        messages.success(request, 'Redirecionamento realizado com sucesso.')
+        # messages.success(request, 'Redirecionamento realizado com sucesso.')
         return redirect(checkout_session.url)
 
     
