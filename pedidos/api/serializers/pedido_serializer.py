@@ -20,6 +20,8 @@ class PedidosSerializer(serializers.ModelSerializer):
     restaurante_read = serializers.SerializerMethodField()
     pagamentos_read = serializers.SerializerMethodField()
     itens_read = serializers.SerializerMethodField()
+    
+    
 
 
     def get_adicionais_read(self, obj):
@@ -31,9 +33,18 @@ class PedidosSerializer(serializers.ModelSerializer):
             "item": item.item.nome if item.item else None,
             "quantidade": item.quantidade,
             "total": item.total_item,
-            "preco": item.item.preco if item.item else None,
-            "preco_promocao": item.item.preco_promocao if item.item else None
-
+            "preco_do_item": item.item.preco if item.item else None,
+            "preco_promocao": item.item.preco_promocao if item.item else None,
+            "preco_total_item": item.total_item,
+            "preco_total_complementos": item.total_complementos,
+            "preco_total": item.preco,
+            "complementos": [
+                {"complemento": complemento.complemento.nome if complemento.complemento.nome else None,
+                 "valor": complemento.complemento.preco if complemento.complemento.preco else None,
+                 "quantidade": complemento.quantidade if complemento.quantidade else None,
+                 "total": complemento.total if complemento.total else None} 
+                for complemento in item.itenspedidocomplementos_set.all()
+                ] 
         } for item in obj.itenspedido_set.all()]
 
     def get_pagamentos_read(self, obj):
