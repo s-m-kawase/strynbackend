@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from pedidos.models.pedido import Pedidos
 
@@ -38,6 +39,11 @@ class Pagamento(models.Model):
         verbose_name='Valor Pago',
         null=True,
         default=0
+    )
+    payment_details = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name='Detalhes do pagamento'
     )
 
     

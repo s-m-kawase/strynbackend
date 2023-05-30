@@ -1,6 +1,7 @@
 from rest_framework import viewsets ,filters
 import django_filters.rest_framework
 from pedidos.models import Pedidos,Restaurante, ItensPedido
+from pagamentos.models import Pagamento
 from django.db.models import Q
 from ..serializers.pedido_serializer import *
 from rest_framework.permissions import IsAuthenticated
@@ -66,6 +67,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
+        pagamento  = Pagamento.objects.get(pedido=pedido)
 
         # itens_pedido = ItensPedido.objects.filter(pedido=pedido)
 
@@ -93,7 +95,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
             success_url='http://localhost:8000/success',
             cancel_url='http://localhost:8000/cancel',
         )
-        # messages.success(request, 'Redirecionamento realizado com sucesso.')
+        # Salva o session_id no objeto pedido
+        pedido.session_id = checkout_session.id
+        pedido.save()
+
+        # Redireciona para a URL do checkout do Stripe
         return redirect(checkout_session.url)
 
     
