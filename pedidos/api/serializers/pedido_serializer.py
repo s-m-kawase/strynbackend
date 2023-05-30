@@ -31,7 +31,7 @@ class PedidosSerializer(serializers.ModelSerializer):
         return [{
             "id": item.id if item.item else None,
             "item": item.item.nome if item.item else None,
-            "foto": item.item.foto if item.item.foto else None,
+            # "foto": item.item.foto if item.item.foto else None,
             "quantidade": item.quantidade,
             "total": item.total_item,
             "preco_do_item": item.item.preco if item.item else None,
