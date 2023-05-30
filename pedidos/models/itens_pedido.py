@@ -15,7 +15,7 @@ class ItensPedido(models.Model):
     pedido = models.ForeignKey(
         Pedidos,
         verbose_name="Pedido",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True
     )
 
