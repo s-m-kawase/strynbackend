@@ -22,6 +22,7 @@ class PedidosSerializer(serializers.ModelSerializer):
     itens_read = serializers.SerializerMethodField()
     
     
+    
 
 
     def get_adicionais_read(self, obj):
@@ -31,7 +32,7 @@ class PedidosSerializer(serializers.ModelSerializer):
         return [{
             "id": item.id if item.item else None,
             "item": item.item.nome if item.item else None,
-            # "foto": item.item.foto if item.item.foto else None,
+            "foto_item": item.item.foto.url if item.item.foto and item.item.foto.url else None,
             "quantidade": item.quantidade,
             "total": item.total_item,
             "preco_do_item": item.item.preco if item.item else None,
@@ -41,6 +42,7 @@ class PedidosSerializer(serializers.ModelSerializer):
             "preco_total": item.preco,
             "complementos": [
                 {"complemento": complemento.complemento.nome if complemento.complemento.nome else None,
+                 "foto_complemento": complemento.complemento.foto if complemento.complemento.foto else None,
                  "valor": complemento.complemento.preco if complemento.complemento.preco else None,
                  "quantidade": complemento.quantidade if complemento.quantidade else None,
                  "total": complemento.total if complemento.total else None} 
