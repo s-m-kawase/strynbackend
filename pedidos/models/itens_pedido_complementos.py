@@ -13,7 +13,7 @@ class ItensPedidoComplementos(models.Model):
 
     item_pedido = models.ForeignKey(
         ItensPedido,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         verbose_name='Item do Pedido',
         null=True
     )
