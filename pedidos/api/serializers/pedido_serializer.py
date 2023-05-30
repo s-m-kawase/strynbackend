@@ -31,6 +31,7 @@ class PedidosSerializer(serializers.ModelSerializer):
     def get_itens_read(self, obj):
         return [{
             "id": item.id if item.item else None,
+            "id_item_cardapio": item.item.id if item.item else None,
             "item": item.item.nome if item.item else None,
             "foto_item": item.item.foto.url if item.item.foto and item.item.foto.url else None,
             "quantidade": item.quantidade,
