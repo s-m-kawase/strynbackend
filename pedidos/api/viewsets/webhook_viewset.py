@@ -63,7 +63,7 @@ class StripeWebhookViewSet(ViewSet):
 
         # Atualizar o status do pedido com base no pagamento
         if session['payment_status'] == 'paid':
-            pedido.status = 'Confirmado'
+            pedido.status = 'Pago'
 
             # Enviar uma confirmação por e-mail
             remetente = config('EMAIL_HOST_USER')
@@ -76,7 +76,7 @@ class StripeWebhookViewSet(ViewSet):
             
 
         elif session['payment_status'] == 'unpaid':
-            pedido.status = 'Solicitado'
+            pedido.status = 'Sacola'
             # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
             remetente = config('EMAIL_HOST_USER')
             recipient_email = cliente_email
@@ -102,7 +102,7 @@ class StripeWebhookViewSet(ViewSet):
         pedido = Pedidos.objects.get(session_id=payment_intent['id'])
 
         # Atualizar o status do pedido
-        pedido.status = 'Cancelado'
+        pedido.status = 'Com erro'
         pedido.save()
 
         # Enviar um e-mail ao cliente informando sobre o pagamento falhado
