@@ -64,7 +64,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
     
         return query
     
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['get'])
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
