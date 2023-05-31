@@ -8,6 +8,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+
 from rest_framework import routers
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from core.api.viewsets.profile_viewset import ProfileViewSet
@@ -31,6 +32,7 @@ from pedidos.api.viewsets.cardapio_com_ordem_viewset import CardapioComOrdemView
 from apistripe.api.viewset.config_stripe_viewset import ConfigStripeViewSet
 from apistripe.api.viewset.price_viewset import PriceViewSet
 from apistripe.api.viewset.produto_viewset import ProdutoViewSet
+from pedidos.api.viewsets.webhook_viewset import StripeWebhookViewSet
 
 router = routers.DefaultRouter()
 router.register(r'usuario', UserViewSet, basename='usuario'),
@@ -58,12 +60,16 @@ router.register(r'cardapio_com_ordem', CardapioComOrdemViewSet, basename='cardap
 router.register(r'Config_stripe', ConfigStripeViewSet, basename='Config_stripe'),
 router.register(r'produto', ProdutoViewSet, basename='produto'),
 router.register(r'price', PriceViewSet, basename='price'),
+router.register(r'webhook', StripeWebhookViewSet, basename='webhook')
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path ("accounts/",  include ( "django.contrib.auth.urls" ),name='login'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-
+    path('api/webhook/', StripeWebhookViewSet.as_view({'post': 'webhook'}), name='webhook'),
+    # path('webhook2/',stripe_webhook,name='webhook'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
  
