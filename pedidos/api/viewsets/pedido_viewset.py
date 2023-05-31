@@ -63,11 +63,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
     
         return query
     
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=['post'])
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
-        pagamento  = Pagamento.objects.get(pedido=pedido)
+        # pagamento  = Pagamento.objects.get(pedido=pedido)
 
         # itens_pedido = ItensPedido.objects.filter(pedido=pedido)
 
@@ -97,7 +97,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         )
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id
-        pedido.checkou_url= checkout_session.url
+        pedido.checkou_url = checkout_session.url
         pedido.save()
 
         # Redireciona para a URL do checkout do Stripe
