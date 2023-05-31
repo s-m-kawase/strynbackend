@@ -86,6 +86,11 @@ class Pedidos(models.Model):
         blank=True, null=True
     )
 
+    checkou_url=models.CharField(
+        max_length=150,
+        blank=True, null=True
+    )
+
     @property
     def subtotal(self):
         subtotal = 0

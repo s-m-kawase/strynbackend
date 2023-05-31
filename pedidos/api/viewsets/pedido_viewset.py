@@ -97,6 +97,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         )
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id
+        pedido.checkou_url= checkout_session.url
         pedido.save()
 
         # Redireciona para a URL do checkout do Stripe
