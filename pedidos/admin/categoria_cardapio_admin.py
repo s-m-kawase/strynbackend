@@ -6,6 +6,7 @@ from .ordem_categoria_cardapio_inline import OrdemCategoriaCardapioInline
 @admin.register(CategoriaCardapio)
 class CategoriaCardapioAdmin(admin.ModelAdmin):
     list_display = [
+        'id',
         'nome',
     ]
 
