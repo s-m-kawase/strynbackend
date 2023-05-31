@@ -19,17 +19,18 @@ class Pedidos(models.Model):
     ) 
     
     STATUS_CHOICE = (
-        ('Solicitado','Solicitado'),
-        ('Confirmado','Confirmado'),
-        ('Entregue','Entregue'),
+        ('Sacola','Sacola'),
+        ('Pago','Pago'),
+        ('Pronto','Pronto'),
         ('Concluído','Concluído'),
         ('Cancelado','Cancelado'),
+        ('Com erro', 'Com erro')
     )
 
     status_pedido = models.CharField(
         verbose_name="Status do Pedido",
         choices=STATUS_CHOICE,
-        default='Solicitado',
+        default='Sacola',
         max_length=20
     )
 
