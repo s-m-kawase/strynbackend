@@ -9,6 +9,7 @@ from rest_framework.decorators import action
 from django.http.response import JsonResponse
 from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import redirect
+from rest_framework.response import Response
 from django.contrib import messages
 import stripe
 from decouple import config
@@ -63,14 +64,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
     
         return query
     
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['get'])
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
-        # pagamento  = Pagamento.objects.get(pedido=pedido)
-
-        # itens_pedido = ItensPedido.objects.filter(pedido=pedido)
-
+      
         # Cria uma lista de pedido criando chave no stripe
         line_items = []
         for item_pedido in pedido.itenspedido_set.all():
@@ -86,7 +84,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'quantity': item_pedido.quantidade,
             }
             line_items.append(line_item)
-
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -99,8 +96,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         pedido.session_id = checkout_session.id
         pedido.checkou_url = checkout_session.url
         pedido.save()
-
         # Redireciona para a URL do checkout do Stripe
-        return redirect(checkout_session.url)
+        return Response({'checkout_url': checkout_session.url})
 
     
