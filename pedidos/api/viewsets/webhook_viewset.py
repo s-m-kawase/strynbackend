@@ -24,7 +24,7 @@ class StripeWebhookViewSet(ViewSet):
     @csrf_exempt
     def webhook(self, request):
         payload = request.data
-        sig_header = request.headers['Stripe-Signature']
+        sig_header = request.META['HTTP_STRIPE_SIGNATURE']
         event = None
 
         try:
