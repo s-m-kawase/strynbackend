@@ -5,6 +5,7 @@ from rest_framework.viewsets import ViewSet
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from pedidos.models import Pedidos
+from apistripe.models.stripe import Stripe
 
 from decouple import config
 
@@ -23,6 +24,9 @@ class StripeWebhookViewSet(ViewSet):
     @action(detail=False, methods=['post'])
     @csrf_exempt
     def webhook(self, request):
+        stripe = Stripe.objects.all().first()
+        stripe.webhook = request
+        stripe.save()
         payload = request.data
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
         event = None

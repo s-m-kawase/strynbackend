@@ -1,8 +1,10 @@
-from .produto import Produto
+# from .produto import Produto
 from .config_stripe import ConfigStripe
-from .price import Price
+# from .price import Price
+from .stripe import Stripe
 __all__ = [
-    Produto,
+    # Produto,
     ConfigStripe,  
-    Price
+    # Price,
+    Stripe
 ]
