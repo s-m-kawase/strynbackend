@@ -87,7 +87,7 @@ class Pedidos(models.Model):
     )
 
     checkou_url=models.CharField(
-        max_length=150,
+        max_length=500,
         blank=True, null=True
     )
 
