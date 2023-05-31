@@ -89,8 +89,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
             payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
-            success_url='http://localhost:8000/success',
-            cancel_url='http://localhost:8000/cancel',
+            success_url='http://localhost:9000/cliente/sucesso',
+            cancel_url='http://localhost:9000/cliente/visao-geral',
         )
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id
@@ -98,6 +98,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
         pedido.save()
         # Redireciona para a URL do checkout do Stripe
         
-        return Response({'checkout_url': checkout_session.url})
+        return Response({'checkout_url': checkout_session.url, 'session_id': checkout_session.id})
 
     
