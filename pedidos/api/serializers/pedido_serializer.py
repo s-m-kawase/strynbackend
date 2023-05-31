@@ -33,7 +33,7 @@ class PedidosSerializer(serializers.ModelSerializer):
             "id": item.id if item.item else None,
             "id_item_cardapio": item.item.id if item.item else None,
             "item": item.item.nome if item.item else None,
-            "foto_item": item.item.foto.url if item.item.foto and item.item.foto.url else None,
+            # "foto_item": item.item.foto.url if item.item.foto and item.item.foto.url else None,
             "quantidade": item.quantidade,
             "preco_do_item": item.item.preco if item.item else None,
             "preco_promocao": item.item.preco_promocao if item.item else None,
