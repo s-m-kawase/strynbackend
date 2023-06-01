@@ -68,7 +68,7 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path ("accounts/",  include ( "django.contrib.auth.urls" ),name='login'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    path('api/webhook/', StripeWebhookViewSet.as_view({'post': 'webhook'}), name='webhook'),
+    path('api/webhook/', StripeWebhookViewSet.as_view({'get': 'webhook'}), name='webhook'),
     # path('webhook2/',stripe_webhook,name='webhook'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
