@@ -39,13 +39,19 @@ class StripeWebhookViewSet(ViewSet):
             # Se payload for inválido, retorna erro 400
             return Response(status=400, data={
                 'error': 'Erro no payload',
-                'message': f"{e}"
+                'message': f"{e}",
+                 'requet_meta':request.META,
+                'requet_data':request.data,
+                'assinatura_cabecalho':sig_header,
                 })
         except stripe.error.SignatureVerificationError as e:
             # Se a assinatura for inválida, retorna erro 400
             return Response(status=400, data={
                 'error': 'Assinatura inválida',
-                'message': f"{e}"
+                'message': f"{e}",
+                'requet_meta':request.META,
+                'requet_data':request.data,
+                'assinatura_cabecalho':sig_header,
                 })
 
         # Lidar com o evento
