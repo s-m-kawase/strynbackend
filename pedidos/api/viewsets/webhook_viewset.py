@@ -1,3 +1,5 @@
+
+import json
 import stripe
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -27,7 +29,7 @@ class StripeWebhookViewSet(ViewSet):
         # stripe = Stripe.objects.all().first()
         # stripe.webhook = request.META
         # stripe.save()
-        payload = request.body
+        payload = json.dump(request.data)
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
         event = None
 
