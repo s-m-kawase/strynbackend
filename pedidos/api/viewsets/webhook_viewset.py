@@ -15,18 +15,18 @@ endpoint_secret = config('STRIPE_WEBHOOK_SECRET')
 
 class StripeWebhookViewSet(ViewSet):
 
-    @action(detail=False, methods=['post'])
-    def initiate_payment(self, request):
-        session_id = request.data.get('session_id')
-        self.process_payment(session_id)
-        return Response({'message': 'Pagamento processado com sucesso'})
+    # @action(detail=False, methods=['post'])
+    # def initiate_payment(self, request):
+    #     session_id = request.data.get('session_id')
+    #     self.process_payment(session_id)
+    #     return Response({'message': 'Pagamento processado com sucesso'})
 
     @action(detail=False, methods=['post'])
     @csrf_exempt
     def webhook(self, request):
-        stripe = Stripe.objects.all().first()
-        stripe.webhook = request.META
-        stripe.save()
+        # stripe = Stripe.objects.all().first()
+        # stripe.webhook = request.META
+        # stripe.save()
         payload = request.data
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
         event = None
