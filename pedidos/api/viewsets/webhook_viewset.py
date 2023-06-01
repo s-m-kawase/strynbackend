@@ -28,7 +28,7 @@ class StripeWebhookViewSet(ViewSet):
         # stripe.webhook = request.META
         # stripe.save()
         payload = request.data
-        sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+        sig_header = "{'wsgi.errors': <gunicorn.http.wsgi.WSGIErrorsWrapper object at 0x7fb2033d49a0>, 'wsgi.version': (1, 0), 'wsgi.multithread': False, 'wsgi.multiprocess': False, 'wsgi.run_once': False, 'wsgi.file_wrapper': <class 'gunicorn.http.wsgi.FileWrapper'>, 'wsgi.input_terminated': True, 'SERVER_SOFTWARE': 'gunicorn/20.1.0', 'wsgi.input': <gunicorn.http.body.Body object at 0x7fb2033d4160>, 'gunicorn.socket': <socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('172.17.0.84', 5000), raddr=('172.17.0.1', 41830)>, 'REQUEST_METHOD': 'POST', 'QUERY_STRING': '', 'RAW_URI': '/api/webhook/', 'SERVER_PROTOCOL': 'HTTP/1.1', 'HTTP_CONNECTION': 'close', 'HTTP_HOST': 'stryn.dokku.outboxsistemas.com', 'HTTP_X_FORWARDED_FOR': '54.187.216.72', 'HTTP_X_FORWARDED_PORT': '443', 'HTTP_X_FORWARDED_PROTO': 'https', 'HTTP_X_REQUEST_START': '1685624637.583', 'CONTENT_LENGTH': '2052', 'CONTENT_TYPE': 'application/json; charset=utf-8', 'HTTP_CACHE_CONTROL': 'no-cache', 'HTTP_USER_AGENT': 'Stripe/1.0 (+https://stripe.com/docs/webhooks)', 'HTTP_ACCEPT': '*/*; q=0.5, application/xml', 'HTTP_STRIPE_SIGNATURE': 't=1685624637,v1=e91308c0c04b282b6eb17f2d4a477a43cd64d821ca038bb71e0263be58153b84,v0=4c4cc3f6ca6ac84794e994401374ec9c060d7815df9e4d9be2123bb850c8a794', 'wsgi.url_scheme': 'https', 'REMOTE_ADDR': '172.17.0.1', 'REMOTE_PORT': '41830', 'SERVER_NAME': '0.0.0.0', 'SERVER_PORT': '5000', 'PATH_INFO': '/api/webhook/', 'SCRIPT_NAME': ''}"
         event = None
 
         try:
