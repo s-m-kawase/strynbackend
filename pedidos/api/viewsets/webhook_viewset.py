@@ -40,7 +40,7 @@ class StripeWebhookViewSet(ViewSet):
             return Response(status=400, data={
                 'error': 'Erro no payload',
                 'message': f"{e}",
-                 'requet_meta':request.META,
+                #  'requet_meta':request.META,
                 'requet_data':request.data,
                 'assinatura_cabecalho':sig_header,
                 })
@@ -49,7 +49,7 @@ class StripeWebhookViewSet(ViewSet):
             return Response(status=400, data={
                 'error': 'Assinatura inválida',
                 'message': f"{e}",
-                'requet_meta':request.META,
+                # 'requet_meta':request.META,
                 'requet_data':request.data,
                 'assinatura_cabecalho':sig_header,
                 })
