@@ -37,10 +37,16 @@ class StripeWebhookViewSet(ViewSet):
             )
         except ValueError as e:
             # Se payload for inválido, retorna erro 400
-            return Response(status=400, data={'error': 'Erro no payload'})
+            return Response(status=400, data={
+                'error': 'Erro no payload',
+                'message': f"{e}"
+                })
         except stripe.error.SignatureVerificationError as e:
             # Se a assinatura for inválida, retorna erro 400
-            return Response(status=400, data={'error': 'Assinatura inválida'})
+            return Response(status=400, data={
+                'error': 'Assinatura inválida',
+                'message': f"{e}"
+                })
 
         # Lidar com o evento
         if event['type'] == 'checkout.session.completed':
