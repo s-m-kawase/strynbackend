@@ -99,5 +99,3 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Redireciona para a URL do checkout do Stripe
         
         return Response({'checkout_url': checkout_session.url, 'session_id': checkout_session.id})
-
-    
