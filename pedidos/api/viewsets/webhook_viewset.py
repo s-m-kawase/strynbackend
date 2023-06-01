@@ -31,16 +31,16 @@ class StripeWebhookViewSet(ViewSet):
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
         event = None
 
-        # try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
-        )
-        # except ValueError as e:
-        #     # Se payload for inválido, retorna erro 400
-        #     return Response(status=400, data={'error': 'Erro no payload'})
-        # except stripe.error.SignatureVerificationError as e:
-        #     # Se a assinatura for inválida, retorna erro 400
-        #     return Response(status=400, data={'error': 'Assinatura inválida'})
+        try:
+            event = stripe.Webhook.construct_event(
+                payload, sig_header, endpoint_secret
+            )
+        except ValueError as e:
+            # Se payload for inválido, retorna erro 400
+            return Response(status=400, data={'error': 'Erro no payload'})
+        except stripe.error.SignatureVerificationError as e:
+            # Se a assinatura for inválida, retorna erro 400
+            return Response(status=400, data={'error': 'Assinatura inválida'})
 
         # Lidar com o evento
         if event['type'] == 'checkout.session.completed':
