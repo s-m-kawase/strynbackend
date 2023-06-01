@@ -27,7 +27,7 @@ class StripeWebhookViewSet(ViewSet):
         # stripe = Stripe.objects.all().first()
         # stripe.webhook = request.META
         # stripe.save()
-        payload = request.data
+        payload = request.body
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
         event = None
 
