@@ -23,7 +23,7 @@ class StripeWebhookViewSet(ViewSet):
     #     self.process_payment(session_id)
     #     return Response({'message': 'Pagamento processado com sucesso'})
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['post'])
     @csrf_exempt
     def webhook(self, request):
         # stripe = Stripe.objects.all().first()
