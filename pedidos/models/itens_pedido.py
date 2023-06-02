@@ -31,7 +31,7 @@ class ItensPedido(models.Model):
     )
     
     preco = models.DecimalField(
-        verbose_name="Preço Unitário",
+        verbose_name="Preço Item + Complementos",
         decimal_places=2,
         max_digits=12,
         blank=True, null=True,
@@ -54,8 +54,12 @@ class ItensPedido(models.Model):
         return total
 
     def calcular_preco(self):
-        self.preco = self.total_item + self.total_complementos
-        self.save()
+        try:
+            self.preco = self.total_item + self.total_complementos
+            self.save()
+        except:
+            self.preco = 0
+            self.save()
 
     def __str__(self):
         return str(self.item)
