@@ -17,7 +17,7 @@ stripe.api_key = config('STRIPE_SECRET_KEY')
 
 class StripeWebhookViewSet(ViewSet):
     @csrf_exempt
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['get'])
     def webhook(self, request):
         endpoint_secret = 'whsec_ZAzKGVyqFlX4qOaRgFPCRbSiwSALukQL'
 
