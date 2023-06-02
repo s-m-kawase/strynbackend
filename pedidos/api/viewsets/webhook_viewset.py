@@ -117,24 +117,34 @@ class StripeWebhookViewSet(ViewSet):
             # Obter o pedido associado ao session_id
             pedido = Pedidos.objects.get(session_id=session['id'])
 
-            # Obter o e-mail do cliente a partir do modelo User
-            cliente_email = pedido.cliente.user.email
-
             # Atualizar o status do pedido com base no pagamento
             if session['payment_status'] == 'paid':
-                pedido.status = 'Pago'
+                 # pegar o id co cliente apartir do session
+                customer_id = session['customer']['id']
+                 # usar para pegar o email do cliente
+                customer = stripe.Customer.retrieve(customer_id)
+                cliente_email = customer['email']
+                pedido.status_pedido = 'Pago'
 
-                # Enviar uma confirmação por e-mail
+                # lista dos item pedido
+                items = []
+                for item in pedido.itens_pedido.all():
+                    item_info = f"Nome do Item: {item.nome}\nQuantidade: {item.quantidade}\nPreço Unitário: {item.preco_unitario}\n\n"
+                    items.append(item_info)
+
+                # mensagem detalhes do pedido
+                message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.valor_total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
+                message += "\n".join(items)
+              
+               # Enviar uma confirmação por e-mail
                 remetente = config('EMAIL_HOST_USER')
                 recipient_email = cliente_email
                 subject = 'Confirmação de Pagamento'
-                message = 'Seu pagamento foi processado com sucesso. Obrigado por sua compra! \n Aguarde sua entrega está a caminho!'
                 send_mail(subject, message, remetente, [recipient_email])
-
                 # Gerar uma nota fiscal
 
             elif session['payment_status'] == 'unpaid':
-                pedido.status = 'Sacola'
+                pedido.status_pedido = 'Sacola'
                 # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
                 remetente = config('EMAIL_HOST_USER')
                 recipient_email = cliente_email
@@ -143,7 +153,7 @@ class StripeWebhookViewSet(ViewSet):
                 send_mail(subject, message, remetente, [recipient_email])
 
             elif session['payment_status'] == 'canceled':
-                pedido.status = 'Cancelado'
+                pedido.status_pedido = 'Cancelado'
                 # Notificar o cliente sobre o cancelamento do pedido
                 remetente = config('EMAIL_HOST_USER')
                 recipient_email = cliente_email
@@ -169,7 +179,7 @@ class StripeWebhookViewSet(ViewSet):
             pedido = Pedidos.objects.get(session_id=payment_intent['id'])
 
             # Atualizar o status do pedido
-            pedido.status = 'Com erro'
+            pedido.status_pedido = 'Com erro'
             pedido.save()
 
             # Enviar um e-mail ao cliente informando sobre o pagamento falhado
