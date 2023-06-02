@@ -1,5 +1,6 @@
 
 import stripe
+import traceback
 from django.conf import settings
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -16,44 +17,6 @@ stripe.api_key = config('STRIPE_SECRET_KEY')
 
 
 class StripeWebhookViewSet(ViewSet):
-    # @csrf_exempt
-    # @action(detail=False, methods=['get'])
-    # def webhook(self, request):
-    #     endpoint_secret = 'whsec_ZAzKGVyqFlX4qOaRgFPCRbSiwSALukQL'
-
-    #     payload = request.body
-    #     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-    #     event = None
-
-    #     try:
-    #         event = stripe.Webhook.construct_event(
-    #             payload, sig_header, endpoint_secret
-    #         )
-    #     except ValueError as e:
-    #         # Invalid payload
-    #          return Response(status=400, data={
-    #             'error': 'Erro no payload',
-    #             'endpoint': endpoint_secret,
-    #             'message': f"{e}",
-    #             #  'requet_meta':request.META,
-    #             'payload':request.data,
-    #             'HTTP_STRIPE_SIGNATURE':sig_header,
-    #             })
-    #     except stripe.error.SignatureVerificationError as e:
-    #         # Invalid signature
-    #         return Response(status=400, data={
-    #             'error': 'Erro no payload',
-    #             'message': f"{e}",
-    #             #  'requet_meta':request.META,
-    #             'requet_data':request.data,
-    #             'assinatura_cabecalho':sig_header,
-    #             })
-
-    #     # Passed signature verification
-    #     return Response(status=200)
-
-
-
 
     @action(detail=False, methods=['post'])
     def initiate_payment(self, request):
@@ -64,10 +27,7 @@ class StripeWebhookViewSet(ViewSet):
     @action(detail=False, methods=['get'])
     @csrf_exempt
     def webhook(self, request):
-        # stripe = Stripe.objects.all().first()
-        # stripe.request_data = request.data
-        # stripe.webhook = request.META
-        # stripe.save()
+       
         endpoint_secret = config('STRIPE_WEBHOOK_SECRET')
         payload = request.body
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
@@ -140,7 +100,10 @@ class StripeWebhookViewSet(ViewSet):
                 remetente = settings.EMAIL_HOST_USER
                 recipient_email = cliente_email
                 subject = 'Confirmação de Pagamento'
-                send_mail(subject, message, remetente, [recipient_email])
+                try:
+                    send_mail(subject, message, remetente, [recipient_email])
+                except Exception as e:
+                    traceback.print_exc()
                 # Gerar uma nota fiscal
 
             elif session['payment_status'] == 'unpaid':
