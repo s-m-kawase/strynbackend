@@ -26,10 +26,10 @@ class StripeWebhookViewSet(ViewSet):
     @action(detail=False, methods=['get'])
     @csrf_exempt
     def webhook(self, request):
-        stripe = Stripe.objects.all().first()
-        stripe.request_data = request.data
-        stripe.webhook = request.META
-        stripe.save()
+        # stripe = Stripe.objects.all().first()
+        # stripe.request_data = request.data
+        # stripe.webhook = request.META
+        # stripe.save()
         payload = request.data
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
         event = None
