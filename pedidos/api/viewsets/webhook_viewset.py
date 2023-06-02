@@ -123,12 +123,14 @@ class StripeWebhookViewSet(ViewSet):
             # Salvar as alterações no pedido
             pedido.save()
 
-        except Pedidos.DoesNotExist:
-            # Pedido não encontrado
-            return Response(status=400, data={'error': 'Pedido não encontrado'})
+        # except Pedidos.DoesNotExist:
+        #     # Pedido não encontrado
+        #     return Response(status=400, data={'error': 'Pedido não encontrado'})
 
         except Exception as e:
-            return Response(status=500, data={'error': str(e)})
+            error_message = f"Erro ao lidar com o pagamento: {str(e)}"
+            print(error_message)
+            return Response(status=500, data={'error': error_message})
 
 
     def handle_failed_payment(self, payment_intent):
