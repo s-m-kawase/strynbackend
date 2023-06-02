@@ -32,7 +32,7 @@ class StripeWebhookViewSet(ViewSet):
         # stripe.save()
         endpoint_secret = 'whsec_ZAzKGVyqFlX4qOaRgFPCRbSiwSALukQL'
         payload = request.data
-        sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+        sig_header = 't=1685708166,v1=d2e6d2410b53c49a9afd2806dae8de9c72ae718d9ee8b5b957c9c3b0f80eced1,v0=0897b4891b49b2aba45e424938809633e65df1ee4481b0b6880c123cd0c93524'
         event = None
 
         try:
