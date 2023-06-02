@@ -36,6 +36,13 @@ class ItensPedido(models.Model):
         max_digits=12,
         blank=True, null=True,
     )
+    
+    multiplicador_item_pedido = models.IntegerField(
+        verbose_name='Multiplicador Item Pedido',
+        max_length=5,
+        default=1,
+        blank=True, null=True,
+    )
 
     @property
     def total_item(self):
@@ -55,7 +62,10 @@ class ItensPedido(models.Model):
 
     def calcular_preco(self):
         try:
-            self.preco = self.total_item + self.total_complementos
+            if self.multiplicador_item_pedido != 1:
+                self.preco = (self.total_item + self.total_complementos) * self.multiplicador_item_pedido
+            else:
+                self.preco = self.total_item + self.total_complementos
             self.save()
         except:
             self.preco = 0
