@@ -1,6 +1,6 @@
 
-import json
 import stripe
+from django.conf import settings
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
@@ -137,7 +137,7 @@ class StripeWebhookViewSet(ViewSet):
                 message += "\n".join(items)
               
                # Enviar uma confirmação por e-mail
-                remetente = config('EMAIL_HOST_USER')
+                remetente = settings.EMAIL_HOST_USER
                 recipient_email = cliente_email
                 subject = 'Confirmação de Pagamento'
                 send_mail(subject, message, remetente, [recipient_email])
