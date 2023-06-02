@@ -30,8 +30,8 @@ from pedidos.api.viewsets.tempo_estimado_viewset import TempoEstimadoViewSet
 from pedidos.api.viewsets.ordem_categoria_cardapio_view import OrdemCategoriaCardapioViewSet
 from pedidos.api.viewsets.cardapio_com_ordem_viewset import CardapioComOrdemViewSet
 from apistripe.api.viewset.config_stripe_viewset import ConfigStripeViewSet
-from apistripe.api.viewset.price_viewset import PriceViewSet
-from apistripe.api.viewset.produto_viewset import ProdutoViewSet
+# from apistripe.api.viewset.price_viewset import PriceViewSet
+# from apistripe.api.viewset.produto_viewset import ProdutoViewSet
 from pedidos.api.viewsets.webhook_viewset import StripeWebhookViewSet
 
 router = routers.DefaultRouter()
@@ -58,8 +58,8 @@ router.register(r'ordem_categoria_cardapio', OrdemCategoriaCardapioViewSet, base
 router.register(r'cardapio_com_ordem', CardapioComOrdemViewSet, basename='cardapio_com_ordem'),
 
 router.register(r'Config_stripe', ConfigStripeViewSet, basename='Config_stripe'),
-router.register(r'produto', ProdutoViewSet, basename='produto'),
-router.register(r'price', PriceViewSet, basename='price'),
+# router.register(r'produto', ProdutoViewSet, basename='produto'),
+# router.register(r'price', PriceViewSet, basename='price'),
 router.register(r'webhook', StripeWebhookViewSet, basename='webhook')
 
 
