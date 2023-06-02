@@ -1,6 +1,5 @@
 
 import stripe
-import traceback
 from django.conf import settings
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -8,13 +7,11 @@ from rest_framework.viewsets import ViewSet
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from pedidos.models import Pedidos
-from apistripe.models.stripe import Stripe
-
 from decouple import config
+
 
 stripe.api_key = config('STRIPE_SECRET_KEY')
 # endpoint_secret = config('STRIPE_WEBHOOK_SECRET')
-
 
 class StripeWebhookViewSet(ViewSet):
 
@@ -79,9 +76,8 @@ class StripeWebhookViewSet(ViewSet):
 
             # Atualizar o status do pedido com base no pagamento
             if session['payment_status'] == 'paid':
-                 # pegar o id co cliente apartir do session
+                 # pegar o id co cliente e pegar o email 
                 customer_id = session['customer']['id']
-                 # pegar o email do cliente
                 customer = stripe.Customer.retrieve(customer_id)
                 cliente_email = customer['email']
                 pedido.status_pedido = 'Pago'
@@ -100,10 +96,10 @@ class StripeWebhookViewSet(ViewSet):
                 remetente = settings.EMAIL_HOST_USER
                 recipient_email = cliente_email
                 subject = 'Confirmação de Pagamento'
-                try:
-                    send_mail(subject, message, remetente, [recipient_email])
-                except Exception as e:
-                    traceback.print_exc()
+                
+                send_mail(subject, message, remetente, [recipient_email])
+               
+                    
                 # Gerar uma nota fiscal
 
             elif session['payment_status'] == 'unpaid':
@@ -132,8 +128,7 @@ class StripeWebhookViewSet(ViewSet):
             return Response(status=400, data={'error': 'Pedido não encontrado'})
 
         except Exception as e:
-            # Outro erro durante a atualização do status do pedido
-            return Response(status=500, data={'error': 'Erro ao atualizar o status do pedido'})
+            return Response(status=500, data={'error': str(e)})
 
 
     def handle_failed_payment(self, payment_intent):
