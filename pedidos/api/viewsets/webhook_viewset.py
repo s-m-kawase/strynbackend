@@ -12,7 +12,7 @@ from apistripe.models.stripe import Stripe
 from decouple import config
 
 stripe.api_key = config('STRIPE_SECRET_KEY')
-endpoint_secret = config('STRIPE_WEBHOOK_SECRET')
+# endpoint_secret = config('STRIPE_WEBHOOK_SECRET')
 
 
 class StripeWebhookViewSet(ViewSet):
@@ -30,6 +30,7 @@ class StripeWebhookViewSet(ViewSet):
         # stripe.request_data = request.data
         # stripe.webhook = request.META
         # stripe.save()
+        endpoint_secret = 'whsec_ZAzKGVyqFlX4qOaRgFPCRbSiwSALukQL'
         payload = json.loads(request.data)
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
         event = None
