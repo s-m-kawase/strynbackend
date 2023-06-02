@@ -1,3 +1,5 @@
+
+import json
 import stripe
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -15,19 +17,19 @@ endpoint_secret = config('STRIPE_WEBHOOK_SECRET')
 
 class StripeWebhookViewSet(ViewSet):
 
-    @action(detail=False, methods=['post'])
-    def initiate_payment(self, request):
-        session_id = request.data.get('session_id')
-        self.process_payment(session_id)
-        return Response({'message': 'Pagamento processado com sucesso'})
+    # @action(detail=False, methods=['post'])
+    # def initiate_payment(self, request):
+    #     session_id = request.data.get('session_id')
+    #     self.process_payment(session_id)
+    #     return Response({'message': 'Pagamento processado com sucesso'})
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['get'])
     @csrf_exempt
     def webhook(self, request):
-        stripe = Stripe.objects.all().first()
-        stripe.webhook = request
-        stripe.save()
-        payload = request.data
+        # stripe = Stripe.objects.all().first()
+        # stripe.webhook = request.META
+        # stripe.save()
+        payload = json.dumps(request.data)
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
         event = None
 
@@ -37,10 +39,22 @@ class StripeWebhookViewSet(ViewSet):
             )
         except ValueError as e:
             # Se payload for inválido, retorna erro 400
-            return Response(status=400, data={'error': 'Erro no payload'})
+            return Response(status=400, data={
+                'error': 'Erro no payload',
+                'message': f"{e}",
+                #  'requet_meta':request.META,
+                'requet_data':request.data,
+                'assinatura_cabecalho':sig_header,
+                })
         except stripe.error.SignatureVerificationError as e:
             # Se a assinatura for inválida, retorna erro 400
-            return Response(status=400, data={'error': 'Assinatura inválida'})
+            return Response(status=400, data={
+                'error': 'Assinatura inválida',
+                'message': f"{e}",
+                # 'requet_meta':request.META,
+                'requet_data':request.data,
+                'assinatura_cabecalho':sig_header,
+                })
 
         # Lidar com o evento
         if event['type'] == 'checkout.session.completed':
