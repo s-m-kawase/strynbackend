@@ -16,7 +16,7 @@ class StripeAdmin(admin.ModelAdmin):
     ]
 
     list_filter = [
-        'webhook'
+        
     ]
 
    
