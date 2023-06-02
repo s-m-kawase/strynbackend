@@ -95,14 +95,12 @@ class StripeWebhookViewSet(ViewSet):
             message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.valor_total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
             message += "\n".join(items)
             
-            # Enviar uma confirmação por e-mail
+            # Enviar confirmação por e-mail
             remetente = settings.EMAIL_HOST_USER
             recipient_email = cliente_email
             subject = 'Confirmação de Pagamento'
-            try:
-                send_mail(subject, message, remetente, [recipient_email])
-            except Exception as e:
-                traceback.print_exc()
+            send_mail(subject, message, remetente, [recipient_email])
+            
             # Gerar uma nota fiscal
 
         elif session['payment_status'] == 'unpaid':
