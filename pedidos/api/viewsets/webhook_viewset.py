@@ -21,7 +21,7 @@ class StripeWebhookViewSet(ViewSet):
     def webhook(self, request):
         endpoint_secret = 'whsec_ZAzKGVyqFlX4qOaRgFPCRbSiwSALukQL'
 
-        payload = request.data
+        payload = request.body
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
         event = None
 
