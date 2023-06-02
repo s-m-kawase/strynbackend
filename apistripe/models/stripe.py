@@ -7,6 +7,10 @@ class Stripe(models.Model):
         verbose_name='webhook',
     )
 
+    request_data = models.TextField(
+        verbose_name='webhook',
+    )
+
     def __str__(self):
         '''Método que retorna a representação do objeto como string.'''
         return self.webhook

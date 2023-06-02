@@ -89,8 +89,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
             payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
-            success_url='http://localhost:9000/cliente/sucesso',
-            cancel_url='http://localhost:9000/cliente/visao-geral',
+            success_url='https://stryn.netlify.app/cliente/sucesso',
+            cancel_url='https://stryn.netlify.app/cliente/visao-geral',
         )
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id
