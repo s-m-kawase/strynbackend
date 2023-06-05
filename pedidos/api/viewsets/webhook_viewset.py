@@ -69,19 +69,13 @@ class StripeWebhookViewSet(ViewSet):
                 pedido = Pedidos.objects.get(session_id=session_id)
                 self.handle_failed_payment(pedido, payment_intent)
             
-            
-
-        elif event['type'] == 'payment_intent.payment_failed':
-            payment_intent = event['data']['object']
-            self.handle_failed_payment(payment_intent)
-           
 
         return Response(status=200)
 
 
     def update_order_status(self, pedido ,session):
    
-        if session.get('payment_status') == 'paid':
+        if session['payment_status'] == 'paid':
             customer_id = session['customer']['id']
             customer = stripe.Customer.retrieve(customer_id)
             cliente_email = customer['email']
@@ -107,7 +101,7 @@ class StripeWebhookViewSet(ViewSet):
                 
             # Gerar uma nota fiscal
 
-        elif session.get('payment_status') == 'unpaid':
+        elif session['payment_status'] == 'unpaid':
             pedido.status_pedido = 'Sacola'
             # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
             remetente = config('EMAIL_HOST_USER')
@@ -116,7 +110,7 @@ class StripeWebhookViewSet(ViewSet):
             message = 'Lembramos que o Pagamento do seu pedido ainda está pendente. Por favor, realize o pagamento o mais breve possível.'
             send_mail(subject, message, remetente, [recipient_email])
 
-        elif session.get('payment_status') == 'canceled':
+        elif session['payment_status'] == 'canceled':
             pedido.status_pedido = 'Cancelado'
             # Notificar o cliente sobre o cancelamento do pedido
             remetente = config('EMAIL_HOST_USER')
@@ -138,10 +132,8 @@ class StripeWebhookViewSet(ViewSet):
     #     return Response(status=500, data={'error': error_message})
 
 
-    def handle_failed_payment(self, payment_intent):
+    def handle_failed_payment(self, pedido ,payment_intent):
         try:
-            # Lógica para lidar com o pagamento falhado, por exemplo, enviar um e-mail ao cliente
-            pedido = Pedidos.objects.get(session_id=payment_intent['id'])
 
             # Atualizar o status do pedido
             pedido.status_pedido = 'Com erro'
