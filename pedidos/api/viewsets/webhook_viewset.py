@@ -79,18 +79,44 @@ class StripeWebhookViewSet(ViewSet):
 
 
     def update_order_status(self, pedido ,session):
-   
+        email = session['customer_details']['email']
         if session['status'] == 'complete':
             pedido.status_pedido = 'Pago'
             pedido.save()
+
+            # mensagem detalhes do pedido
+            message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
+            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
+            # Enviar uma confirmação por e-mail
+            remetente = settings.EMAIL_HOST_USER
+            recipient_email = email
+            subject = 'Confirmação de Pagamento'
+            
+            send_mail(subject, message, remetente, [recipient_email])
 
         elif session['status'] == 'incomplete':
             pedido.status_pedido = 'Sacola'
             pedido.save()
 
+            # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
+            remetente = config('EMAIL_HOST_USER')
+            recipient_email = email
+            subject = 'Lembrete de Pagamento'
+            message = f"Seu pagamento está incompleto. Por favor, verifique as informações do seu pagamento e conclua a transação para prosseguir com o pedido.\n\n"
+            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
+            send_mail(subject, message, remetente, [recipient_email])
+
         elif session['status'] == 'canceled':
             pedido.status_pedido = 'Cancelado'
             pedido.save()
+
+            # Notificar o cliente sobre o cancelamento do pedido
+            remetente = config('EMAIL_HOST_USER')
+            recipient_email = email
+            subject = 'Cancelamento de Pedido'
+            message = f"Seu pagamento foi cancelado. Entre em contato conosco para obter mais informações.\n\n"
+            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
+            send_mail(subject, message, remetente, [recipient_email])
     
 
     def confirma_pagamento(self, pedido, session, status):
