@@ -56,15 +56,27 @@ class StripeWebhookViewSet(ViewSet):
         # Lidar com o evento
         if event['type'] == 'checkout.session.completed':
             session = event['data']['object']
-            self.update_order_status(session)
+            # self.update_order_status(session)
+            print({
+                'session':session,
+                'message': 'checkout.session.completed ok '
+                })
 
         elif event['type'] == 'payment_intent.succeeded':
             payment_intent = event['data']['object']
-            self.update_order_status(payment_intent)
+            # self.update_order_status(payment_intent)
+            print({
+                'session':payment_intent,
+                'message': 'payment_intent.succeeded ok '
+                })
 
         elif event['type'] == 'payment_intent.payment_failed':
             payment_intent = event['data']['object']
-            self.handle_failed_payment(payment_intent)
+            # self.handle_failed_payment(payment_intent)
+            print({
+                'session':payment_intent,
+                'message': 'payment_intent.payment_failed ok '
+                })
 
         return Response(status=200)
 
