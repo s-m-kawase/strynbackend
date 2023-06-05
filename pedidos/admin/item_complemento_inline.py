@@ -12,4 +12,8 @@ class ItensPedidoComplementosInline(nested_admin.NestedStackedInline):
     #     'total_complementos',
     #     'preco',
     #     ]
+    
+    readonly_fields = [
+        'valor_unitario',
+    ]
     extra = 0
