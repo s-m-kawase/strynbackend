@@ -75,7 +75,7 @@ class StripeWebhookViewSet(ViewSet):
 
     def update_order_status(self, pedido ,session):
    
-        if session['payment_status'] == 'paid':
+        if session['status'] == 'complete':
             # customer_id = session['customer']['id']
             # customer = stripe.Customer.retrieve(customer_id)
             # cliente_email = customer['email']
@@ -102,7 +102,7 @@ class StripeWebhookViewSet(ViewSet):
                 
             # Gerar uma nota fiscal
 
-        elif session['payment_status'] == 'unpaid':
+        elif session['status'] == 'incomplete':
             pedido.status_pedido = 'Sacola'
             pedido.save()
             # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
@@ -112,7 +112,7 @@ class StripeWebhookViewSet(ViewSet):
             # message = 'Lembramos que o Pagamento do seu pedido ainda está pendente. Por favor, realize o pagamento o mais breve possível.'
             # send_mail(subject, message, remetente, [recipient_email])
 
-        elif session['payment_status'] == 'canceled':
+        elif session['status'] == 'canceled':
             pedido.status_pedido = 'Cancelado'
             pedido.save()
             # Notificar o cliente sobre o cancelamento do pedido
