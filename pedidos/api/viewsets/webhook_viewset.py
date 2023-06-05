@@ -74,28 +74,28 @@ class StripeWebhookViewSet(ViewSet):
     def update_order_status(self, pedido ,session):
    
         if session['status'] == 'complete':
-            # customer_id = session['customer']['id']
-            # customer = stripe.Customer.retrieve(customer_id)
-            # cliente_email = customer['email']
+            customer_id = session['customer']['id']
+            customer = stripe.Customer.retrieve(customer_id)
+            cliente_email = customer['email']
             pedido.status_pedido = 'Pago'
             pedido.save()
 
             # lista dos item pedido
-            # items = []
-            # for item in pedido.itens_pedido.all():
-            #     item_info = f"Nome do Item: {item.item.nome}\nQuantidade: {item.quantidade}\nPreço Unitário: {item.preco}\n\n"
-            #     items.append(item_info)
+            items = []
+            for item in pedido.itens_pedido.all():
+                item_info = f"Nome do Item: {item.item.nome}\nQuantidade: {item.quantidade}\nPreço Unitário: {item.preco}\n\n"
+                items.append(item_info)
 
-            # # mensagem detalhes do pedido
-            # message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
-            # # message += "\n".join(items)
+            # mensagem detalhes do pedido
+            message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
+            message += "\n".join(items)
             
-            # # Enviar uma confirmação por e-mail
-            # remetente = settings.EMAIL_HOST_USER
-            # recipient_email = cliente_email
-            # subject = 'Confirmação de Pagamento'
+            # Enviar uma confirmação por e-mail
+            remetente = settings.EMAIL_HOST_USER
+            recipient_email = cliente_email
+            subject = 'Confirmação de Pagamento'
             
-            # send_mail(subject, message, remetente, [recipient_email])
+            send_mail(subject, message, remetente, [recipient_email])
             
                 
             # Gerar uma nota fiscal
