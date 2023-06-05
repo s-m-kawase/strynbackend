@@ -76,9 +76,9 @@ class StripeWebhookViewSet(ViewSet):
     def update_order_status(self, pedido ,session):
    
         if session['payment_status'] == 'paid':
-            customer_id = session['customer']['id']
-            customer = stripe.Customer.retrieve(customer_id)
-            cliente_email = customer['email']
+            # customer_id = session['customer']['id']
+            # customer = stripe.Customer.retrieve(customer_id)
+            # cliente_email = customer['email']
             pedido.status_pedido = 'Pago'
 
             # lista dos item pedido
