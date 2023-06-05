@@ -56,27 +56,18 @@ class StripeWebhookViewSet(ViewSet):
         # Lidar com o evento
         if event['type'] == 'checkout.session.completed':
             session = event['data']['object']
-            # self.update_order_status(session)
-            print({
-                'session':session,
-                'message': 'checkout.session.completed ok '
-                })
+            self.update_order_status(session)
+            
 
         elif event['type'] == 'payment_intent.succeeded':
             payment_intent = event['data']['object']
-            # self.update_order_status(payment_intent)
-            print({
-                'session':payment_intent,
-                'message': 'payment_intent.succeeded ok '
-                })
+            self.update_order_status(payment_intent)
+            
 
         elif event['type'] == 'payment_intent.payment_failed':
             payment_intent = event['data']['object']
-            # self.handle_failed_payment(payment_intent)
-            print({
-                'session':payment_intent,
-                'message': 'payment_intent.payment_failed ok '
-                })
+            self.handle_failed_payment(payment_intent)
+           
 
         return Response(status=200)
 
@@ -95,14 +86,14 @@ class StripeWebhookViewSet(ViewSet):
             pedido.status_pedido = 'Pago'
 
             # lista dos item pedido
-            items = []
-            for item in pedido.itens_pedido.all():
-                item_info = f"Nome do Item: {item.item.nome}\nQuantidade: {item.quantidade}\nPreço Unitário: {item.preco}\n\n"
-                items.append(item_info)
+            # items = []
+            # for item in pedido.itens_pedido.all():
+            #     item_info = f"Nome do Item: {item.item.nome}\nQuantidade: {item.quantidade}\nPreço Unitário: {item.preco}\n\n"
+            #     items.append(item_info)
 
             # mensagem detalhes do pedido
             message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
-            message += "\n".join(items)
+            # message += "\n".join(items)
             
             # Enviar uma confirmação por e-mail
             remetente = settings.EMAIL_HOST_USER
