@@ -73,7 +73,7 @@ class StripeWebhookViewSet(ViewSet):
 
 
     def update_order_status(self, session):
-    # try:
+   
         # Obter o pedido associado ao session_id
         pedido = Pedidos.objects.get(session_id=session['id'])
 
@@ -91,16 +91,16 @@ class StripeWebhookViewSet(ViewSet):
             #     item_info = f"Nome do Item: {item.item.nome}\nQuantidade: {item.quantidade}\nPreço Unitário: {item.preco}\n\n"
             #     items.append(item_info)
 
-            # mensagem detalhes do pedido
-            message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
-            # message += "\n".join(items)
+            # # mensagem detalhes do pedido
+            # message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
+            # # message += "\n".join(items)
             
-            # Enviar uma confirmação por e-mail
-            remetente = settings.EMAIL_HOST_USER
-            recipient_email = cliente_email
-            subject = 'Confirmação de Pagamento'
+            # # Enviar uma confirmação por e-mail
+            # remetente = settings.EMAIL_HOST_USER
+            # recipient_email = cliente_email
+            # subject = 'Confirmação de Pagamento'
             
-            send_mail(subject, message, remetente, [recipient_email])
+            # send_mail(subject, message, remetente, [recipient_email])
             
                 
             # Gerar uma nota fiscal
