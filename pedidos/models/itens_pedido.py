@@ -37,6 +37,7 @@ class ItensPedido(models.Model):
         blank=True, null=True,
     )
     
+    #VERIFICAR IMPACTO DISSO NO CONTROLE DE ESTOQUE SE TIVER!!!
     multiplicador_item_pedido = models.IntegerField(
         verbose_name='Multiplicador Item Pedido',
         max_length=5,
