@@ -64,7 +64,8 @@ class StripeWebhookViewSet(ViewSet):
             payment_intent = event['data']['object']
             session_id = event['data']['object']['id']          
             pedido = Pedidos.objects.get(session_id=session_id)
-            self.confirma_pagamento(payment_intent, pedido)
+            status = payment_intent['status']
+            self.confirma_pagamento(payment_intent, pedido, status)
             
 
         elif event['type'] == 'payment_intent.succeeded':
@@ -92,10 +93,10 @@ class StripeWebhookViewSet(ViewSet):
             pedido.save()
     
 
-    def confirma_pagamento(self, pedido ,session, payment_intent):
+    def confirma_pagamento(status, pedido ,session, payment_intent):
         # pega email do cliente no stripe
         email = session['customer_details']['email']
-        if payment_intent['status'] == 'succeeded':
+        if status == 'succeeded':
             
             # mensagem detalhes do pedido
             message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
@@ -109,7 +110,7 @@ class StripeWebhookViewSet(ViewSet):
                 
             # Gerar uma nota fiscal
 
-        elif payment_intent['status'] == 'failed':
+        elif status == 'failed':
         
             # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
             remetente = config('EMAIL_HOST_USER')
@@ -118,7 +119,7 @@ class StripeWebhookViewSet(ViewSet):
             message = f"Seu pagamento falhou. Por favor, verifique as informações do seu pagamento e tente novamente.\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
             send_mail(subject, message, remetente, [recipient_email])
 
-        elif payment_intent['status'] == 'canceled':
+        elif status == 'canceled':
         
             # Notificar o cliente sobre o cancelamento do pedido
             remetente = config('EMAIL_HOST_USER')
