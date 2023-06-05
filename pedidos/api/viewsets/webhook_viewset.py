@@ -52,20 +52,20 @@ class StripeWebhookViewSet(ViewSet):
                 'requet_data':request.data,
                 'assinatura_cabecalho':sig_header,
                 })
-      
+
         # Lidar com o evento
         if event['type'] == 'checkout.session.completed':
             session = event['data']['object']
-            pedido = Pedidos.objects.get(id=23)
+            session_id = event['data']['object']['id']          
+            pedido = Pedidos.objects.get(session_id=session_id)
             self.update_order_status(pedido, session)
             
 
         elif event['type'] == 'payment_intent.succeeded':
             payment_intent = event['data']['object']
-            session_id = payment_intent.get('metadata', {}).get('session_id')
-            if session_id:
-                pedido = Pedidos.objects.get(session_id=session_id)
-                self.handle_failed_payment(payment_intent, pedido)
+            session_id = event['data']['object']['id']  
+            pedido = Pedidos.objects.get(session_id=session_id)
+            self.handle_failed_payment(payment_intent, pedido)
             
 
         return Response(status=200)
@@ -73,12 +73,12 @@ class StripeWebhookViewSet(ViewSet):
 
     def update_order_status(self, pedido ,session):
    
-        # session['status'] == 'complete'
+        if session['status'] == 'complete':
             # customer_id = session['customer']['id']
             # customer = stripe.Customer.retrieve(customer_id)
             # cliente_email = customer['email']
-        pedido.status_pedido = 'Pago'
-        pedido.save()
+            pedido.status_pedido = 'Pago'
+            pedido.save()
 
             # lista dos item pedido
             # items = []
@@ -100,9 +100,9 @@ class StripeWebhookViewSet(ViewSet):
                 
             # Gerar uma nota fiscal
 
-        # elif session['status'] == 'incomplete':
-        #     pedido.status_pedido = 'Sacola'
-        #     pedido.save()
+        elif session['status'] == 'incomplete':
+            pedido.status_pedido = 'Sacola'
+            pedido.save()
             # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
             # remetente = config('EMAIL_HOST_USER')
             # recipient_email = cliente_email
@@ -110,9 +110,9 @@ class StripeWebhookViewSet(ViewSet):
             # message = 'Lembramos que o Pagamento do seu pedido ainda está pendente. Por favor, realize o pagamento o mais breve possível.'
             # send_mail(subject, message, remetente, [recipient_email])
 
-        # elif session['status'] == 'canceled':
-        #     pedido.status_pedido = 'Cancelado'
-        #     pedido.save()
+        elif session['status'] == 'canceled':
+            pedido.status_pedido = 'Cancelado'
+            pedido.save()
             # Notificar o cliente sobre o cancelamento do pedido
             # remetente = config('EMAIL_HOST_USER')
             # recipient_email = cliente_email
