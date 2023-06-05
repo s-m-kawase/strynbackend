@@ -59,9 +59,9 @@ class StripeWebhookViewSet(ViewSet):
             self.update_order_status(session)
             
 
-        elif event['type'] == 'payment_intent.succeeded':
-            payment_intent = event['data']['object']
-            self.update_order_status(payment_intent)
+        # elif event['type'] == 'payment_intent.succeeded':
+        #     payment_intent = event['data']['object']
+        #     self.update_order_status(payment_intent)
             
 
         elif event['type'] == 'payment_intent.payment_failed':
