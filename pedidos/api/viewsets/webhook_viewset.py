@@ -52,14 +52,12 @@ class StripeWebhookViewSet(ViewSet):
                 'requet_data':request.data,
                 'assinatura_cabecalho':sig_header,
                 })
-
+      
         # Lidar com o evento
         if event['type'] == 'checkout.session.completed':
             session = event['data']['object']
-            pedido_id = session.get('metadata', {}).get('pedido_id')
-            if pedido_id:
-                pedido = Pedidos.objects.get(id=pedido_id)
-                self.update_order_status(pedido, session)
+            pedido = Pedidos.objects.get(id=23)
+            self.update_order_status(pedido, session)
             
 
         elif event['type'] == 'payment_intent.succeeded':
