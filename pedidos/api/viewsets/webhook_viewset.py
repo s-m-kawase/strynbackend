@@ -80,9 +80,6 @@ class StripeWebhookViewSet(ViewSet):
     def update_order_status(self, pedido ,session):
    
         if session['status'] == 'complete':
-            customer_id = session['customer']['id']
-            customer = stripe.Customer.retrieve(customer_id)
-            cliente_email = customer['email']
             pedido.status_pedido = 'Pago'
             pedido.save()
 
@@ -90,7 +87,7 @@ class StripeWebhookViewSet(ViewSet):
             message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
             # Enviar uma confirmação por e-mail
             remetente = settings.EMAIL_HOST_USER
-            recipient_email = cliente_email
+            recipient_email = 'diovantrab@gmail.com'
             subject = 'Confirmação de Pagamento'
             
             send_mail(subject, message, remetente, [recipient_email])
