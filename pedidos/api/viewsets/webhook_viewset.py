@@ -78,7 +78,7 @@ class StripeWebhookViewSet(ViewSet):
         pedido = Pedidos.objects.get(session_id=session['id'])
 
         # Atualizar o status do pedido com base no pagamento
-        if session['payment_status'] == 'paid':
+        if session.get('payment_status') == 'paid':
                 # pegar o id co cliente e pegar o email 
             customer_id = session['customer']['id']
             customer = stripe.Customer.retrieve(customer_id)
