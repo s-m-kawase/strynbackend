@@ -93,7 +93,7 @@ class StripeWebhookViewSet(ViewSet):
             pedido.save()
     
 
-    def confirma_pagamento(status, pedido ,session, payment_intent):
+    def confirma_pagamento(self, pedido, session, status):
         # pega email do cliente no stripe
         email = session['customer_details']['email']
         if status == 'succeeded':
