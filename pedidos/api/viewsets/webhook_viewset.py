@@ -80,6 +80,7 @@ class StripeWebhookViewSet(ViewSet):
             # customer = stripe.Customer.retrieve(customer_id)
             # cliente_email = customer['email']
             pedido.status_pedido = 'Pago'
+            pedido.save()
 
             # lista dos item pedido
             # items = []
@@ -103,24 +104,26 @@ class StripeWebhookViewSet(ViewSet):
 
         elif session['payment_status'] == 'unpaid':
             pedido.status_pedido = 'Sacola'
+            pedido.save()
             # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
-            remetente = config('EMAIL_HOST_USER')
-            recipient_email = cliente_email
-            subject = 'Lembrete de Pagamento'
-            message = 'Lembramos que o Pagamento do seu pedido ainda está pendente. Por favor, realize o pagamento o mais breve possível.'
-            send_mail(subject, message, remetente, [recipient_email])
+            # remetente = config('EMAIL_HOST_USER')
+            # recipient_email = cliente_email
+            # subject = 'Lembrete de Pagamento'
+            # message = 'Lembramos que o Pagamento do seu pedido ainda está pendente. Por favor, realize o pagamento o mais breve possível.'
+            # send_mail(subject, message, remetente, [recipient_email])
 
         elif session['payment_status'] == 'canceled':
             pedido.status_pedido = 'Cancelado'
+            pedido.save()
             # Notificar o cliente sobre o cancelamento do pedido
-            remetente = config('EMAIL_HOST_USER')
-            recipient_email = cliente_email
-            subject = 'Cancelamento de Pedido'
-            message = 'Infelizmente, o seu pedido foi cancelado. Entre em contato conosco para mais informações.'
-            send_mail(subject, message, remetente, [recipient_email])
+            # remetente = config('EMAIL_HOST_USER')
+            # recipient_email = cliente_email
+            # subject = 'Cancelamento de Pedido'
+            # message = 'Infelizmente, o seu pedido foi cancelado. Entre em contato conosco para mais informações.'
+            # send_mail(subject, message, remetente, [recipient_email])
 
         # Salvar as alterações no pedido
-        pedido.save()
+        # pedido.save()
 
     # except Pedidos.DoesNotExist:
     #     # Pedido não encontrado
