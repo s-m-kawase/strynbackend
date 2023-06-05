@@ -85,7 +85,7 @@ class StripeWebhookViewSet(ViewSet):
                 # lista dos item pedido
                 items = []
                 for item in pedido.itens_pedido.all():
-                    item_info = f"Nome do Item: {item.nome}\nQuantidade: {item.quantidade}\nPreço Unitário: {item.preco_unitario}\n\n"
+                    item_info = f"Nome do Item: {item.item.nome}\nQuantidade: {item.quantidade}\nPreço Unitário: {item.preco}\n\n"
                     items.append(item_info)
 
                 # mensagem detalhes do pedido
