@@ -64,9 +64,9 @@ class StripeWebhookViewSet(ViewSet):
             payment_intent = event['data']['object']
             session_id = event['data']['object']['id']          
             pedido = Pedidos.objects.get(session_id=session_id)
-            status = event['data']['status']
-            self.confirma_pagamento(payment_intent, pedido, status)
-            
+            status = payment_intent['status']
+            self.confirma_pagamento(pedido, payment_intent, status)
+                    
 
         elif event['type'] == 'payment_intent.succeeded':
             payment_intent = event['data']['object']
