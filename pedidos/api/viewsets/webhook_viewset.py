@@ -67,7 +67,7 @@ class StripeWebhookViewSet(ViewSet):
             session_id = payment_intent.get('metadata', {}).get('session_id')
             if session_id:
                 pedido = Pedidos.objects.get(session_id=session_id)
-                self.handle_failed_payment(pedido, payment_intent)
+                self.handle_failed_payment(payment_intent, pedido)
             
 
         return Response(status=200)
