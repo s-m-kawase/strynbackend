@@ -9,9 +9,9 @@ class ItensPedidoInline(NestedStackedInline):
     model = ItensPedido
     autocomplete_fields = ['item', 'pedido']
     readonly_fields = [
-        'total_item',
         'total_complementos',
-        'preco',
+        'preco_item_mais_complementos',
+        'valor_unitario_item',
         ]
     extra = 0
     
