@@ -64,7 +64,7 @@ class StripeWebhookViewSet(ViewSet):
             payment_intent = event['data']['object']
             session_id = event['data']['object']['id']          
             pedido = Pedidos.objects.get(session_id=session_id)
-            status = payment_intent['status']
+            status = event['data']['object']['status']
             self.confirma_pagamento(payment_intent, pedido, status)
             
 
