@@ -119,13 +119,16 @@ class StripeWebhookViewSet(ViewSet):
             send_mail(subject, message, remetente, [recipient_email])
     
 
-    def confirma_pagamento(self, pedido, session, status):
-        # pega email do cliente no stripe
-        email = session['customer_details']['email']
+    def confirma_pagamento(self, pedido, payment_intent, status):
+        email = payment_intent['charges']['data'][0]['billing_details']['email']
+
         if status == 'succeeded':
-            
+            pedido.status_pedido = 'Pago'
+            pedido.save()
+
             # mensagem detalhes do pedido
-            message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
+            message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
+            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
             # Enviar uma confirmação por e-mail
             remetente = settings.EMAIL_HOST_USER
             recipient_email = email
@@ -135,24 +138,6 @@ class StripeWebhookViewSet(ViewSet):
             
                 
             # Gerar uma nota fiscal
-
-        elif status == 'failed':
-        
-            # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
-            remetente = config('EMAIL_HOST_USER')
-            recipient_email = email
-            subject = 'Lembrete de Pagamento'
-            message = f"Seu pagamento falhou. Por favor, verifique as informações do seu pagamento e tente novamente.\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
-            send_mail(subject, message, remetente, [recipient_email])
-
-        elif status == 'canceled':
-        
-            # Notificar o cliente sobre o cancelamento do pedido
-            remetente = config('EMAIL_HOST_USER')
-            recipient_email = email
-            subject = 'Cancelamento de Pedido'
-            message = f"Seu pagamento foi cancelado. Entre em contato conosco para obter mais informações.\n\nDetalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
-            send_mail(subject, message, remetente, [recipient_email])
 
 
     def handle_failed_payment(self, pedido ,payment_intent):
