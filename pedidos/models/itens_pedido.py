@@ -63,7 +63,10 @@ class ItensPedido(models.Model):
     
     @property
     def total_item(self):
-        total = self.valor_unitario_item * self.quantidade
+        try:
+            total = self.valor_unitario_item * self.quantidade
+        except:
+            total = 0
         return total
 
     def calcular_preco_item_mais_complementos(self):
