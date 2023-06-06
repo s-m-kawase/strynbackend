@@ -59,6 +59,12 @@ class ItensPedido(models.Model):
             if complemento.valor_total:
                 total += complemento.valor_total
         return total
+    
+    @property
+    def total_item(self):
+        total = self.valor_unitario_item * self.quantidade
+        return total
+        
 
     def calcular_preco_item_mais_complementos(self):
         self.valor_unitario_item = self.item.preco if self.item.preco else 0
