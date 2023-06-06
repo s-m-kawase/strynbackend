@@ -20,6 +20,7 @@ class Pedidos(models.Model):
     
     STATUS_CHOICE = (
         ('Sacola','Sacola'),
+        ('Aguardando Pagamento Mesa', 'Aguardando Pagamento Mesa')
         ('Pago','Pago'),
         ('Aguardando Preparo', 'Aguardando Preparo'),
         ('Em preparo','Em preparo'),
