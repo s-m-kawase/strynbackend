@@ -68,7 +68,7 @@ class ItensPedido(models.Model):
             else:
                 self.preco_item_mais_complementos = (self.valor_unitario_item * self.quantidade) + self.total_complementos
         except:
-            self.preco = 0
+            self.preco_item_mais_complementos = 0
         self.save()
 
     def __str__(self):
