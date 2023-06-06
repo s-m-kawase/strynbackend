@@ -21,7 +21,7 @@ class Pedidos(models.Model):
     STATUS_CHOICE = (
         ('Sacola','Sacola'),
         ('Pago','Pago'),
-        ('Pronto','Pronto'),
+        ('Em preparo','Em preparo'),
         ('Concluído','Concluído'),
         ('Cancelado','Cancelado'),
         ('Com erro', 'Com erro')
@@ -97,8 +97,8 @@ class Pedidos(models.Model):
         subtotal = 0
         
         for item in self.itenspedido_set.all():
-            if item.preco is not None:
-                subtotal += item.preco
+            if item.preco_item_mais_complementos is not None:
+                subtotal += item.preco_item_mais_complementos
         return subtotal
         
         

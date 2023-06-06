@@ -30,7 +30,14 @@ class ItensPedido(models.Model):
         null=True
     )
     
-    preco = models.DecimalField(
+    valor_unitario_item = models.DecimalField(
+        verbose_name="Valor Unitário Item",
+        decimal_places=2,
+        max_digits=12,
+        blank=True, null=True,
+    )
+    
+    preco_item_mais_complementos = models.DecimalField(
         verbose_name="Preço Item + Complementos",
         decimal_places=2,
         max_digits=12,
@@ -44,33 +51,25 @@ class ItensPedido(models.Model):
         default=1,
         blank=True, null=True,
     )
-
-    @property
-    def total_item(self):
-        
-        total = 0
-        if self.item:
-            total = float(self.quantidade) * (float(self.item.preco) if self.item else 0)
-
-        return total
     
     @property
     def total_complementos(self):
         total = 0
         for complemento in self.itenspedidocomplementos_set.all():
-            total += complemento.total
+            if complemento.valor_total:
+                total += complemento.valor_total
         return total
 
-    def calcular_preco(self):
+    def calcular_preco_item_mais_complementos(self):
+        self.valor_unitario_item = self.item.preco if self.item.preco else 0
         try:
             if self.multiplicador_item_pedido != 1:
-                self.preco = (self.total_item + self.total_complementos) * self.multiplicador_item_pedido
+                self.preco_item_mais_complementos = (self.total_item + self.total_complementos) * self.multiplicador_item_pedido
             else:
-                self.preco = self.total_item + self.total_complementos
-            self.save()
+                self.preco_item_mais_complementos = (self.valor_unitario_item * self.quantidade) + self.total_complementos
         except:
             self.preco = 0
-            self.save()
+        self.save()
 
     def __str__(self):
         return str(self.item)
