@@ -45,7 +45,7 @@ class PedidosSerializer(serializers.ModelSerializer):
                  "foto_complemento": complemento.complemento.foto.url if complemento.complemento.foto else None,
                  "valor": complemento.complemento.preco if complemento.complemento.preco else None,
                  "quantidade": complemento.quantidade if complemento.quantidade else None,
-                 "total": complemento.total if complemento.total else None} 
+                 "total": complemento.valor_total if complemento.valor_total else None} 
                 for complemento in item.itenspedidocomplementos_set.all()
                 ] 
         } for item in obj.itenspedido_set.all()]

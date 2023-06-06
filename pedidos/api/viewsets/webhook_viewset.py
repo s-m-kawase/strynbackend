@@ -86,7 +86,7 @@ class StripeWebhookViewSet(ViewSet):
 
             # mensagem detalhes do pedido
             message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
-            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}\n\nItens do Pedido:\n"
+            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
             # Enviar uma confirmação por e-mail
             remetente = settings.EMAIL_HOST_USER
             recipient_email = email
