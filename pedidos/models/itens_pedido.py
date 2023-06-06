@@ -53,6 +53,14 @@ class ItensPedido(models.Model):
     )
     
     @property
+    def valor_total_item(self):
+        try:
+            valor = self.quantidade * self.valor_unitario_item
+        except:
+            valor = 0
+        return valor
+    
+    @property
     def total_complementos(self):
         total = 0
         for complemento in self.itenspedidocomplementos_set.all():
@@ -77,4 +85,7 @@ class ItensPedido(models.Model):
         app_label = 'pedidos'
         verbose_name = 'Item Pedido'
         verbose_name_plural = 'Itens Pedidos'
+    
+    
+    
     
