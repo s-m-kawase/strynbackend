@@ -76,7 +76,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             line_item = {
                 'price_data': {
                     'currency': 'brl',
-                    'unit_amount': int(item_pedido.preco) * 100,
+                    'unit_amount': int(item_pedido.preco_item_mais_complementos) * 100,
                     'product_data': {
                         'name': item_pedido.item.nome,
                     },
