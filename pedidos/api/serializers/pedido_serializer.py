@@ -20,9 +20,6 @@ class PedidosSerializer(serializers.ModelSerializer):
     restaurante_read = serializers.SerializerMethodField()
     pagamentos_read = serializers.SerializerMethodField()
     itens_read = serializers.SerializerMethodField()
-    
-    
-    
 
 
     def get_adicionais_read(self, obj):
