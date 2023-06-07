@@ -66,20 +66,19 @@ class StripeWebhookViewSet(ViewSet):
             pedido = Pedidos.objects.get(session_id=session_id)
             self.cancel_checkout_session(pedido, session)
 
+        elif event['type'] == 'payment_intent.payment_failed':
+            payment_intent = event['data']['object']
+            payment_intent_id = payment_intent['id']
+            pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
+            self.handle_payment_failed(pedido, payment_intent)
+
         elif event['type'] == 'payment_intent.succeeded':
             payment_intent = event['data']['object']
             session_id = event['data']['object']['id']          
             pedido = Pedidos.objects.get(session_id=session_id)
             status = payment_intent['status']
             self.confirma_pagamento(pedido, payment_intent, status)
-                    
-
-
-        elif event['type'] == 'payment_intent.succeeded':
-            payment_intent = event['data']['object']
-            session_id = payment_intent['id']
-            pedido = Pedidos.objects.get(session_id=session_id)
-            self.confirma_pagamento(pedido, payment_intent)
+                
             
 
         return Response(status=200)
