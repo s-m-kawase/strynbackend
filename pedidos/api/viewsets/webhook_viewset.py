@@ -115,10 +115,11 @@ class StripeWebhookViewSet(ViewSet):
         message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
         send_mail(subject, message, remetente, [recipient_email])
 
-    def confirma_pagamento(self, pedido, payment_intent):
+    def confirma_pagamento(self, pedido, payment_intent, status):
+    
         # email = payment_intent['charges']['data'][0]['billing_details']['email']
 
-        if payment_intent['status'] == 'succeeded':
+        if status == 'succeeded':
             pedido.status_pedido = 'Aguardando Preparo'
             pedido.save()
 
