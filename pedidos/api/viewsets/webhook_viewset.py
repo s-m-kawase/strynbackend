@@ -58,12 +58,9 @@ class StripeWebhookViewSet(ViewSet):
             session = event['data']['object']
             session_id = event['data']['object']['id']          
             pedido = Pedidos.objects.get(session_id=session_id)
-            if session.get('payment_status') == 'canceled':
-                self.cancel_checkout_session(pedido)
-            else:
-                self.update_order_status(pedido, session)
+            self.update_order_status(pedido, session)
 
-        elif event['type'] == 'payment_intent.payment_failed':
+        elif event['type'] == 'checkout.session.async_payment_failed':
             session = event['data']['object']
             session_id = session['id']  
             pedido = Pedidos.objects.get(session_id=session_id)
@@ -127,7 +124,7 @@ class StripeWebhookViewSet(ViewSet):
         # Notificar o cliente sobre o cancelamento do pedido
         remetente = config('EMAIL_HOST_USER')
         recipient_email = email
-        subject = 'Cancelamento de Pedido'
+        subject = 'saldo insuficiente'
         message = f"Seu pagamento foi cancelado. Entre em contato conosco para obter mais informações.\n\n"
         message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
         send_mail(subject, message, remetente, ['diovantrab@gmail.com'])
