@@ -114,7 +114,7 @@ class StripeWebhookViewSet(ViewSet):
 
         
 
-    def cancel_checkout_session(pedido, session):
+    def cancel_checkout_session(self, pedido, session):
         
         email = session['customer_details']['email']
         pedido.status_pedido = 'Cancelado'
@@ -128,7 +128,7 @@ class StripeWebhookViewSet(ViewSet):
         message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
         send_mail(subject, message, remetente, [recipient_email])
 
-    def confirma_pagamento(pedido, payment_intent):
+    def confirma_pagamento(self, pedido, payment_intent):
         email = payment_intent['billing_details']['email']
 
         if payment_intent['status'] == 'succeeded':
@@ -149,24 +149,17 @@ class StripeWebhookViewSet(ViewSet):
             # Gerar uma nota fiscal
 
 
-    def handle_failed_payment(self, pedido ,payment_intent):
-        try:
+    def handle_payment_failed(self, pedido, payment_intent):
+        email = payment_intent['billing_details']['email']
 
-            # Atualizar o status do pedido
-            pedido.status_pedido = 'Com erro'
-            pedido.save()
+        # Atualizar o status do pedido
+        pedido.status_pedido = 'Pagamento Falhou'
+        pedido.save()
 
-            # Enviar um e-mail ao cliente informando sobre o pagamento falhado
-            remetente = config('EMAIL_HOST_USER')
-            destinatario = pedido.cliente.user.email
-            assunto = 'Falha no Pagamento'
-            mensagem = 'O pagamento do seu pedido falhou. Por favor, tente novamente.'
-            send_mail(assunto, mensagem, remetente, [destinatario])
+        # Enviar um e-mail ao cliente informando sobre o pagamento falhado
+        remetente = settings.EMAIL_HOST_USER
+        recipient_email = email
+        subject = 'Falha no Pagamento'
+        message = 'O pagamento do seu pedido falhou. Por favor, tente novamente.'
+        send_mail(subject, message, remetente, [recipient_email])
 
-        except Pedidos.DoesNotExist:
-            # Pedido não encontrado
-            return Response(status=400, data={'error': 'Pedido não encontrado'})
-
-        except Exception as e:
-            # Outro erro durante o tratamento do pagamento falhado
-            return Response(status=500, data={'error': 'Erro ao lidar com o pagamento falhado'})
