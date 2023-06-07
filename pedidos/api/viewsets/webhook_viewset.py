@@ -140,7 +140,7 @@ class StripeWebhookViewSet(ViewSet):
         email = payment_intent['billing_details']['email']
 
         # Atualizar o status do pedido
-        pedido.status_pedido = 'Pagamento Falhou'
+        pedido.status_pedido = 'Com erro'
         pedido.save()
 
         # Enviar um e-mail ao cliente informando sobre o pagamento falhado
