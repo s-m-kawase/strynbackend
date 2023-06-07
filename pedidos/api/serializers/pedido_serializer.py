@@ -39,7 +39,7 @@ class PedidosSerializer(serializers.ModelSerializer):
             "preco_total": item.preco_item_mais_complementos,
             "multiplicador_item_pedido": item.multiplicador_item_pedido,
             "complementos": [
-                {"id":complemento.complemento.id,
+                {"id":complemento.complemento.id if complemento.complemento.id else None,
                 "complemento": complemento.complemento.nome if complemento.complemento.nome else None,
                  "foto_complemento": complemento.complemento.foto.url if complemento.complemento.foto else None,
                  "valor": complemento.complemento.preco if complemento.complemento.preco else None,
