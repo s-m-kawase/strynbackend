@@ -91,10 +91,13 @@ class PedidosViewSet(viewsets.ModelViewSet):
             mode='payment',
             success_url='https://stryn.netlify.app/cliente/sucesso',
             cancel_url='https://stryn.netlify.app/cliente/visao-geral',
+            metadata={
+            'pedido_id': str(pedido.id)  # Adiciona o ID do pedido como metadado
+        }
         )
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id
-        pedido.checkou_url = checkout_session.url
+        pedido.payment_intent_id = checkout_session.payment_intent
         pedido.save()
         # Redireciona para a URL do checkout do Stripe
         

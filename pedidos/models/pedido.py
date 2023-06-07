@@ -93,6 +93,10 @@ class Pedidos(models.Model):
         max_length=500,
         blank=True, null=True
     )
+    payment_intent_id = models.CharField(
+        max_length=500,
+        blank=True, null=True
+    )
 
     @property
     def subtotal(self):
