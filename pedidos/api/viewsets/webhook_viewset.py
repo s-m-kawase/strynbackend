@@ -8,9 +8,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from pedidos.models import Pedidos
 from decouple import config
-import logging
-
-logger = logging.getLogger(__name__)
 
 
 stripe.api_key = config('STRIPE_SECRET_KEY')
@@ -62,17 +59,15 @@ class StripeWebhookViewSet(ViewSet):
             session_id = event['data']['object']['id']          
             pedido = Pedidos.objects.get(session_id=session_id)
             self.update_order_status(pedido, session)
+
         elif event['type'] == 'payment_intent.succeeded':
-            try:
-                payment_intent = event['data']['object']
-                session_id = payment_intent['id']
-                pedido = Pedidos.objects.get(session_id=session_id)
-                status = payment_intent['status']
-                self.confirma_pagamento(pedido, payment_intent, status)
-            except stripe.error.StripeError:
-                logger.exception('Erro ao lidar com o pagamento bem-sucedido')
-                return Response(status=500, data={'error': 'Erro interno do servidor'})
+            payment_intent = event['data']['object']
+            session_id = event['data']['object']['id']          
+            pedido = Pedidos.objects.get(session_id=session_id)
+            status = payment_intent['status']
+            self.confirma_pagamento(pedido, payment_intent, status)
                     
+
 
         elif event['type'] == 'payment_intent.succeeded':
             payment_intent = event['data']['object']
@@ -113,6 +108,7 @@ class StripeWebhookViewSet(ViewSet):
             send_mail(subject, message, remetente, [recipient_email])
 
         elif session['status'] == 'canceled':
+            email = pedido.cliente.user.email
             pedido.status_pedido = 'Cancelado'
             pedido.save()
 
@@ -122,7 +118,7 @@ class StripeWebhookViewSet(ViewSet):
             subject = 'Cancelamento de Pedido'
             message = f"Seu pagamento foi cancelado. Entre em contato conosco para obter mais informações.\n\n"
             message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
-            send_mail(subject, message, remetente, [recipient_email])
+            send_mail(subject, message, remetente, ['diovantrab@gmail.com'])
     
 
     def confirma_pagamento(self, pedido, payment_intent, status):
