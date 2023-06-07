@@ -106,7 +106,7 @@ class StripeWebhookViewSet(ViewSet):
             pedido.save()
 
             # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
-            remetente = config('EMAIL_HOST_USER')
+            remetente = settings.EMAIL_HOST_USER
             recipient_email = email
             subject = 'Lembrete de Pagamento'
             message = f"Seu pagamento está incompleto. Por favor, verifique as informações do seu pagamento e conclua a transação para prosseguir com o pedido.\n\n"
@@ -117,13 +117,13 @@ class StripeWebhookViewSet(ViewSet):
 
     def cancel_checkout_session(pedido):
         
-        email = pedido.cliente.user.email
+        # email = pedido.cliente.user.email
         pedido.status_pedido = 'Cancelado'
         pedido.save()
 
         # Notificar o cliente sobre o cancelamento do pedido
-        remetente = config('EMAIL_HOST_USER')
-        recipient_email = email
+        remetente = settings.EMAIL_HOST_USER
+        # recipient_email = email
         subject = 'saldo insuficiente'
         message = f"Seu pagamento foi cancelado. Entre em contato conosco para obter mais informações.\n\n"
         message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
