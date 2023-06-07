@@ -137,16 +137,17 @@ class StripeWebhookViewSet(ViewSet):
 
 
     def handle_payment_failed(self, pedido, payment_intent):
-        # email = payment_intent['billing_details']['email']
+        email = payment_intent['charges']['data'][0]['billing_details']['email']
+
 
         # Atualizar o status do pedido
         pedido.status_pedido = 'Com erro'
         pedido.save()
 
         # Enviar um e-mail ao cliente informando sobre o pagamento falhado
-        # remetente = settings.EMAIL_HOST_USER
-        # recipient_email = email
-        # subject = 'Falha no Pagamento'
-        # message = 'O pagamento do seu pedido falhou. Por favor, tente novamente.'
-        # send_mail(subject, message, remetente, [recipient_email])
+        remetente = settings.EMAIL_HOST_USER
+        recipient_email = email
+        subject = 'Falha no Pagamento'
+        message = 'O pagamento do seu pedido falhou. Por favor, tente novamente.'
+        send_mail(subject, message, remetente, [recipient_email])
 
