@@ -116,21 +116,21 @@ class StripeWebhookViewSet(ViewSet):
         send_mail(subject, message, remetente, [recipient_email])
 
     def confirma_pagamento(self, pedido, payment_intent):
-        email = payment_intent['charges']['data'][0]['billing_details']['email']
+        # email = payment_intent['charges']['data'][0]['billing_details']['email']
 
         if payment_intent['status'] == 'succeeded':
-            pedido.status_pedido = 'Pago'
+            pedido.status_pedido = 'Aguardando Preparo'
             pedido.save()
 
-            # mensagem detalhes do pedido
-            message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
-            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
-            # Enviar uma confirmação por e-mail
-            remetente = settings.EMAIL_HOST_USER
-            recipient_email = email
-            subject = 'Confirmação de Pagamento'
+            # # mensagem detalhes do pedido
+            # message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
+            # message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
+            # # Enviar uma confirmação por e-mail
+            # remetente = settings.EMAIL_HOST_USER
+            # recipient_email = email
+            # subject = 'Confirmação de Pagamento'
             
-            send_mail(subject, message, remetente, [recipient_email])
+            # send_mail(subject, message, remetente, [recipient_email])
             
             # Gerar uma nota fiscal
 
