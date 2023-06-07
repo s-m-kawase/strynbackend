@@ -37,6 +37,7 @@ class PedidosSerializer(serializers.ModelSerializer):
             "valor_total_item": item.total_item,
             "valor_total_complementos": item.total_complementos,
             "preco_total": item.preco_item_mais_complementos,
+            "multiplicador_item_pedido": item.multiplicador_item_pedido,
             "complementos": [
                 {"id":complemento.complemento.id,
                 "complemento": complemento.complemento.nome if complemento.complemento.nome else None,
