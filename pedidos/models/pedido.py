@@ -20,7 +20,7 @@ class Pedidos(models.Model):
     
     STATUS_CHOICE = (
         ('Sacola','Sacola'),
-        ('Aguardando Pagamento Mesa', 'Aguardando Pagamento Mesa')
+        ('Aguardando Pagamento Mesa', 'Aguardando Pagamento Mesa'),
         ('Pago','Pago'),
         ('Aguardando Preparo', 'Aguardando Preparo'),
         ('Em preparo','Em preparo'),
@@ -33,7 +33,7 @@ class Pedidos(models.Model):
         verbose_name="Status do Pedido",
         choices=STATUS_CHOICE,
         default='Sacola',
-        max_length=20
+        max_length=25
     )
 
     tempo_estimado = models.ManyToManyField(
