@@ -58,9 +58,12 @@ class StripeWebhookViewSet(ViewSet):
             session = event['data']['object']
             session_id = event['data']['object']['id']          
             pedido = Pedidos.objects.get(session_id=session_id)
-            self.update_order_status(pedido, session)
+            if session.get('payment_status') == 'canceled':
+                self.cancel_checkout_session(pedido)
+            else:
+                self.update_order_status(pedido, session)
 
-        elif event['type'] == 'checkout.session.async_payment_failed':
+        elif event['type'] == 'payment_intent.payment_failed':
             session = event['data']['object']
             session_id = session['id']  
             pedido = Pedidos.objects.get(session_id=session_id)
@@ -77,9 +80,9 @@ class StripeWebhookViewSet(ViewSet):
 
         elif event['type'] == 'payment_intent.succeeded':
             payment_intent = event['data']['object']
-            session_id = event['data']['object']['id']  
+            session_id = payment_intent['id']
             pedido = Pedidos.objects.get(session_id=session_id)
-            self.handle_failed_payment(payment_intent, pedido)
+            self.confirma_pagamento(pedido, payment_intent)
             
 
         return Response(status=200)
@@ -129,10 +132,10 @@ class StripeWebhookViewSet(ViewSet):
         message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
         send_mail(subject, message, remetente, ['diovantrab@gmail.com'])
 
-    def confirma_pagamento(self, pedido, payment_intent, status):
-        email = payment_intent['charges']['data'][0]['billing_details']['email']
+    def confirma_pagamento(pedido, payment_intent):
+        email = payment_intent['billing_details']['email']
 
-        if status == 'succeeded':
+        if payment_intent['status'] == 'succeeded':
             pedido.status_pedido = 'Pago'
             pedido.save()
 
