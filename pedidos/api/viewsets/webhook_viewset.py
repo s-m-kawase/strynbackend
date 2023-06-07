@@ -78,7 +78,7 @@ class StripeWebhookViewSet(ViewSet):
             pedido = Pedidos.objects.get(session_id=session_id)
             status = payment_intent['status']
             self.confirma_pagamento(pedido, payment_intent, status)
-                
+                        
             
 
         return Response(status=200)
@@ -116,7 +116,7 @@ class StripeWebhookViewSet(ViewSet):
         send_mail(subject, message, remetente, [recipient_email])
 
     def confirma_pagamento(self, pedido, payment_intent):
-        email = payment_intent['billing_details']['email']
+        email = payment_intent['charges']['data'][0]['billing_details']['email']
 
         if payment_intent['status'] == 'succeeded':
             pedido.status_pedido = 'Pago'
@@ -132,7 +132,6 @@ class StripeWebhookViewSet(ViewSet):
             
             send_mail(subject, message, remetente, [recipient_email])
             
-                
             # Gerar uma nota fiscal
 
 
