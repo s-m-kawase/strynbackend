@@ -100,20 +100,7 @@ class StripeWebhookViewSet(ViewSet):
             
             send_mail(subject, message, remetente, [recipient_email])
 
-        elif session['status'] == 'incomplete':
-            pedido.status_pedido = 'Sacola'
-            pedido.save()
-
-            # Enviar um lembrete de pagamento, agendar uma nova tentativa de cobrança, etc.
-            remetente = settings.EMAIL_HOST_USER
-            recipient_email = email
-            subject = 'Lembrete de Pagamento'
-            message = f"Seu pagamento está incompleto. Por favor, verifique as informações do seu pagamento e conclua a transação para prosseguir com o pedido.\n\n"
-            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
-            send_mail(subject, message, remetente, [recipient_email])
-
         
-
     def cancel_checkout_session(self, pedido, session):
         
         email = session['customer_details']['email']
