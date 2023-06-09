@@ -192,7 +192,7 @@ class StripeWebhookViewSet(ViewSet):
 
         # enviar email
         remetente = settings.EMAIL_HOST_USER
-        recipient_email = pedido.cliente.email
+        recipient_email = refund['billing_details']['email']
         subject = 'Estorno do Pedido'
         message = 'O pagamento do seu pedido foi estornado. Entre em contato conosco para mais informações.'
         send_mail(subject, message, remetente, [recipient_email])
