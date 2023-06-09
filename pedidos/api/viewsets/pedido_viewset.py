@@ -72,7 +72,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Calcula o valor total do pedido com a taxa de atendimento
         subtotal = 0
         for item_pedido in pedido.itenspedido_set.all():
-            subtotal += pedido.total
+            subtotal += item_pedido.quantidade * item_pedido.preco_item_mais_complementos
         taxa_atendimento = subtotal * (pedido.restaurante.taxa_serviço/100)
         
 
