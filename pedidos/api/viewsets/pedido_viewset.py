@@ -122,7 +122,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
             if payment_intent_id:
                 for item_pedido in pedido.itenspedido_set.all():
-                    amount = int(item_pedido.preco_item_mais_complementos) * 100,
+                    amount = int(item_pedido.preco_item_mais_complementos * 100)
                 try:
                     # Cria o reembolso com base no ID do pagamento
                     refund = stripe.Refund.create(
