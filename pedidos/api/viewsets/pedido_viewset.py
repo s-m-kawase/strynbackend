@@ -87,19 +87,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
             }
             line_items.append(line_item)
 
-        # Adiciona um item com o valor total do pedido
-        total_item = {
-            'price_data': {
-                'currency': 'brl',
-                'unit_amount': int(pedido.total * 100),
-                'product_data': {
-                    'name': 'Total do Pedido',
-                },
-            },
-            'quantity': 1,
-        }
-        line_items.append(total_item)
-
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
