@@ -69,12 +69,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
 
-        amount = int(pedido.total * 100)
-
         # Cria uma lista de pedido criando chave no stripe
         line_items = []
-        for item_pedido in pedido.itenspedido_set.all():
-            # Cria um objeto com todos os itens no stripe
+        for item_pedido in Pedidos.itenspedido_set.all():
+            # Cria um objeto para cada item do pedido
             line_item = {
                 'price_data': {
                     'currency': 'brl',
@@ -86,6 +84,19 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'quantity': item_pedido.quantidade,
             }
             line_items.append(line_item)
+
+        # Adiciona um item com o valor total do pedido
+        total_item = {
+            'price_data': {
+                'currency': 'brl',
+                'unit_amount': int(pedido.total * 100),
+                'product_data': {
+                    'name': 'Total do Pedido',
+                },
+            },
+            'quantity': 1,
+        }
+        line_items.append(total_item)
 
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
@@ -103,12 +114,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
         pedido.session_id = checkout_session.id
         pedido.payment_intent_id = checkout_session.payment_intent
         pedido.save()
-
-        # Atualiza o valor do pagamento associado ao payment_intent
-        payment_intent = stripe.PaymentIntent.modify(
-            checkout_session.payment_intent,
-            amount=int(pedido.total * 100)
-        )
 
         # Redireciona para a URL do checkout do Stripe
         return Response({'checkout_url': checkout_session.url, 'session_id': checkout_session.id})
