@@ -156,39 +156,6 @@ class StripeWebhookViewSet(ViewSet):
 
 
     def handle_charge_refunded(refund):
-        charge_id = refund['charge']
-
-        # Verifique se tem cobrança
-        try:
-            charge = stripe.Charge.retrieve(charge_id)
-        except stripe.error.InvalidRequestError:
-            # O charge_id não existe no Stripe
-            return Response({'erro': 'Cobrança não encontrada'}, status=500)
-
-        # encontra pedido
-        try:
-            pedido = Pedidos.objects.get(payment_intent_id=charge['payment_intent'])
-        except Pedidos.DoesNotExist:
-            return Response({'erro': 'Pedido não encontrado'}, status=500)
-        
-        # verifico se ja não foi estornado
-        if pedido.status_pedido == 'Estornado':
-           return Response({'mensagem': 'Pedido já foi estornado'}, status=200)
-        
-        # executo o estorno
-        try:
-            refund = stripe.Refund.create(
-                charge=charge_id,
-                amount=charge['amount'],
-        )
-        except stripe.error.InvalidRequestError as e:
-            # O estorno não pôde ser processado
-            error_message = str(e)
-            return Response({'error': error_message}, status=500)
-        
-        # modifico status_pedido
-        pedido.status_pedido = 'Estornado'
-        pedido.save()
 
         # enviar email
         remetente = settings.EMAIL_HOST_USER
