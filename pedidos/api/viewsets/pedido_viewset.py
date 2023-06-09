@@ -111,10 +111,14 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Aplica o desconto no valor total
         cupom_desconto = pedido.cupom if pedido.cupom else None
         if cupom_desconto:
+            # Calcula o valor do desconto em centavos
+            desconto_em_centavos = int(cupom_desconto.valor * 100)
+            
+            # Cria a linha de checkout para representar o desconto
             line_item_desconto = {
                 'price_data': {
                     'currency': 'brl',
-                    'unit_amount': int(cupom_desconto.valor * -100),  # Valor do desconto em centavos (negativo)
+                    'unit_amount': desconto_em_centavos,
                     'product_data': {
                         'name': 'Desconto',
                     },
@@ -122,7 +126,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'quantity': 1,
             }
             line_items.append(line_item_desconto)
-
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
