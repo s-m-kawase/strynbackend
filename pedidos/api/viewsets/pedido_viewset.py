@@ -68,11 +68,13 @@ class PedidosViewSet(viewsets.ModelViewSet):
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
-      
+
+        amount = int(pedido.total * 100)
+
         # Cria uma lista de pedido criando chave no stripe
         line_items = []
         for item_pedido in pedido.itenspedido_set.all():
-            # Cria um objeto com todos os item no stripe
+            # Cria um objeto com todos os itens no stripe
             line_item = {
                 'price_data': {
                     'currency': 'brl',
@@ -84,6 +86,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'quantity': item_pedido.quantidade,
             }
             line_items.append(line_item)
+
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -91,16 +94,20 @@ class PedidosViewSet(viewsets.ModelViewSet):
             mode='payment',
             success_url='https://stryn.netlify.app/cliente/sucesso',
             cancel_url='https://stryn.netlify.app/cliente/visao-geral',
+            payment_intent_data={
+                'amount': amount,  # Define o valor total do pedido
+            },
             metadata={
-            'pedido_id': str(pedido.id)  # Adiciona o ID do pedido como metadado
-        }
+                'pedido_id': str(pedido.id),  # Adiciona o ID do pedido como metadado
+            }
         )
+
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id
         pedido.payment_intent_id = checkout_session.payment_intent
         pedido.save()
+
         # Redireciona para a URL do checkout do Stripe
-        
         return Response({'checkout_url': checkout_session.url, 'session_id': checkout_session.id})
 
     @action(detail=True, methods=['get'])
