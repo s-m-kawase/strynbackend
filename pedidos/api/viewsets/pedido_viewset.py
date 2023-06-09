@@ -69,9 +69,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
 
+
+
         # Cria uma lista de pedido criando chave no stripe
         line_items = []
-        for item_pedido in Pedidos.itenspedido_set.all():
+        for item_pedido in pedido.itenspedido_set.all():
             # Cria um objeto para cada item do pedido
             line_item = {
                 'price_data': {
