@@ -108,12 +108,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
         line_items.append(line_item_taxa_atendimento)
 
         # Aplica o desconto no valor total
-        cupom_desconto = pedido.cupom.valor
+        cupom_desconto = pedido.cupom if pedido.cupom else None
         if cupom_desconto:
             line_item_desconto = {
                 'price_data': {
                     'currency': 'brl',
-                    'unit_amount': int(cupom_desconto.valor_desconto * -100),  # Valor do desconto em centavos (negativo)
+                    'unit_amount': int(cupom_desconto.valor * -1),  # Valor do desconto em centavos (negativo)
                     'product_data': {
                         'name': 'Desconto',
                     },
