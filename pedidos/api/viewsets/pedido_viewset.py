@@ -113,7 +113,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             line_item_desconto = {
                 'price_data': {
                     'currency': 'brl',
-                    'unit_amount': int(cupom_desconto.valor * -1),  # Valor do desconto em centavos (negativo)
+                    'unit_amount': int(cupom_desconto.valor * -100),  # Valor do desconto em centavos (negativo)
                     'product_data': {
                         'name': 'Desconto',
                     },
