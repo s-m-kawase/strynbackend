@@ -26,7 +26,8 @@ class Pedidos(models.Model):
         ('Em preparo','Em preparo'),
         ('Concluído','Concluído'),
         ('Cancelado','Cancelado'),
-        ('Com erro', 'Com erro')
+        ('Com erro', 'Com erro'),
+        ('Estornado', 'Estornado')
     )
 
     status_pedido = models.CharField(

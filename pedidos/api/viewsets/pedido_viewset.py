@@ -102,3 +102,35 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Redireciona para a URL do checkout do Stripe
         
         return Response({'checkout_url': checkout_session.url, 'session_id': checkout_session.id})
+
+    @action(detail=True, methods=['post'])
+    def solicitar_reembolso(self, request, pk):
+        pedido = Pedidos.objects.get(id=pk)
+
+        # Verifica se o pedido já foi reembolsado
+        if pedido.status_pedido == 'Estornado':
+            return Response({'mensagem': 'Pedido já foi reembolsado'}, status=200)
+
+        # Verifica se o pedido está associado a uma sessão de pagamento
+        if pedido.session_id:
+            session_id = pedido.session_id
+            payment_intent_id = pedido.payment_intent_id
+
+            if payment_intent_id:
+                try:
+                    # Cria o reembolso com base no ID do pagamento
+                    refund = stripe.Refund.create(
+                        payment_intent=payment_intent_id,
+                        amount=pedido.total,
+                    )
+
+                    # Atualiza o status do pedido 
+                    pedido.status_pedido = 'Estornado'
+                    pedido.save()
+
+                    return Response({'mensagem': 'Reembolso realizado com sucesso'}, status=200)
+                except stripe.error.StripeError as e:
+                    error_message = str(e)
+                    return Response({'erro': error_message}, status=500)
+
+        return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)

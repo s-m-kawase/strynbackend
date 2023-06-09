@@ -78,6 +78,9 @@ class StripeWebhookViewSet(ViewSet):
             pedido = Pedidos.objects.get(session_id=session_id)
             status = payment_intent['status']
             self.confirma_pagamento(pedido, payment_intent, status)
+
+        elif event['type'] == 'charge.refunded':
+            self.handle_charge_refunded(event['data']['object'])
                         
             
 
@@ -151,3 +154,47 @@ class StripeWebhookViewSet(ViewSet):
         message = 'O pagamento do seu pedido falhou. Por favor, tente novamente.'
         send_mail(subject, message, remetente, [recipient_email])
 
+
+    def handle_charge_refunded(refund):
+        charge_id = refund['charge']
+
+        # Verifique se tem cobrança
+        try:
+            charge = stripe.Charge.retrieve(charge_id)
+        except stripe.error.InvalidRequestError:
+            # O charge_id não existe no Stripe
+            return Response({'erro': 'Cobrança não encontrada'}, status=500)
+
+        # encontra pedido
+        try:
+            pedido = Pedidos.objects.get(payment_intent_id=charge['payment_intent'])
+        except Pedidos.DoesNotExist:
+            return Response({'erro': 'Pedido não encontrado'}, status=500)
+        
+        # verifico se ja não foi estornado
+        if pedido.status_pedido == 'Estornado':
+           return Response({'mensagem': 'Pedido já foi estornado'}, status=200)
+        
+        # executo o estorno
+        try:
+            refund = stripe.Refund.create(
+                charge=charge_id,
+                amount=charge['amount'],
+        )
+        except stripe.error.InvalidRequestError as e:
+            # O estorno não pôde ser processado
+            error_message = str(e)
+            return Response({'error': error_message}, status=500)
+        
+        # modifico status_pedido
+        pedido.status_pedido = 'Estornado'
+        pedido.save()
+
+        # enviar email
+        remetente = settings.EMAIL_HOST_USER
+        recipient_email = pedido.cliente.email
+        subject = 'Estorno do Pedido'
+        message = 'O pagamento do seu pedido foi estornado. Entre em contato conosco para mais informações.'
+        send_mail(subject, message, remetente, [recipient_email])
+
+        return Response({'mensagem': 'Estorno realizado com sucesso'}, status=200)
