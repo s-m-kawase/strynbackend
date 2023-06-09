@@ -94,9 +94,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
             mode='payment',
             success_url='https://stryn.netlify.app/cliente/sucesso',
             cancel_url='https://stryn.netlify.app/cliente/visao-geral',
-            payment_intent_data={
-                'amount': amount,  # Define o valor total do pedido
-            },
             metadata={
                 'pedido_id': str(pedido.id),  # Adiciona o ID do pedido como metadado
             }
@@ -106,6 +103,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
         pedido.session_id = checkout_session.id
         pedido.payment_intent_id = checkout_session.payment_intent
         pedido.save()
+
+        # Atualiza o valor do pagamento associado ao payment_intent
+        payment_intent = stripe.PaymentIntent.modify(
+            checkout_session.payment_intent,
+            amount=int(pedido.total * 100)
+        )
 
         # Redireciona para a URL do checkout do Stripe
         return Response({'checkout_url': checkout_session.url, 'session_id': checkout_session.id})
