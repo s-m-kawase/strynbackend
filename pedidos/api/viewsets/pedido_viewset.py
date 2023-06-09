@@ -121,7 +121,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                     # Cria o reembolso com base no ID do pagamento
                     refund = stripe.Refund.create(
                         payment_intent=payment_intent_id,
-                        amount=pedido.total,
+                        amount = int(pedido.total * 100),
                     )
 
                     # Atualiza o status do pedido 
