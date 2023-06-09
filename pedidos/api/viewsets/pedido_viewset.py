@@ -69,7 +69,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
 
-
+        # Calcula o valor total do pedido com a taxa de atendimento
+        subtotal = 0
+        for item_pedido in pedido.itenspedido_set.all():
+            subtotal += pedido.total
+        taxa_atendimento = subtotal * (pedido.restaurante.taxa_serviço/100)
+        
 
         # Cria uma lista de pedido criando chave no stripe
         line_items = []
@@ -86,6 +91,36 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'quantity': item_pedido.quantidade,
             }
             line_items.append(line_item)
+
+
+
+        # Adiciona o line_item para a taxa de atendimento
+        line_item_taxa_atendimento = {
+            'price_data': {
+                'currency': 'brl',
+                'unit_amount': int(taxa_atendimento * 100),
+                'product_data': {
+                    'name': 'Taxa de Atendimento',
+                },
+            },
+            'quantity': 1,
+        }
+        line_items.append(line_item_taxa_atendimento)
+
+        # Aplica o desconto no valor total
+        cupom_desconto = pedido.cupom.valor
+        if cupom_desconto:
+            line_item_desconto = {
+                'price_data': {
+                    'currency': 'brl',
+                    'unit_amount': int(cupom_desconto.valor_desconto * -100),  # Valor do desconto em centavos (negativo)
+                    'product_data': {
+                        'name': 'Desconto',
+                    },
+                },
+                'quantity': 1,
+            }
+            line_items.append(line_item_desconto)
 
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
