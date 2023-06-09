@@ -70,11 +70,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
         pedido = Pedidos.objects.get(id=pk)
 
         # Calcula o valor total do pedido com a taxa de atendimento
-        subtotal = 0
+        subtotal = 0.0
         for item_pedido in pedido.itenspedido_set.all():
             subtotal += item_pedido.quantidade * item_pedido.preco_item_mais_complementos
-        taxa_atendimento = subtotal * (float(pedido.restaurante.taxa_serviço) / 100)
-        
+
+        taxa_atendimento = subtotal * (pedido.restaurante.taxa_serviço / 100.0)
+            
 
         # Cria uma lista de pedido criando chave no stripe
         line_items = []
