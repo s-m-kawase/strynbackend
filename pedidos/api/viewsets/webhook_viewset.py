@@ -156,8 +156,7 @@ class StripeWebhookViewSet(ViewSet):
 
 
     def handle_charge_refunded(refund):
-
-        # enviar email
+        # Enviar email
         remetente = settings.EMAIL_HOST_USER
         recipient_email = refund['billing_details']['email']
         subject = 'Estorno do Pedido'
