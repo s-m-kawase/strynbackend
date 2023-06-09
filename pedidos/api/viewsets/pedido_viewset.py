@@ -103,7 +103,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         
         return Response({'checkout_url': checkout_session.url, 'session_id': checkout_session.id})
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['get'])
     def solicitar_reembolso(self, request, pk):
         pedido = Pedidos.objects.get(id=pk)
 
