@@ -1,4 +1,4 @@
-from rest_framework import serializers 
+from rest_framework import serializers
 from pagamentos.models import Pagamento
 from pedidos.api.serializers.pedido_serializer import PedidosSerializer
 
