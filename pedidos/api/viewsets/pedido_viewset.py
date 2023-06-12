@@ -58,12 +58,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         if status:
             query = query.filter(status_pedido=status)
-        
+
         if usuario:
             query = query.filter(restaurante__usuario=usuario)
-    
+
         return query
-    
+
     @action(detail=True, methods=['get'])
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
@@ -75,7 +75,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             subtotal += float(item_pedido.quantidade * item_pedido.preco_item_mais_complementos)
 
         taxa_atendimento = float(subtotal) * (float(pedido.restaurante.taxa_serviço) / 100.0)
-            
+
 
         # Cria uma lista de pedido criando chave no stripe
         line_items = []
@@ -108,24 +108,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
         }
         line_items.append(line_item_taxa_atendimento)
 
-        # Aplica o desconto no valor total
-        cupom_desconto = pedido.cupom if pedido.cupom else None
-        if cupom_desconto:
-            # Calcula o valor do desconto em centavos
-            desconto_em_centavos = int(cupom_desconto.valor * 100)
-            
-            # Cria a linha de checkout para representar o desconto
-            line_item_desconto = {
-                'price_data': {
-                    'currency': 'brl',
-                    'unit_amount': desconto_em_centavos,
-                    'product_data': {
-                        'name': 'Desconto',
-                    },
-                },
-                'quantity': 1,
-            }
-            line_items.append(line_item_desconto)
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -169,7 +151,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                         amount = amount,
                     )
 
-                    # Atualiza o status do pedido 
+                    # Atualiza o status do pedido
                     pedido.status_pedido = 'Estornado'
                     pedido.save()
 

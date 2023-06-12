@@ -44,7 +44,7 @@ class PedidosSerializer(serializers.ModelSerializer):
                  "foto_complemento": complemento.complemento.foto.url if complemento.complemento and complemento.complemento.foto else None,
                  "valor": complemento.complemento.preco if complemento.complemento else None,
                  "quantidade": complemento.quantidade if complemento.quantidade else None,
-                 "total": complemento.total if complemento.total else None}
+                 "total": complemento.total if complemento else None}
 
                 for complemento in item.itenspedidocomplementos_set.all()
                 ]
