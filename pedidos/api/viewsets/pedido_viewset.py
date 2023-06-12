@@ -108,6 +108,21 @@ class PedidosViewSet(viewsets.ModelViewSet):
         }
         line_items.append(line_item_taxa_atendimento)
 
+
+        if pedido.cupom and pedido.cupom.porcentagem:
+          cupom = stripe.Coupon.create(
+                  percent_off=pedido.cupom.porcentagem,
+                  duration="once_per_customer",
+                  redeem_by=pedido.cupom.validado_ate
+                  )
+        elif pedido.cupom and pedido.cupom.valor:
+          cupom = stripe.Coupon.create(
+                  percent_off=pedido.cupom.valor,
+                  currency="brl",
+                  duration="once_per_customer",
+                  redeem_by=pedido.cupom.validado_ate
+                  )
+
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -115,6 +130,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             mode='payment',
             success_url='https://stryn.netlify.app/cliente/sucesso',
             cancel_url='https://stryn.netlify.app/cliente/visao-geral',
+            discounts=[cupom],  # Adicionar o desconto ao carrinho
             metadata={
                 'pedido_id': str(pedido.id),  # Adiciona o ID do pedido como metadado
             }

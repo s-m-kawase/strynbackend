@@ -12,6 +12,12 @@ class ItensPedido(models.Model):
         null=True
     )
 
+    observacoes = models.TextField(
+        max_length=500,
+        verbose_name='Observações do item pedido',
+        blank=True, null=True,
+    )
+
     pedido = models.ForeignKey(
         Pedidos,
         verbose_name="Pedido",
@@ -29,21 +35,21 @@ class ItensPedido(models.Model):
         verbose_name='Quantidade de Produto',
         null=True
     )
-    
+
     valor_unitario_item = models.DecimalField(
         verbose_name="Valor Unitário Item",
         decimal_places=2,
         max_digits=12,
         blank=True, null=True,
     )
-    
+
     preco_item_mais_complementos = models.DecimalField(
         verbose_name="Preço Item + Complementos",
         decimal_places=2,
         max_digits=12,
         blank=True, null=True,
     )
-    
+
     #VERIFICAR IMPACTO DISSO NO CONTROLE DE ESTOQUE SE TIVER!!!
     multiplicador_item_pedido = models.IntegerField(
         verbose_name='Multiplicador Item Pedido',
@@ -51,8 +57,8 @@ class ItensPedido(models.Model):
         default=1,
         blank=True, null=True,
     )
-    
-    
+
+
     @property
     def total_complementos(self):
         total = 0
@@ -60,7 +66,7 @@ class ItensPedido(models.Model):
             if complemento.valor_total:
                 total += complemento.valor_total
         return total
-    
+
     @property
     def total_item(self):
         try:
@@ -86,7 +92,6 @@ class ItensPedido(models.Model):
         app_label = 'pedidos'
         verbose_name = 'Item Pedido'
         verbose_name_plural = 'Itens Pedidos'
-    
-    
-    
-    
+
+
+
