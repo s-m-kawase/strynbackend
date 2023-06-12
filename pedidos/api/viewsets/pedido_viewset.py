@@ -122,6 +122,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                   duration="once_per_customer",
                   redeem_by=pedido.cupom.validado_ate
                   )
+        else: cupom = None
 
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
