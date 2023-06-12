@@ -22,12 +22,26 @@ class ItensPedidoComplementos(models.Model):
         verbose_name='Quantidade de Produtos Adicionados',
         null=True
     )
+    
+    valor_unitario = models.DecimalField(
+        verbose_name='Valor Unitário',
+        max_digits=10,
+        decimal_places=2,
+        blank=True, null= True,
+    )
+    
+    valor_total = models.DecimalField(
+        verbose_name='Valor Total',
+        max_digits=10,
+        decimal_places=2,
+        blank=True, null= True,
+    )
 
-    @property
-    def total(self):
-        total = 0
-        total+= float(self.complemento.preco) * float(self.quantidade)
-        return total
+    
+    def calcular_valor_total_complemento(self):
+        self.valor_unitario = float(self.complemento.preco)
+        self.valor_total = self.valor_unitario * float(self.quantidade)
+        self.save()
 
     def __str__(self):
         return f'{self.item_pedido} - {self.complemento}'

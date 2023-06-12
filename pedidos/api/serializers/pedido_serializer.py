@@ -22,9 +22,6 @@ class PedidosSerializer(serializers.ModelSerializer):
     itens_read = serializers.SerializerMethodField()
 
 
-
-
-
     def get_adicionais_read(self, obj):
         return [AdicionalSerializer(instance=adicionais).data for adicionais in obj.adicionais.all()]
 
@@ -35,11 +32,12 @@ class PedidosSerializer(serializers.ModelSerializer):
             "item": item.item.nome if item.item else None,
             # "foto_item": item.item.foto.url if item.item.foto and item.item.foto.url else None,
             "quantidade": item.quantidade,
-            "preco_do_item": item.item.preco if item.item else None,
-            "preco_promocao": item.item.preco_promocao if item.item else None,
-            "preco_total_item": item.total_item,
-            "preco_total_complementos": item.total_complementos,
-            "preco_total": item.preco,
+            "valor_unitario_item": item.valor_unitario_item if item.valor_unitario_item else None,
+            #"preco_promocao": item.item.preco_promocao if item.item else None,
+            "valor_total_item": item.total_item,
+            "valor_total_complementos": item.total_complementos,
+            "preco_total": item.preco_item_mais_complementos,
+            "multiplicador_item_pedido": item.multiplicador_item_pedido,
             "complementos": [
                 {"complemento": complemento.complemento.nome if complemento.complemento else None,
                  "id_item_complemento": complemento.id if complemento else None,
@@ -47,6 +45,7 @@ class PedidosSerializer(serializers.ModelSerializer):
                  "valor": complemento.complemento.preco if complemento.complemento else None,
                  "quantidade": complemento.quantidade if complemento.quantidade else None,
                  "total": complemento.total if complemento.total else None}
+
                 for complemento in item.itenspedidocomplementos_set.all()
                 ]
         } for item in obj.itenspedido_set.all()]

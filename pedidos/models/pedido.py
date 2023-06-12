@@ -20,18 +20,21 @@ class Pedidos(models.Model):
     
     STATUS_CHOICE = (
         ('Sacola','Sacola'),
+        ('Aguardando Pagamento Mesa', 'Aguardando Pagamento Mesa'),
         ('Pago','Pago'),
-        ('Pronto','Pronto'),
+        ('Aguardando Preparo', 'Aguardando Preparo'),
+        ('Em preparo','Em preparo'),
         ('Concluído','Concluído'),
         ('Cancelado','Cancelado'),
-        ('Com erro', 'Com erro')
+        ('Com erro', 'Com erro'),
+        ('Estornado', 'Estornado')
     )
 
     status_pedido = models.CharField(
         verbose_name="Status do Pedido",
         choices=STATUS_CHOICE,
         default='Sacola',
-        max_length=20
+        max_length=25
     )
 
     tempo_estimado = models.ManyToManyField(
@@ -91,14 +94,18 @@ class Pedidos(models.Model):
         max_length=500,
         blank=True, null=True
     )
+    payment_intent_id = models.CharField(
+        max_length=500,
+        blank=True, null=True
+    )
 
     @property
     def subtotal(self):
         subtotal = 0
         
         for item in self.itenspedido_set.all():
-            if item.preco is not None:
-                subtotal += item.preco
+            if item.preco_item_mais_complementos is not None:
+                subtotal += item.preco_item_mais_complementos
         return subtotal
         
         

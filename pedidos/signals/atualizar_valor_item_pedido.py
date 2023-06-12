@@ -5,9 +5,12 @@ from ..models import CategoriaCardapio, Cardapio, ItensPedido
 
 
 @receiver(post_save, sender=ItensPedido)
-def atualizar_valor_item_pedido(sender, instance, created, **kwargs):
+def atualizar_valor_item_pedido(sender, instance, **kwargs):
     post_save.disconnect(atualizar_valor_item_pedido, sender=sender)
-    instance.calcular_preco()
+    try:
+        instance.calcular_preco_item_mais_complementos()
+    except:
+        pass
     post_save.connect(atualizar_valor_item_pedido, sender=sender)
 
 
