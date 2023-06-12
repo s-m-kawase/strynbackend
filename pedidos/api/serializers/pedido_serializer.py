@@ -40,13 +40,14 @@ class PedidosSerializer(serializers.ModelSerializer):
             "preco_total": item.preco_item_mais_complementos,
             "multiplicador_item_pedido": item.multiplicador_item_pedido,
             "complementos": [
-                {"id": complemento.complemento.id if complemento.complemento else None,
-                  "complemento": complemento.complemento.nome if complemento.complemento else None,
-                 "id_item_complemento": complemento.id if complemento else None,
+
+                {"id":complemento.complemento.id if complemento.complemento else None,
+                 "id_item_complemento":complemento.id if complemento else None,
+                "complemento": complemento.complemento.nome if complemento.complemento else None,
                  "foto_complemento": complemento.complemento.foto.url if complemento.complemento and complemento.complemento.foto else None,
                  "valor": complemento.complemento.preco if complemento.complemento else None,
                  "quantidade": complemento.quantidade if complemento.quantidade else None,
-                 "total": complemento.valor_total if complemento else None}
+                 "total": complemento.valor_total if complemento.valor_total else None}
 
                 for complemento in item.itenspedidocomplementos_set.all()
                 ]
@@ -68,7 +69,9 @@ class PedidosSerializer(serializers.ModelSerializer):
 
 
     def get_restaurante_read(self, obj):
-        return RestauranteSerializer(instance=obj.restaurante).data
+
+        return RestauranteSerializer(instance=obj.restaurante).data if obj.restaurante else None
+
 
     def get_cliente_read(self, obj):
         serialized_cliente = ClienteSerializer(instance=obj.cliente).data if obj.cliente else None
