@@ -1,4 +1,4 @@
-from rest_framework import serializers 
+from rest_framework import serializers
 from pedidos.models import Pedidos
 from pagamentos.api.serializers.adicional_serializers import AdicionalSerializer
 from pagamentos.api.serializers.cupom_serializers import CupomSerializer
@@ -12,7 +12,7 @@ class PedidosSerializer(serializers.ModelSerializer):
     total = serializers.ReadOnlyField()
     subtotal = serializers.ReadOnlyField()
     itens_quantidade = serializers.ReadOnlyField()
-    
+
     adicionais_read = serializers.SerializerMethodField()
     cupom_read = serializers.SerializerMethodField()
     cliente_read = serializers.SerializerMethodField()
@@ -20,14 +20,14 @@ class PedidosSerializer(serializers.ModelSerializer):
     restaurante_read = serializers.SerializerMethodField()
     pagamentos_read = serializers.SerializerMethodField()
     itens_read = serializers.SerializerMethodField()
-    
-    
-    
+
+
+
 
 
     def get_adicionais_read(self, obj):
         return [AdicionalSerializer(instance=adicionais).data for adicionais in obj.adicionais.all()]
-    
+
     def get_itens_read(self, obj):
         return [{
             "id": item.id if item.item else None,
@@ -41,13 +41,14 @@ class PedidosSerializer(serializers.ModelSerializer):
             "preco_total_complementos": item.total_complementos,
             "preco_total": item.preco,
             "complementos": [
-                {"complemento": complemento.complemento.nome if complemento.complemento.nome else None,
-                 "foto_complemento": complemento.complemento.foto.url if complemento.complemento.foto else None,
-                 "valor": complemento.complemento.preco if complemento.complemento.preco else None,
+                {"complemento": complemento.complemento.nome if complemento.complemento else None,
+                 "id_item_complemento": complemento.id if complemento else None,
+                 "foto_complemento": complemento.complemento.foto.url if complemento.complemento and complemento.complemento.foto else None,
+                 "valor": complemento.complemento.preco if complemento.complemento else None,
                  "quantidade": complemento.quantidade if complemento.quantidade else None,
-                 "total": complemento.total if complemento.total else None} 
+                 "total": complemento.total if complemento.total else None}
                 for complemento in item.itenspedidocomplementos_set.all()
-                ] 
+                ]
         } for item in obj.itenspedido_set.all()]
 
     def get_pagamentos_read(self, obj):
@@ -61,13 +62,13 @@ class PedidosSerializer(serializers.ModelSerializer):
     def get_tempo_estimado_read(self, obj):
          return [TempoEstimadoSerializer(instance=tempo_estimado).data for tempo_estimado in obj.tempo_estimado.all()]
 
-    # def get_cliente_read(self, obj):    
+    # def get_cliente_read(self, obj):
     #     return ClienteSerializer(instance=obj.cliente).data if obj.cliente else None
-   
 
-    def get_restaurante_read(self, obj):    
+
+    def get_restaurante_read(self, obj):
         return RestauranteSerializer(instance=obj.restaurante).data
-    
+
     def get_cliente_read(self, obj):
         serialized_cliente = ClienteSerializer(instance=obj.cliente).data if obj.cliente else None
         pedido_horario = obj.data_criacao.strftime('%H:%M:%S')
