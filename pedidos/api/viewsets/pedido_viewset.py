@@ -131,7 +131,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             mode='payment',
             success_url='https://stryn.netlify.app/cliente/sucesso',
             cancel_url='https://stryn.netlify.app/cliente/visao-geral',
-            discounts=[cupom],  # Adicionar o desconto ao carrinho
+            discounts=cupom,  # Adicionar o desconto ao carrinho
             metadata={
                 'pedido_id': str(pedido.id),  # Adiciona o ID do pedido como metadado
             }
