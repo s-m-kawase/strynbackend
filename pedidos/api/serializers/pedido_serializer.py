@@ -30,7 +30,8 @@ class PedidosSerializer(serializers.ModelSerializer):
             "id": item.id if item.item else None,
             "id_item_cardapio": item.item.id if item.item else None,
             "item": item.item.nome if item.item else None,
-            # "foto_item": item.item.foto.url if item.item.foto and item.item.foto.url else None,
+            "observacoes":item.observacoes if item else None,
+             "foto_item": item.item.foto.url if item.item and item.item.foto else None,
             "quantidade": item.quantidade,
             "valor_unitario_item": item.valor_unitario_item if item.valor_unitario_item else None,
             #"preco_promocao": item.item.preco_promocao if item.item else None,
@@ -39,6 +40,7 @@ class PedidosSerializer(serializers.ModelSerializer):
             "preco_total": item.preco_item_mais_complementos,
             "multiplicador_item_pedido": item.multiplicador_item_pedido,
             "complementos": [
+
                 {"id":complemento.complemento.id if complemento.complemento else None,
                  "id_item_complemento":complemento.id if complemento else None,
                 "complemento": complemento.complemento.nome if complemento.complemento else None,
@@ -46,6 +48,7 @@ class PedidosSerializer(serializers.ModelSerializer):
                  "valor": complemento.complemento.preco if complemento.complemento else None,
                  "quantidade": complemento.quantidade if complemento.quantidade else None,
                  "total": complemento.valor_total if complemento.valor_total else None}
+
                 for complemento in item.itenspedidocomplementos_set.all()
                 ]
         } for item in obj.itenspedido_set.all()]
@@ -66,7 +69,9 @@ class PedidosSerializer(serializers.ModelSerializer):
 
 
     def get_restaurante_read(self, obj):
+
         return RestauranteSerializer(instance=obj.restaurante).data if obj.restaurante else None
+
 
     def get_cliente_read(self, obj):
         serialized_cliente = ClienteSerializer(instance=obj.cliente).data if obj.cliente else None
