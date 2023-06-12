@@ -16,8 +16,16 @@ class Cupom(models.Model):
     valor = models.DecimalField(
         verbose_name='Valor',
         max_digits=10,
-        decimal_places=2
+        decimal_places=2,
+        blank=True, null=True
     )
+
+    porcentagem = models.DecimalField(
+        verbose_name="porcentagem",
+        max_digits=5,
+        decimal_places=2,
+        blank=True, null=True
+        )
 
     cod_cupom = models.CharField(
         max_length=200,
