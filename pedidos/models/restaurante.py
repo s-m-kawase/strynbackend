@@ -49,7 +49,7 @@ class Restaurante(models.Model):
         blank=True, null=True,
     )
 
-    taxa_serviço = models.IntegerField(
+    taxa_servico = models.IntegerField(
         verbose_name="Taxa de serviço",
         blank=True, null=True,
         default=10
@@ -62,4 +62,3 @@ class Restaurante(models.Model):
         app_label = 'pedidos'
         verbose_name = 'Restaurante'
         verbose_name_plural = 'Restaurantes'
-    
