@@ -109,22 +109,20 @@ class PedidosViewSet(viewsets.ModelViewSet):
         }
         line_items.append(line_item_taxa_atendimento)
 
-        validade = pedido.cupom.validado_ate
-        timestamp_futuro = int(validade.timestamp())
-        if timestamp_futuro > int(time.time()):
-          if pedido.cupom and pedido.cupom.porcentagem:
-            cupom = stripe.Coupon.create(
-                    percent_off=pedido.cupom.porcentagem,
-                    duration="once",
-                    )
-          elif pedido.cupom and pedido.cupom.valor:
-            cupom = stripe.Coupon.create(
-                    amount_off=pedido.cupom.valor * 100,
-                    currency="brl",
-                    duration="once",
-                    )
-          else: cupom = None
-        else: return Response('cupom com data invalida')
+
+        if pedido.cupom and pedido.cupom.porcentagem:
+          cupom = stripe.Coupon.create(
+                  percent_off=pedido.cupom.porcentagem,
+                  duration="once",
+                  )
+        elif pedido.cupom and pedido.cupom.valor:
+          cupom = stripe.Coupon.create(
+                  amount_off=int(pedido.cupom.valor * 100), # Converter o valor para centavos como um número inteiro
+                  currency="brl",
+                  duration="once",
+                  )
+        else: cupom = None
+
 
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
