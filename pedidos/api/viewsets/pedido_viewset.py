@@ -128,7 +128,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
-            payment_method_types=[pagamento.pagamento],
+            payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
             success_url='https://stryn.netlify.app/cliente/sucesso',

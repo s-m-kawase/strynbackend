@@ -155,12 +155,14 @@ class StripeWebhookViewSet(ViewSet):
         send_mail(subject, message, remetente, [recipient_email])
 
 
-    def handle_charge_refunded(refund):
-        # Enviar email
-        remetente = settings.EMAIL_HOST_USER
-        recipient_email = refund['billing_details']['email']
-        subject = 'Estorno do Pedido'
-        message = 'O pagamento do seu pedido foi estornado. Entre em contato conosco para mais informações.'
-        send_mail(subject, message, remetente, [recipient_email])
+    def handle_charge_refunded(refund, payment_intent_id):
+        pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
+        if pedido.status_pedido == 'Estornado':
+          # Enviar email
+          remetente = settings.EMAIL_HOST_USER
+          recipient_email = refund['billing_details']['email']
+          subject = 'Estorno do Pedido'
+          message = 'O pagamento do seu pedido foi estornado. Entre em contato conosco para mais informações.'
+          send_mail(subject, message, remetente, [recipient_email])
 
-        return Response({'mensagem': 'Estorno realizado com sucesso'}, status=200)
+          return Response({'mensagem': 'Estorno realizado com sucesso'}, status=200)
