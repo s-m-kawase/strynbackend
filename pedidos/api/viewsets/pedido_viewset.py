@@ -120,7 +120,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                     )
           elif pedido.cupom and pedido.cupom.valor:
             cupom = stripe.Coupon.create(
-                    percent_off=pedido.cupom.valor,
+                    amount_off=int(pedido.cupom.valor * 100),
                     currency="brl",
                     duration="once",
                     redeem_by=pedido.cupom.validado_ate
