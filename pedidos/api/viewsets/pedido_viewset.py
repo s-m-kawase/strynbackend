@@ -148,7 +148,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Redireciona para a URL do checkout do Stripe
         return Response({'checkout_url': checkout_session.url, 'session_id': checkout_session.id})
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=['post'])
     def solicitar_reembolso(self, request, pk):
         pedido = Pedidos.objects.get(id=pk)
 
@@ -158,34 +158,40 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         # Verifica se o pedido está associado a uma sessão de pagamento
         if pedido.session_id:
+            session_id = pedido.session_id
             payment_intent_id = pedido.payment_intent_id
 
-        # Calcula o valor total do pedido com a taxa de atendimento
-        subtotal = 0.0
-        for item_pedido in pedido.itenspedido_set.all():
-            subtotal += float(item_pedido.quantidade * item_pedido.preco_item_mais_complementos)
+            if payment_intent_id:
+              try:
+                  # Calcula o valor total do pedido, incluindo a taxa de atendimento
+                  subtotal = sum(item.preco_item_mais_complementos * item.quantidade for item in pedido.itenspedido_set.all())
+                  taxa_atendimento = subtotal * (pedido.restaurante.taxa_servico / 100)
+                  total_com_taxa = subtotal + taxa_atendimento
 
-        taxa_atendimento = float(subtotal) * (float(pedido.restaurante.taxa_serviço) / 100.0)
+                  # Aplica o desconto ao valor total
+                  if pedido.cupom and pedido.cupom.valor:
+                      porcentagem_desconto = pedido.cupom.calcular_porcentagem_desconto()
+                      desconto = total_com_taxa * (porcentagem_desconto / 100)
+                      total_reembolso = total_com_taxa - desconto
+                  else:
+                      total_reembolso = total_com_taxa
 
-        porcentagem_desconto = pedido.cupom.calcular_porcentagem_desconto()
-        if pedido.cupom and pedido.cupom.valor:
-            desconto = (subtotal + taxa_atendimento) * porcentagem_desconto
-            valor_reembolso = subtotal + taxa_atendimento - desconto
+                  # Converte o valor do reembolso para centavos
+                  amount = int(total_reembolso * 100)
 
-            valor_reembolso_centavos = int(valor_reembolso * 100)
+                  # Cria o reembolso com base no ID do pagamento
+                  refund = stripe.Refund.create(
+                      payment_intent=payment_intent_id,
+                      amount=amount,
+                  )
 
-            try:
-                # Cria o reembolso com base no ID do pagamento
-                refund = stripe.Refund.create(
-                    payment_intent=payment_intent_id,
-                    amount=valor_reembolso_centavos,
-                )
+                  # Atualiza o status do pedido
+                  pedido.status_pedido = 'Estornado'
+                  pedido.save()
 
-                # Atualiza o status do pedido
-                pedido.status_pedido = 'Estornado'
-                pedido.save()
+                  return Response({'mensagem': 'Reembolso realizado com sucesso'}, status=200)
+              except stripe.error.StripeError as e:
+                  error_message = str(e)
+                  return Response({'erro': error_message}, status=500)
 
-                return Response({'mensagem': 'Reembolso realizado com sucesso'}, status=200)
-            except stripe.error.StripeError as e:
-                error_message = str(e)
-                return Response({'erro': error_message}, status=500)
+        return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
