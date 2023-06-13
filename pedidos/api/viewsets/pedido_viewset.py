@@ -119,7 +119,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
           cupom = stripe.Coupon.create(
                   percent_off=pedido.cupom.valor,
                   currency="brl",
-                  duration="once_per_customer",
+                  duration="once",
                   redeem_by=pedido.cupom.validado_ate
                   )
         else: cupom = None
