@@ -6,7 +6,7 @@ from ..models import Pedidos
 class PedidosInline(admin.StackedInline):
     model = Pedidos
     can_delete = False
-    filter_horizontal = ['tempo_estimado', 'adicionais']
+    filter_horizontal = [ 'adicionais']
     autocomplete_fields = ['cupom']
     readonly_fields = [
         'data_criacao',

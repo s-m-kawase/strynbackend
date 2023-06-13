@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .tempo import TempoEstimado
 from pedidos.models.categoria_cardapio import CategoriaCardapio
 
 class Restaurante(models.Model):
@@ -48,6 +49,13 @@ class Restaurante(models.Model):
         verbose_name='Horario de Encerramento',
         blank=True, null=True,
     )
+    tempo_estimado = models.ForeignKey(
+        TempoEstimado,
+        verbose_name='Tempo Estimado',
+        on_delete=models.SET_NULL,
+        blank=True, null=True,
+    )
+
 
     taxa_servico = models.IntegerField(
         verbose_name="Taxa de serviço",

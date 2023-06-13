@@ -37,9 +37,10 @@ class Pedidos(models.Model):
         max_length=25
     )
 
-    tempo_estimado = models.ManyToManyField(
+    tempo_estimado = models.ForeignKey(
         TempoEstimado,
         verbose_name='Tempo Estimado',
+        on_delete=models.SET_NULL,
         blank=True, null=True,
     )
 

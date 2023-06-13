@@ -18,7 +18,7 @@ class PedidosAdmin(NestedModelAdmin):
     ]
 
     filter_horizontal = [
-        'tempo_estimado',
+        
         'adicionais'
     ]
 
@@ -31,7 +31,7 @@ class PedidosAdmin(NestedModelAdmin):
     autocomplete_fields = [
         'cliente',
         'cupom',
-        
+
     ]
 
     inlines = [
