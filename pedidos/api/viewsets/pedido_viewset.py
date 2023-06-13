@@ -110,17 +110,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
         line_items.append(line_item_taxa_atendimento)
 
 
-        if pedido.cupom and pedido.cupom.porcentagem:
+        if pedido.cupom and pedido.cupom.valor:
           cupom = stripe.Coupon.create(
-                  percent_off=pedido.cupom.porcentagem,
+                  percent_off=pedido.cupom.valor,
                   duration="once",
-                  )
-        elif pedido.cupom and pedido.cupom.valor:
-          cupom = stripe.Coupon.create(
-                  amount_off=int(pedido.cupom.valor * 100), # Converter o valor para centavos como um número inteiro
-                  currency="brl",
-                  duration="once",
-                  )
+                )
         else: cupom = None
 
 
