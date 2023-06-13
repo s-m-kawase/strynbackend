@@ -84,7 +84,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         pedido = Pedidos.objects.get(id=pk)
 
         cupom = criar_cupom(pedido)
-        cupom_id = cupom.id
+        cupom_id = cupom.id if cupom else None
 
         # Calcula o valor total do pedido com a taxa de atendimento
         subtotal = 0.0
