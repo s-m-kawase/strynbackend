@@ -66,9 +66,25 @@ class PedidosViewSet(viewsets.ModelViewSet):
         return query
 
     @action(detail=True, methods=['get'])
+    def criar_cupom(self, request, pk):
+        pedido = Pedidos.objects.get(id=pk)
+
+        if pedido.cupom and pedido.cupom.valor:
+            percent_off = pedido.cupom.calcular_porcentagem_desconto()
+            cupom = stripe.Coupon.create(
+                percent_off=percent_off,
+                duration="once",
+            )
+            return Response({'cupom_id': cupom.id})
+        else:
+            return Response({'message': 'Nenhum cupom encontrado.'})
+
+    @action(detail=True, methods=['get'])
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
+
+        cupom_id = self.criar_cupom(request, pk)
 
         # Calcula o valor total do pedido com a taxa de atendimento
         subtotal = 0.0
@@ -109,15 +125,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
         }
         line_items.append(line_item_taxa_atendimento)
 
-
-        if pedido.cupom and pedido.cupom.valor:
-          cupom = stripe.Coupon.create(
-                  percent_off=int(pedido.cupom.valor),
-                  duration="once",
-                )
-        else: cupom = None
-
-
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -125,7 +132,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
             mode='payment',
             success_url='https://stryn.netlify.app/cliente/sucesso',
             cancel_url='https://stryn.netlify.app/cliente/visao-geral',
-            discounts=[cupom] if cupom else [],  # Adicionar o desconto ao carrinho
+            discounts=[{
+                'coupon': cupom_id
+            }] if cupom_id else [],  # Adicionar o desconto ao carrinho
             metadata={
                 'pedido_id': str(pedido.id),  # Adiciona o ID do pedido como metadado
             }
