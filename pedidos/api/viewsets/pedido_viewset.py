@@ -82,7 +82,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
-        pagamento = Pagamento.objects.get(pedido=pedido)
 
         cupom = criar_cupom(pedido)
         cupom_id = cupom.id
