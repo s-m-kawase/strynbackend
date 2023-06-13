@@ -24,7 +24,7 @@ class StripeWebhookViewSet(ViewSet):
     @action(detail=False, methods=['post'])
     @csrf_exempt
     def webhook(self, request):
-       
+
         endpoint_secret = config('STRIPE_WEBHOOK_SECRET')
         payload = request.body
         sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
@@ -56,13 +56,13 @@ class StripeWebhookViewSet(ViewSet):
         # Lidar com o evento
         if event['type'] == 'checkout.session.completed':
             session = event['data']['object']
-            session_id = event['data']['object']['id']          
+            session_id = event['data']['object']['id']
             pedido = Pedidos.objects.get(session_id=session_id)
             self.update_order_status(pedido, session)
 
         elif event['type'] == 'checkout.session.async_payment_failed':
             session = event['data']['object']
-            session_id = session['id']  
+            session_id = session['id']
             pedido = Pedidos.objects.get(session_id=session_id)
             self.cancel_checkout_session(pedido, session)
 
@@ -74,15 +74,15 @@ class StripeWebhookViewSet(ViewSet):
 
         elif event['type'] == 'payment_intent.succeeded':
             payment_intent = event['data']['object']
-            session_id = event['data']['object']['id']          
+            session_id = event['data']['object']['id']
             pedido = Pedidos.objects.get(session_id=session_id)
             status = payment_intent['status']
             self.confirma_pagamento(pedido, payment_intent, status)
 
         elif event['type'] == 'charge.refunded':
             self.handle_charge_refunded(event['data']['object'])
-                        
-            
+
+
 
         return Response(status=200)
 
@@ -100,12 +100,12 @@ class StripeWebhookViewSet(ViewSet):
             remetente = settings.EMAIL_HOST_USER
             recipient_email = email
             subject = 'Confirmação de Pagamento'
-            
+
             send_mail(subject, message, remetente, [recipient_email])
 
-        
+
     def cancel_checkout_session(self, pedido, session):
-        
+
         email = session['customer_details']['email']
         pedido.status_pedido = 'Cancelado'
         pedido.save()
@@ -119,23 +119,23 @@ class StripeWebhookViewSet(ViewSet):
         send_mail(subject, message, remetente, [recipient_email])
 
     def confirma_pagamento(self, pedido, payment_intent, status):
-    
-        # email = payment_intent['charges']['data'][0]['billing_details']['email']
 
-        if status == 'succeeded':
+        email = payment_intent['charges']['data'][0]['billing_details']['email']
+
+        if pedido == 'pago':
             pedido.status_pedido = 'Aguardando Preparo'
             pedido.save()
 
-            # # mensagem detalhes do pedido
-            # message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
-            # message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
-            # # Enviar uma confirmação por e-mail
-            # remetente = settings.EMAIL_HOST_USER
-            # recipient_email = email
-            # subject = 'Confirmação de Pagamento'
-            
-            # send_mail(subject, message, remetente, [recipient_email])
-            
+            #  mensagem detalhes do pedido
+            message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
+            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
+            # Enviar uma confirmação por e-mail
+            remetente = settings.EMAIL_HOST_USER
+            recipient_email = email
+            subject = 'Confirmação de Pagamento'
+
+            send_mail(subject, message, remetente, [recipient_email])
+
             # Gerar uma nota fiscal
 
 
