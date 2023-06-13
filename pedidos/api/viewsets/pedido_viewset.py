@@ -112,7 +112,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         if pedido.cupom and pedido.cupom.valor:
           cupom = stripe.Coupon.create(
-                  percent_off=pedido.cupom.valor,
+                  percent_off=int(pedido.cupom.valor),
                   duration="once",
                 )
         else: cupom = None
