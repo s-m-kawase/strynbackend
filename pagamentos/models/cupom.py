@@ -39,9 +39,11 @@ class Cupom(models.Model):
         null=True
     )
 
-
     def calcular_Preco(self):
-        pass
+      if self.porcentagem is not None:
+         return (self.porcentagem / 100)
+      else:
+          return 0
 
 
 
