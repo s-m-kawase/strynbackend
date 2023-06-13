@@ -164,8 +164,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
             if payment_intent_id:
               try:
                   # Calcula o valor total do pedido, incluindo a taxa de atendimento
-                  subtotal = sum(item.preco_item_mais_complementos * item.quantidade for item in pedido.itenspedido_set.all())
-                  taxa_atendimento = subtotal * (pedido.restaurante.taxa_servico / 100)
+                  subtotal = sum(float(item.preco_item_mais_complementos * item.quantidade for item in pedido.itenspedido_set.all()))
+                  taxa_atendimento = subtotal * float((pedido.restaurante.taxa_servico / 100))
                   total_com_taxa = subtotal + taxa_atendimento
 
                   # Aplica o desconto ao valor total
