@@ -39,11 +39,11 @@ class Cupom(models.Model):
         null=True
     )
 
-    def calcular_Preco(self):
-      if self.valor is not None:
-         return (self.valor / 100)
-      else:
-          return 0
+   # def calcular_Preco(self):
+    #  if self.valor is not None:
+     #    return (self.valor / 100)
+      #else:
+       #   return 0
 
 
 
