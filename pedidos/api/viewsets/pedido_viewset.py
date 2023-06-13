@@ -12,6 +12,7 @@ from django.shortcuts import redirect
 from rest_framework.response import Response
 from django.contrib import messages
 import stripe
+import time
 from decouple import config
 
 stripe_secret_key = config('STRIPE_SECRET_KEY')
@@ -108,21 +109,24 @@ class PedidosViewSet(viewsets.ModelViewSet):
         }
         line_items.append(line_item_taxa_atendimento)
 
-
-        if pedido.cupom and pedido.cupom.porcentagem:
-          cupom = stripe.Coupon.create(
-                  percent_off=pedido.cupom.porcentagem,
-                  duration="once_per_customer",
-                  redeem_by=pedido.cupom.validado_ate
-                  )
-        elif pedido.cupom and pedido.cupom.valor:
-          cupom = stripe.Coupon.create(
-                  percent_off=pedido.cupom.valor,
-                  currency="brl",
-                  duration="once",
-                  redeem_by=pedido.cupom.validado_ate
-                  )
-        else: cupom = None
+        validade = pedido.cupom.validado_ate
+        timestamp_futuro = int(validade.timestamp())
+        if timestamp_futuro > int(time.time()):
+          if pedido.cupom and pedido.cupom.porcentagem:
+            cupom = stripe.Coupon.create(
+                    percent_off=pedido.cupom.porcentagem,
+                    duration="once_per_customer",
+                    redeem_by=pedido.cupom.validado_ate
+                    )
+          elif pedido.cupom and pedido.cupom.valor:
+            cupom = stripe.Coupon.create(
+                    percent_off=pedido.cupom.valor,
+                    currency="brl",
+                    duration="once",
+                    redeem_by=pedido.cupom.validado_ate
+                    )
+          else: cupom = None
+        else: return Response('cupom com data invalida')
 
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
