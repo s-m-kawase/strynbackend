@@ -169,15 +169,16 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         porcentagem_desconto = pedido.cupom.calcular_porcentagem_desconto()
         if pedido.cupom and pedido.cupom.valor:
-            reembolso = subtotal + taxa_atendimento - ((subtotal + taxa_atendimento) * porcentagem_desconto)
+            desconto = (subtotal + taxa_atendimento) * porcentagem_desconto
+            valor_reembolso = subtotal + taxa_atendimento - desconto
 
-            reembolso = int(reembolso * 100)
+            valor_reembolso_centavos = int(valor_reembolso * 100)
 
             try:
                 # Cria o reembolso com base no ID do pagamento
                 refund = stripe.Refund.create(
                     payment_intent=payment_intent_id,
-                    amount = reembolso,
+                    amount=valor_reembolso_centavos,
                 )
 
                 # Atualiza o status do pedido
@@ -188,5 +189,3 @@ class PedidosViewSet(viewsets.ModelViewSet):
             except stripe.error.StripeError as e:
                 error_message = str(e)
                 return Response({'erro': error_message}, status=500)
-
-        return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
