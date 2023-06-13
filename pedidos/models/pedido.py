@@ -10,14 +10,14 @@ class Pedidos(models.Model):
         verbose_name='Data da Criação',
         auto_now_add=True,
         blank=True, null=True,
-    ) 
+    )
 
     data_atualizacao = models.DateTimeField(
         verbose_name='Data de Atualização',
         auto_now=True,
         blank=True, null=True,
-    ) 
-    
+    )
+
     STATUS_CHOICE = (
         ('Sacola','Sacola'),
         ('Aguardando Pagamento Mesa', 'Aguardando Pagamento Mesa'),
@@ -52,7 +52,7 @@ class Pedidos(models.Model):
         'pedidos.Cliente',
         on_delete=models.CASCADE,
         verbose_name='Cliente',
-        blank=True, 
+        blank=True,
         null=True
     )
 
@@ -82,7 +82,7 @@ class Pedidos(models.Model):
     adicionais = models.ManyToManyField(
         Adicional,
         verbose_name='Adicionais',
-        null= True, blank=True    
+        null= True, blank=True
     )
 
     session_id = models.CharField(
@@ -102,34 +102,29 @@ class Pedidos(models.Model):
     @property
     def subtotal(self):
         subtotal = 0
-        
+
         for item in self.itenspedido_set.all():
             if item.preco_item_mais_complementos is not None:
                 subtotal += item.preco_item_mais_complementos
         return subtotal
-        
-        
-        
+
+
+
 
     @property
     def total(self):
-        
+
         adicionais = 0
         for adicional in self.adicionais.all():
             adicionais += float(adicional.valor)
-
-        taxa_atendimento = 0
-        if self.restaurante and self.restaurante.taxa_serviço:
-            taxa_atendimento = float(self.restaurante.taxa_serviço / 100)
 
         cupom = float(self.cupom.valor) if self.cupom else 0
 
         total = 0
         total += float(self.subtotal if self.subtotal else 0)
-        total -= float(self.desconto if self.desconto else 0) 
+        total -= float(self.desconto if self.desconto else 0)
         total -= float(cupom)
         total += float(adicionais)
-        total += float(total * taxa_atendimento)
 
         return total
 
@@ -140,7 +135,7 @@ class Pedidos(models.Model):
             quantidade+=item.quantidade if item.quantidade else 0
 
         return quantidade
-    
+
 
     def efetuar_pedido(self):
         pass

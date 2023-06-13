@@ -34,7 +34,7 @@ def criar_cupom(pedido):
         return cupom
     else:
         return None
-    
+
 
 class PedidosViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
@@ -158,26 +158,35 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         # Verifica se o pedido está associado a uma sessão de pagamento
         if pedido.session_id:
-            session_id = pedido.session_id
             payment_intent_id = pedido.payment_intent_id
 
-            if payment_intent_id:
-                for item_pedido in pedido.itenspedido_set.all():
-                    amount = int(item_pedido.preco_item_mais_complementos * 100)
-                try:
-                    # Cria o reembolso com base no ID do pagamento
-                    refund = stripe.Refund.create(
-                        payment_intent=payment_intent_id,
-                        amount = amount,
-                    )
+        # Calcula o valor total do pedido com a taxa de atendimento
+        subtotal = 0.0
+        for item_pedido in pedido.itenspedido_set.all():
+            subtotal += float(item_pedido.quantidade * item_pedido.preco_item_mais_complementos)
 
-                    # Atualiza o status do pedido
-                    pedido.status_pedido = 'Estornado'
-                    pedido.save()
+        taxa_atendimento = float(subtotal) * (float(pedido.restaurante.taxa_serviço) / 100.0)
 
-                    return Response({'mensagem': 'Reembolso realizado com sucesso'}, status=200)
-                except stripe.error.StripeError as e:
-                    error_message = str(e)
-                    return Response({'erro': error_message}, status=500)
+        porcentagem_desconto = pedido.cupom.calcular_porcentagem_desconto()
+        if pedido.cupom and pedido.cupom.valor:
+            reembolso = subtotal + taxa_atendimento - ((subtotal + taxa_atendimento) * porcentagem_desconto)
+
+            reembolso = int(reembolso * 100)
+
+            try:
+                # Cria o reembolso com base no ID do pagamento
+                refund = stripe.Refund.create(
+                    payment_intent=payment_intent_id,
+                    amount = reembolso,
+                )
+
+                # Atualiza o status do pedido
+                pedido.status_pedido = 'Estornado'
+                pedido.save()
+
+                return Response({'mensagem': 'Reembolso realizado com sucesso'}, status=200)
+            except stripe.error.StripeError as e:
+                error_message = str(e)
+                return Response({'erro': error_message}, status=500)
 
         return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
