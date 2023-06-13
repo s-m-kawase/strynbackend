@@ -65,9 +65,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         return query
 
-    @action(detail=True, methods=['get'])
-    def criar_cupom(self, request, pk):
-        pedido = Pedidos.objects.get(id=pk)
+    def criar_cupom(self, request, pedido):
         stripe_secret_key = config('STRIPE_SECRET_KEY')
         stripe.api_key = stripe_secret_key
         if pedido.cupom and pedido.cupom.valor:
@@ -76,16 +74,17 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 percent_off=percent_off,
                 duration="once",
             )
-            return Response({'cupom_id': cupom.id})
+            return cupom
         else:
-            return Response({'message': 'Nenhum cupom encontrado.'})
+            return None
 
     @action(detail=True, methods=['get'])
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
 
-        cupom_id = self.criar_cupom(request, pk)
+        cupom = self.criar_cupom(request, pedido)
+        cupom_id = cupom.id
 
         # Calcula o valor total do pedido com a taxa de atendimento
         subtotal = 0.0
