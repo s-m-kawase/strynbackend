@@ -115,15 +115,13 @@ class PedidosViewSet(viewsets.ModelViewSet):
           if pedido.cupom and pedido.cupom.porcentagem:
             cupom = stripe.Coupon.create(
                     percent_off=pedido.cupom.porcentagem,
-                    duration="once_per_customer",
-                    redeem_by=pedido.cupom.validado_ate
+                    duration="once",
                     )
           elif pedido.cupom and pedido.cupom.valor:
             cupom = stripe.Coupon.create(
-                    amount_off=int(pedido.cupom.valor * 100),
+                    amount_off=pedido.cupom.valor * 100,
                     currency="brl",
                     duration="once",
-                    redeem_by=pedido.cupom.validado_ate
                     )
           else: cupom = None
         else: return Response('cupom com data invalida')
