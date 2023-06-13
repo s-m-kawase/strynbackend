@@ -68,11 +68,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'])
     def criar_cupom(self, request, pk):
         pedido = Pedidos.objects.get(id=pk)
-
+        stripe_secret_key = config('STRIPE_SECRET_KEY')
+        stripe.api_key = stripe_secret_key
         if pedido.cupom and pedido.cupom.valor:
             percent_off = pedido.cupom.calcular_porcentagem_desconto()
-            stripe_secret_key = config('STRIPE_SECRET_KEY')
-            stripe.api_key = stripe_secret_key
             cupom = stripe.Coupon.create(
                 percent_off=percent_off,
                 duration="once",
