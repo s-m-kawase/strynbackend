@@ -22,6 +22,19 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 1000
 
+def criar_cupom(pedido):
+    stripe_secret_key = config('STRIPE_SECRET_KEY')
+    stripe.api_key = stripe_secret_key
+    if pedido.cupom and pedido.cupom.valor:
+        percent_off = pedido.cupom.calcular_porcentagem_desconto()
+        cupom = stripe.Coupon.create(
+            percent_off=percent_off,
+            duration="once",
+        )
+        return cupom
+    else:
+        return None
+    
 
 class PedidosViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
@@ -65,25 +78,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         return query
 
-    def criar_cupom(self, request, pedido):
-        stripe_secret_key = config('STRIPE_SECRET_KEY')
-        stripe.api_key = stripe_secret_key
-        if pedido.cupom and pedido.cupom.valor:
-            percent_off = pedido.cupom.calcular_porcentagem_desconto()
-            cupom = stripe.Coupon.create(
-                percent_off=percent_off,
-                duration="once",
-            )
-            return cupom
-        else:
-            return None
-
     @action(detail=True, methods=['get'])
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
 
-        cupom = self.criar_cupom(request, pedido)
+        cupom = criar_cupom(pedido)
         cupom_id = cupom.id
 
         # Calcula o valor total do pedido com a taxa de atendimento
