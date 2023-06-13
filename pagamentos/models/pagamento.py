@@ -7,23 +7,19 @@ class Pagamento(models.Model):
         max_length=100,
         verbose_name='Código do pagamento',
         null= True,
-        unique=True 
+        unique=True
     )
 
     TIPO_CHOICE = (
-        ('Pagar na mesa', 'Pagar na mesa'),
-        ('Vale refeição', 'Vale refeição'),
-        ('Vale-alimentação', 'Vale-alimentação'),
-        ('Pagar com pix', 'Pagar com pix'),
-        ('Cartão de crédito', 'Cartão de crédito'),
-        ('Cartão de debito', 'Cartão de debito'),
+        ('Pagamento na mesa', 'Pagamento na mesa'),
+        ('card', 'Pagamento online'),
     )
 
     pagamento = models.CharField(
         verbose_name="Tipo pagamento",
         choices=TIPO_CHOICE,
         max_length=50,
-        default="Cartão de debito"
+        default="Pagamento na mesa"
     )
 
     pedido = models.ForeignKey(
@@ -46,10 +42,10 @@ class Pagamento(models.Model):
         verbose_name='Detalhes do pagamento'
     )
 
-    
+
     @property
     def total(self):
-        
+
         return self.pedido.subtotal
 
     def __str__(self):

@@ -82,6 +82,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
     def create_checkout_session(self, request, pk):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
+        pagamento = Pagamento.objects.get(pedido=pedido)
 
         cupom = criar_cupom(pedido)
         cupom_id = cupom.id
@@ -127,7 +128,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
+            payment_method_types=[pagamento.pagamento],
             line_items=line_items,
             mode='payment',
             success_url='https://stryn.netlify.app/cliente/sucesso',
@@ -150,22 +151,26 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def solicitar_reembolso(self, request, pk):
-        pedido = Pedidos.objects.get(id=pk)
+      pedido = Pedidos.objects.get(id=pk)
 
-        # Verifica se o pedido já foi reembolsado
-        if pedido.status_pedido == 'Estornado':
-            return Response({'mensagem': 'Pedido já foi reembolsado'}, status=200)
+      # Verifica se o pedido já foi reembolsado
+      if pedido.status_pedido == 'Estornado':
+          return Response({'mensagem': 'Pedido já foi reembolsado'}, status=200)
 
-        # Verifica se o pedido está associado a uma sessão de pagamento
-        if pedido.session_id:
-            session_id = pedido.session_id
-            payment_intent_id = pedido.payment_intent_id
+      # Verifica se o pedido está associado a uma sessão de pagamento
+      if pedido.session_id:
+          session_id = pedido.session_id
+          payment_intent_id = pedido.payment_intent_id
 
-            if payment_intent_id:
+          if payment_intent_id:
               try:
                   # Calcula o valor total do pedido, incluindo a taxa de atendimento
-                  subtotal = sum(float(item.preco_item_mais_complementos * item.quantidade for item in pedido.itenspedido_set.all()))
-                  taxa_atendimento = subtotal * float((pedido.restaurante.taxa_servico / 100))
+                  itens_pedido = pedido.itenspedido_set.all()
+                  subtotal = sum(
+                      float(item.preco * item.quantidade)
+                      for item in itens_pedido
+                  )
+                  taxa_atendimento = subtotal * (float(pedido.restaurante.taxa_servico) / 100)
                   total_com_taxa = subtotal + taxa_atendimento
 
                   # Aplica o desconto ao valor total
@@ -193,5 +198,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
               except stripe.error.StripeError as e:
                   error_message = str(e)
                   return Response({'erro': error_message}, status=500)
-
-        return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
+          else:
+              return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
+      else:
+          return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
