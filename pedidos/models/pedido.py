@@ -119,23 +119,35 @@ class Pedidos(models.Model):
         for adicional in self.adicionais.all():
             adicionais += float(adicional.valor)
 
-        cupom = float(self.cupom.valor) if self.cupom else 0
+        if self.restaurante:
+            subtotal = float(self.subtotal)
+            taxa_servico = float(self.restaurante.taxa_servico / 100 * subtotal)
+
+
+
 
         total = 0
         total += float(self.subtotal if self.subtotal else 0)
         total -= float(self.desconto if self.desconto else 0)
-        total -= float(cupom)
         total += float(adicionais)
+        total += float(taxa_servico)
+
+        if self.cupom:
+          total = total
+          taxa = float(self.cupom.valor / 100 )if self.cupom else 0
+          cupom = total * taxa
+
+        total -= float(cupom)
 
         return total
     @property
-    def total_desconto(self):
-      taxa = float(self.restaurante.taxa_servico / 100) if self.restaurante else None
-      desconto_taxa = self.total * taxa
-      total_desconto = self.total + desconto_taxa
+    def total_taxa_serviço_no_pedido(self):
+      taxa = float(self.restaurante.taxa_servico ) if self.restaurante else None
+      taxa_total_servico = float(self.subtotal) * (taxa/100)
+
       context = ({
           "porcentagem":taxa,
-          "total_desconto":total_desconto
+          "taxa_de_servico":taxa_total_servico
       })
       return context
 

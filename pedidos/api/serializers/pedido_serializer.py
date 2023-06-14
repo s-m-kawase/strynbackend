@@ -12,7 +12,7 @@ class PedidosSerializer(serializers.ModelSerializer):
     total = serializers.ReadOnlyField()
     subtotal = serializers.ReadOnlyField()
     itens_quantidade = serializers.ReadOnlyField()
-    total_desconto = serializers.ReadOnlyField()
+    total_taxa_serviço_no_pedido = serializers.ReadOnlyField()
 
     adicionais_read = serializers.SerializerMethodField()
     cupom_read = serializers.SerializerMethodField()
