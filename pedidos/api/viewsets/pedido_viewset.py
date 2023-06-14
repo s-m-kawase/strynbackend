@@ -174,7 +174,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                   # Aplica o desconto ao valor total
                   if pedido.cupom and pedido.cupom.valor:
                       porcentagem_desconto = pedido.cupom.calcular_porcentagem_desconto()
-                      desconto = total_com_taxa * (porcentagem_desconto / 100)
+                      desconto = total_com_taxa * porcentagem_desconto
                       total_reembolso = total_com_taxa - desconto
                   else:
                       total_reembolso = total_com_taxa
