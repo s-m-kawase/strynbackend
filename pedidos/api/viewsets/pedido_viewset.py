@@ -220,14 +220,14 @@ class PedidosViewSet(viewsets.ModelViewSet):
             }
 
             # Obter os itens do pedido
-            lista_itens = intent.items.data
-            for item in lista_itens:
-                item_pedido = {
-                    'nome': item.price.product_data.name,
-                    'quantidade': item.quantity,
-                    # Outras informações relevantes do item
-                }
-                dados_pedido['itens'].append(item_pedido)
+            for item in pedido.itens_pedido.all():
+              item_pedido = {
+                  'nome': item.item.nome,
+                  'quantidade': item.quantidade,
+                  'preço':item.preco_item_mais_complementos
+
+              }
+              dados_pedido['itens'].append(item_pedido)
 
             return Response(dados_pedido)
 
