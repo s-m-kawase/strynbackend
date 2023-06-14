@@ -15,15 +15,96 @@ stripe.api_key = config('STRIPE_SECRET_KEY')
 
 class StripeWebhookViewSet(ViewSet):
 
-    @action(detail=False, methods=['post'])
-    def initiate_payment(self, request):
+  def update_order_status(self, pedido ,session):
+    email = session['customer_details']['email']
+    if session['status'] == 'complete':
+        pedido.status_pedido = 'Pago'
+        pedido.save()
+
+        # mensagem detalhes do pedido
+        message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
+        message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
+        # Enviar uma confirmação por e-mail
+        remetente = settings.EMAIL_HOST_USER
+        recipient_email = email
+        subject = 'Confirmação de Pagamento'
+
+        send_mail(subject, message, remetente, [recipient_email])
+
+
+  def cancel_checkout_session(self, pedido, session):
+
+      email = session['customer_details']['email']
+      pedido.status_pedido = 'Cancelado'
+      pedido.save()
+
+      # Notificar o cliente sobre o cancelamento do pedido
+      remetente = settings.EMAIL_HOST_USER
+      recipient_email = email
+      subject = 'saldo insuficiente'
+      message = f"Seu pagamento foi cancelado. Entre em contato conosco para obter mais informações.\n\n"
+      message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
+      send_mail(subject, message, remetente, [recipient_email])
+
+  def confirma_pagamento(self, pedido, payment_intent, status):
+
+      email = payment_intent['charges']['data'][0]['billing_details']['email']
+
+      if pedido == 'pago':
+          pedido.status_pedido = 'Aguardando Preparo'
+          pedido.save()
+
+          #  mensagem detalhes do pedido
+          message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
+          message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
+          # Enviar uma confirmação por e-mail
+          remetente = settings.EMAIL_HOST_USER
+          recipient_email = email
+          subject = 'Confirmação de Pagamento'
+
+          send_mail(subject, message, remetente, [recipient_email])
+
+          # Gerar uma nota fiscal
+
+
+  def handle_payment_failed(self, pedido, payment_intent):
+      email = payment_intent['charges']['data'][0]['billing_details']['email']
+
+
+      # Atualizar o status do pedido
+      pedido.status_pedido = 'Com erro'
+      pedido.save()
+
+      # Enviar um e-mail ao cliente informando sobre o pagamento falhado
+      remetente = settings.EMAIL_HOST_USER
+      recipient_email = email
+      subject = 'Falha no Pagamento'
+      message = 'O pagamento do seu pedido falhou. Por favor, tente novamente.'
+      send_mail(subject, message, remetente, [recipient_email])
+
+
+  def handle_charge_refunded(refund, payment_intent_id):
+      pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
+      if pedido.status_pedido == 'Estornado':
+        # Enviar email
+        remetente = settings.EMAIL_HOST_USER
+        recipient_email = refund['billing_details']['email']
+        subject = 'Estorno do Pedido'
+        message = 'O pagamento do seu pedido foi estornado. Entre em contato conosco para mais informações.'
+        send_mail(subject, message, remetente, [recipient_email])
+
+        return Response({'mensagem': 'Estorno realizado com sucesso'}, status=200)
+
+
+  @action(detail=False, methods=['post'])
+  def initiate_payment(self, request):
         session_id = request.data.get('session_id')
         self.process_payment(session_id)
         return Response({'message': 'Pagamento processado com sucesso'})
 
-    @action(detail=False, methods=['post'])
-    @csrf_exempt
-    def webhook(self, request):
+  @action(detail=False, methods=['get'])
+  @csrf_exempt
+  def webhook(self, request):
 
         endpoint_secret = config('STRIPE_WEBHOOK_SECRET')
         payload = request.body
@@ -87,82 +168,3 @@ class StripeWebhookViewSet(ViewSet):
         return Response(status=200)
 
 
-    def update_order_status(self, pedido ,session):
-        email = session['customer_details']['email']
-        if session['status'] == 'complete':
-            pedido.status_pedido = 'Pago'
-            pedido.save()
-
-            # mensagem detalhes do pedido
-            message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
-            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
-            # Enviar uma confirmação por e-mail
-            remetente = settings.EMAIL_HOST_USER
-            recipient_email = email
-            subject = 'Confirmação de Pagamento'
-
-            send_mail(subject, message, remetente, [recipient_email])
-
-
-    def cancel_checkout_session(self, pedido, session):
-
-        email = session['customer_details']['email']
-        pedido.status_pedido = 'Cancelado'
-        pedido.save()
-
-        # Notificar o cliente sobre o cancelamento do pedido
-        remetente = settings.EMAIL_HOST_USER
-        recipient_email = email
-        subject = 'saldo insuficiente'
-        message = f"Seu pagamento foi cancelado. Entre em contato conosco para obter mais informações.\n\n"
-        message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
-        send_mail(subject, message, remetente, [recipient_email])
-
-    def confirma_pagamento(self, pedido, payment_intent, status):
-
-        email = payment_intent['charges']['data'][0]['billing_details']['email']
-
-        if pedido == 'pago':
-            pedido.status_pedido = 'Aguardando Preparo'
-            pedido.save()
-
-            #  mensagem detalhes do pedido
-            message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
-            message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
-            # Enviar uma confirmação por e-mail
-            remetente = settings.EMAIL_HOST_USER
-            recipient_email = email
-            subject = 'Confirmação de Pagamento'
-
-            send_mail(subject, message, remetente, [recipient_email])
-
-            # Gerar uma nota fiscal
-
-
-    def handle_payment_failed(self, pedido, payment_intent):
-        email = payment_intent['charges']['data'][0]['billing_details']['email']
-
-
-        # Atualizar o status do pedido
-        pedido.status_pedido = 'Com erro'
-        pedido.save()
-
-        # Enviar um e-mail ao cliente informando sobre o pagamento falhado
-        remetente = settings.EMAIL_HOST_USER
-        recipient_email = email
-        subject = 'Falha no Pagamento'
-        message = 'O pagamento do seu pedido falhou. Por favor, tente novamente.'
-        send_mail(subject, message, remetente, [recipient_email])
-
-
-    def handle_charge_refunded(refund, payment_intent_id):
-        pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
-        if pedido.status_pedido == 'Estornado':
-          # Enviar email
-          remetente = settings.EMAIL_HOST_USER
-          recipient_email = refund['billing_details']['email']
-          subject = 'Estorno do Pedido'
-          message = 'O pagamento do seu pedido foi estornado. Entre em contato conosco para mais informações.'
-          send_mail(subject, message, remetente, [recipient_email])
-
-          return Response({'mensagem': 'Estorno realizado com sucesso'}, status=200)
