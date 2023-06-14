@@ -220,7 +220,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             }
 
             # Obter os itens do pedido
-            for item in pedido.itens_pedido.all():
+            for item in pedido.itenspedido_set.all():
               item_pedido = {
                   'nome': item.item.nome,
                   'quantidade': item.quantidade,
