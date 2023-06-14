@@ -170,7 +170,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
                   taxa = float(subtotal) * (float(pedido.restaurante.taxa_servico) / 100.0)
 
-                  total_com_taxa = float(subtotal) * float(taxa)
+                  total_com_taxa = float(subtotal) + float(taxa)
 
                   # Aplica o desconto ao valor total
                   if pedido.cupom and pedido.cupom.valor:
