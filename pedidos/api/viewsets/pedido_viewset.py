@@ -101,7 +101,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             line_item = {
                 'price_data': {
                     'currency': 'brl',
-                    'unit_amount': int(item_pedido.preco_item_mais_complementos) * 100,
+                    'unit_amount': float(item_pedido.preco_item_mais_complementos) * 100,
                     'product_data': {
                         'name': item_pedido.item.nome,
                     },
@@ -116,7 +116,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         line_item_taxa_atendimento = {
             'price_data': {
                 'currency': 'brl',
-                'unit_amount': int(taxa_atendimento * 100),
+                'unit_amount': float(taxa_atendimento * 100),
                 'product_data': {
                     'name': 'Taxa de Atendimento',
                 },
@@ -169,7 +169,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                       subtotal += float(item_pedido.quantidade * item_pedido.preco_item_mais_complementos)
 
                   total_com_taxa = float(subtotal) * (float(pedido.restaurante.taxa_servico) / 100.0)
-                  
+
 
                   # Aplica o desconto ao valor total
                   if pedido.cupom and pedido.cupom.valor:
