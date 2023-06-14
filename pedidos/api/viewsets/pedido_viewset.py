@@ -220,7 +220,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             }
 
             # Obter os itens do pedido
-            lista_itens = intent.items
+            lista_itens = intent.items.data
             for item in lista_itens:
                 item_pedido = {
                     'nome': item.price.product_data.name,
