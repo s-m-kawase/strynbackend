@@ -168,8 +168,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
                   for item_pedido in pedido.itenspedido_set.all():
                       subtotal += float(item_pedido.quantidade * item_pedido.preco_item_mais_complementos)
 
-                  total_com_taxa = float(subtotal) * (float(pedido.restaurante.taxa_servico) / 100.0)
+                  taxa = float(subtotal) * (float(pedido.restaurante.taxa_servico) / 100.0)
 
+                  total_com_taxa = float(subtotal) * float(taxa)
 
                   # Aplica o desconto ao valor total
                   if pedido.cupom and pedido.cupom.valor:
