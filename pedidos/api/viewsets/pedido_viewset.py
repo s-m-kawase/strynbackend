@@ -220,18 +220,17 @@ class PedidosViewSet(viewsets.ModelViewSet):
             }
 
             # Obter os itens do pedido
-            items = intent.items
-            for item in items:
-                items = {
+            lista_itens = intent.items
+            for item in lista_itens:
+                item_pedido = {
                     'nome': item.price.product_data.name,
                     'quantidade': item.quantity,
                     # Outras informações relevantes do item
                 }
-                dados_pedido['itens'].append(items)
+                dados_pedido['itens'].append(item_pedido)
+
+            return Response(dados_pedido)
 
         except stripe.error.StripeError as e:
             mensagem_erro = str(e)  # Obtém a mensagem de erro da exceção
             return Response({'error': mensagem_erro}, status=500)
-
-
-        return Response(dados_pedido)
