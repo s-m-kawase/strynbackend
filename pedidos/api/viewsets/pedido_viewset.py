@@ -209,7 +209,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         pedido = Pedidos.objects.get(id=pk)
 
         # Obter os dados do pedido do Stripe usando o intent_payment_id
-        intent_payment_id = pedido.intent_payment_id
+        intent_payment_id = pedido.payment_intent_id
         try:
             intent = stripe.PaymentIntent.retrieve(intent_payment_id)
             dados_pedido = {
