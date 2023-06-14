@@ -128,6 +128,16 @@ class Pedidos(models.Model):
         total += float(adicionais)
 
         return total
+    @property
+    def total_desconto(self):
+      taxa = float(self.restaurante.taxa_servico / 100) if self.restaurante else None
+      desconto_taxa = self.total * taxa
+      total_desconto = self.total + desconto_taxa
+      context = ({
+          "porcentagem":taxa,
+          "total_desconto":total_desconto
+      })
+      return context
 
     @property
     def itens_quantidade(self):

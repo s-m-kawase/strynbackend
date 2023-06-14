@@ -201,3 +201,36 @@ class PedidosViewSet(viewsets.ModelViewSet):
               return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
       else:
           return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
+
+
+
+    @action(detail=True, methods=['get'])
+    def confirmado(self, request, pk):
+        pedido = Pedidos.objects.get(id=pk)
+
+        # Obter os dados do pedido do Stripe usando o intent_payment_id
+        intent_payment_id = pedido.intent_payment_id
+        try:
+            intent = stripe.PaymentIntent.retrieve(intent_payment_id)
+            dados_pedido = {
+                'id': intent.id,
+                'valor': intent.amount / 100,  # Converter para valor em reais
+                'status': intent.status,
+                'itens': [],
+            }
+
+            # Obter os itens do pedido
+            for item in intent.charges.data[0].items:
+                item_pedido = {
+                    'nome': item.price.product_data.name,
+                    'quantidade': item.quantity,
+                    # Outras informações relevantes do item
+                }
+                dados_pedido['itens'].append(item_pedido)
+
+        except stripe.error.StripeError as e:
+            mensagem_erro = str(e)  # Obtém a mensagem de erro da exceção
+            return Response({'error': mensagem_erro}, status=500)
+
+
+        return Response(dados_pedido)
