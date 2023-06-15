@@ -150,7 +150,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             pedido=pedido,
             pagamento="Pagamento online",
             valor_pago=pedido.total,
-            codigo_pagamento=checkout_session.payment
+            codigo_pagamento=checkout_session.payment_intent
             )
 
         # Redireciona para a URL do checkout do Stripe
