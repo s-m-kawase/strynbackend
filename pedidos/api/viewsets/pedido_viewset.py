@@ -229,7 +229,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                   'nome': item.item.nome,
                   'quantidade': item.multiplicador_item_pedido,
                   'valor_unidade': item.valor_unitario_item,
-                  'preço':item.preco_item_mais_complementos,
+                  'valor_total_item':item.preco_item_mais_complementos,
               }
               dados_pedido['itens'].append(item_pedido)
 
