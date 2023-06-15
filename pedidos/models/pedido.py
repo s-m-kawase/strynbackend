@@ -137,7 +137,7 @@ class Pedidos(models.Model):
           taxa = float(self.cupom.valor / 100 )if self.cupom else 0
           cupom = total * taxa
 
-        total -= float(cupom)
+        total -= round(float(cupom),2)
 
         return total
     @property
