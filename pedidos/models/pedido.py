@@ -125,7 +125,7 @@ class Pedidos(models.Model):
 
 
 
-
+        cupom = 0
         total = 0
         total += float(self.subtotal if self.subtotal else 0)
         total -= float(self.desconto if self.desconto else 0)
@@ -141,7 +141,7 @@ class Pedidos(models.Model):
 
         return total
     @property
-    def total_taxa_serviço_no_pedido(self):
+    def total_taxa_servico_no_pedido(self):
       taxa = float(self.restaurante.taxa_servico ) if self.restaurante else None
       taxa_total_servico = float(self.subtotal) * (taxa/100)
 
