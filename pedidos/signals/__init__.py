@@ -7,6 +7,7 @@ from .criar_categoria_criar_uma_ordem_categoria import criar_ordem_categoria_car
 from .criar_categoria_criar_uma_ordem_categoria import criar_ordem_categoria_cardapio3
 from .atualizar_valor_complemento_no_pedido import atualizar_valor_complemento_no_pedido
 from .atualizar_delete_complemento import autalizar_delete_complemento
+from .criar_pagamento import criar_pagamento
 
 __all__ = [
     adicionar_categoria_ao_cardapio,
@@ -17,5 +18,6 @@ __all__ = [
     criar_ordem_categoria_cardapio2,
     criar_ordem_categoria_cardapio3,
     atualizar_valor_complemento_no_pedido,
-    autalizar_delete_complemento
+    autalizar_delete_complemento,
+    criar_pagamento
 ]

@@ -125,12 +125,14 @@ class PedidosViewSet(viewsets.ModelViewSet):
         }
         line_items.append(line_item_taxa_atendimento)
 
+        success_url = 'https://stryn.netlify.app/cliente/sucesso?status_pedido={}&pedido_id={}'.format(pedido.status_pedido, pedido.id)
+
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
-            success_url='https://stryn.netlify.app/cliente/sucesso',
+            success_url=success_url,
             cancel_url='https://stryn.netlify.app/cliente/visao-geral',
             discounts=[{
                 'coupon': cupom_id
