@@ -126,13 +126,14 @@ class PedidosViewSet(viewsets.ModelViewSet):
         line_items.append(line_item_taxa_atendimento)
 
         success_url = f'https://stryn.netlify.app/cliente/sucesso?tab=andamento&status_pedido=Pago&id={pedido.id}'
+        cancel_url = f'https://stryn.netlify.app/cliente/sucesso?tab=andamento&status_pedido=Cancelado&id={pedido.id}'
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
             success_url=success_url,
-            cancel_url='https://stryn.netlify.app/cliente/visao-geral',
+            cancel_url=cancel_url,
             discounts=[{
                 'coupon': cupom_id
             }] if cupom_id else [],  # Adicionar o desconto ao carrinho
@@ -168,8 +169,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
       # Verifica se o pedido está associado a uma sessão de pagamento
       if pedido.session_id:
           session_id = pedido.session_id
-          payment_intent_id = pedido.payment_intent_id
           if pagamento.pagamento == 'Pagamento online':
+            payment_intent_id = pedido.payment_intent_id
 
             if payment_intent_id:
                 try:
@@ -192,6 +193,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
                     # Converte o valor do reembolso para centavos
                     amount = int(total_reembolso * 100)
+                    """ amount = int(pedido.valor_pago*100) """
 
                     # Cria o reembolso com base no ID do pagamento
                     refund = stripe.Refund.create(
@@ -249,3 +251,17 @@ class PedidosViewSet(viewsets.ModelViewSet):
         except stripe.error.StripeError as e:
             mensagem_erro = str(e)  # Obtém a mensagem de erro da exceção
             return Response({'error': mensagem_erro}, status=500)
+
+    @action(detail=True, methods=['get'])
+    def criar_pagamento_na_mesa(self,request,pk):
+      pedido = Pedidos.objects.get(id=pk)
+
+      Pagamento.objects.create(
+          pedido=pedido,
+          pagamento="Pagamento na mesa",
+          valor_pago=pedido.total,
+          codigo_pagamento=f"PM{pedido.id}"
+      )
+
+      return JsonResponse({"message":'success'})
+

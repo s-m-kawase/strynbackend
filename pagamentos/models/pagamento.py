@@ -42,7 +42,6 @@ class Pagamento(models.Model):
         verbose_name='Detalhes do pagamento'
     )
 
-
     @property
     def total(self):
 
