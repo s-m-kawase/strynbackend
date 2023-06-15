@@ -205,7 +205,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
 
     @action(detail=True, methods=['get'])
-    def confirmado(self, request, pk):
+    def tela_pedido_confirmado(self, request, pk):
         pedido = Pedidos.objects.get(id=pk)
 
         # Obter os dados do pedido do Stripe usando o intent_payment_id
