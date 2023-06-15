@@ -223,7 +223,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             for item in pedido.itenspedido_set.all():
               item_pedido = {
                   'nome': item.item.nome,
-                  'quantidade': item.quantidade,
+                  'quantidade': item.multiplicador_item_pedido,
                   'preço':item.preco_item_mais_complementos
 
               }
