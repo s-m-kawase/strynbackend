@@ -139,7 +139,7 @@ class Pedidos(models.Model):
 
         total -= round(float(cupom),2)
 
-        return total
+        return round(total, 2)
     @property
     def total_taxa_servico_no_pedido(self):
       taxa = float(self.restaurante.taxa_servico ) if self.restaurante else None
