@@ -224,10 +224,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
               item_pedido = {
                   'nome': item.item.nome,
                   'quantidade': item.multiplicador_item_pedido,
-                  'preço':item.preco_item_mais_complementos
-
+                  'valor_unidade': item.valor_unitario_item,
+                  'preço':item.preco_item_mais_complementos,
               }
               dados_pedido['itens'].append(item_pedido)
+              taxa_servico = pedido.total_taxa_servico_no_pedido
+              dados_pedido['itens'].append(taxa_servico)
 
             return Response(dados_pedido)
 
