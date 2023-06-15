@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+""" from django.db.models.signals import post_save
 from django.dispatch import receiver
 from ..models import Pedidos
 import requests
@@ -19,4 +19,4 @@ def criar_pagamento(sender, instance, created, **kwargs):
             instance.pedido = instance.id
 
     instance.save()
-    post_save.connect(criar_pagamento, sender=sender)
+    post_save.connect(criar_pagamento, sender=sender) """

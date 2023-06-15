@@ -3,6 +3,7 @@ from pedidos.models.tempo import TempoEstimado
 from .restaurante import Restaurante
 from pagamentos.models.cupom import Cupom
 from pagamentos.models.adicional import Adicional
+from django.db.models import Sum
 
 class Pedidos(models.Model):
 
@@ -159,6 +160,9 @@ class Pedidos(models.Model):
 
         return quantidade
 
+    @property
+    def valor_pago(self):
+        self.pagamento_set.all().aggregate(valor=Sum('valor_pago'))['valor']
 
     def efetuar_pedido(self):
         pass

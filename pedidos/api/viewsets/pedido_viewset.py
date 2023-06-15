@@ -146,6 +146,13 @@ class PedidosViewSet(viewsets.ModelViewSet):
         pedido.payment_intent_id = checkout_session.payment_intent
         pedido.save()
 
+        Pagamento.objects.create(
+            pedido=pedido,
+            pagamento="Pagamento online",
+            valor_pago=pedido.total,
+            codigo_pagamento=checkout_session.payment
+            )
+
         # Redireciona para a URL do checkout do Stripe
         return Response({'checkout_url': checkout_session.url, 'session_id': checkout_session.id})
 
