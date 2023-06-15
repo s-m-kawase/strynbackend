@@ -212,10 +212,14 @@ class PedidosViewSet(viewsets.ModelViewSet):
         intent_payment_id = pedido.payment_intent_id
         try:
             intent = stripe.PaymentIntent.retrieve(intent_payment_id)
+            taxa_servico = pedido.total_taxa_servico_no_pedido
             dados_pedido = {
                 'id': intent.id,
                 'valor': intent.amount / 100,  # Converter para valor em reais
                 'status': intent.status,
+                'nome_cliente': intent.charges.data[0].billing_details.name,
+                'ultimo_numero_cartao': intent.charges.data[0].payment_method_details.card.last4,
+                'taxa_de_servico':taxa_servico,
                 'itens': [],
             }
 
@@ -228,8 +232,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                   'preço':item.preco_item_mais_complementos,
               }
               dados_pedido['itens'].append(item_pedido)
-              taxa_servico = pedido.total_taxa_servico_no_pedido
-              dados_pedido['itens'].append(taxa_servico)
+
 
             return Response(dados_pedido)
 
