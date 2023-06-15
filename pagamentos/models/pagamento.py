@@ -12,7 +12,7 @@ class Pagamento(models.Model):
 
     TIPO_CHOICE = (
         ('Pagamento na mesa', 'Pagamento na mesa'),
-        ('card', 'Pagamento online'),
+        ('Pagamento online', 'Pagamento online'),
     )
 
     pagamento = models.CharField(
