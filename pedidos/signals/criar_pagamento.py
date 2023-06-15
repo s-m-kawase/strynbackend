@@ -8,9 +8,8 @@ import requests
 def criar_pagamento(sender, instance, created, **kwargs):
     post_save.disconnect(criar_pagamento, sender=sender)
     if created:
-        url = f'https://stryn.dokku.outboxsistemas.com/api/{instance.id}/create_checkout_session'
-        response = requests.get(url)
-        if response.status_code == 200:
+
+        if instance.payment_intent_id:
             instance.pagamento = 'Pagamento online'
             instance.valor_pago = instance.valor_total
             instance.pedido = instance.id
