@@ -11,11 +11,11 @@ def criar_pagamento(sender, instance, created, **kwargs):
 
         if instance.payment_intent_id:
             instance.pagamento = 'Pagamento online'
-            instance.valor_pago = instance.valor_total
+            instance.valor_pago = instance.total
             instance.pedido = instance.id
         else:
             instance.pagamento = 'Pagamento na mesa'
-            instance.valor_pago = instance.valor_total
+            instance.valor_pago = instance.total
             instance.pedido = instance.id
 
     instance.save()
