@@ -143,7 +143,7 @@ class Pedidos(models.Model):
     @property
     def total_taxa_servico_no_pedido(self):
       taxa = float(self.restaurante.taxa_servico ) if self.restaurante else None
-      taxa_total_servico = float(self.subtotal) * (taxa/100)
+      taxa_total_servico = round(float(self.subtotal) * (taxa/100),2)
 
       context = ({
           "porcentagem":taxa,
