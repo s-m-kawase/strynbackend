@@ -212,7 +212,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             else:
                 return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
           else:
-            # aqui se status pagamento pagar na mesa
+            # aqui sera feito reembolso se o status for pagamento pagar na mesa
             pedido.status_pedido = 'Estornado'
             pedido.save()
       else:
