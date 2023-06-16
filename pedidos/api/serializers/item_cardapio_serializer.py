@@ -1,4 +1,4 @@
-from rest_framework import serializers 
+from rest_framework import serializers
 from pedidos.models import ItemCardapio
 from .categoria_cardapio_serializer import CategoriaCardapioSerializer
 from .grupo_complemento_item_serializer import GrupoComplementosSerializer
@@ -15,7 +15,7 @@ class ItemCardapioSerializer(serializers.ModelSerializer):
 
     def get_categoria_read(self, obj):
         return [CategoriaCardapioSerializer(instance=categoria).data for categoria in obj.categoria.all()]
-    
+
     class Meta:
         model = ItemCardapio
         fields = '__all__'
