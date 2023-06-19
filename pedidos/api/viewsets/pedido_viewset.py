@@ -216,6 +216,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # aqui sera feito reembolso se o status for pagamento pagar na mesa
         pedido.status_pedido = 'Estornado'
         pedido.save()
+        return Response({'mensagem': 'Reembolso realizado com sucesso'}, status=200)
 
 
 
