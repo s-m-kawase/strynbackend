@@ -167,9 +167,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
           return Response({'mensagem': 'Pedido já foi reembolsado'}, status=200)
 
       # Verifica se o pedido está associado a uma sessão de pagamento
-      if pedido.session_id:
-          session_id = pedido.session_id
-          if pagamento.pagamento == 'Pagamento online':
+      if pagamento.pagamento == 'Pagamento online':
+        if pedido.session_id:
+            session_id = pedido.session_id
             payment_intent_id = pedido.payment_intent_id
 
             if payment_intent_id:
@@ -211,12 +211,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
                     return Response({'erro': error_message}, status=500)
             else:
                 return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
-          else:
-            # aqui sera feito reembolso se o status for pagamento pagar na mesa
-            pedido.status_pedido = 'Estornado'
-            pedido.save()
-      else:
         return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
+      else:
+        # aqui sera feito reembolso se o status for pagamento pagar na mesa
+        pedido.status_pedido = 'Estornado'
+        pedido.save()
+
 
 
 
