@@ -12,5 +12,7 @@ def refatorar_data_por_periodo(data_base, tipo_filtro):
         start_date = data_base - timedelta(days=data_base.weekday())
         end_date = start_date + timedelta(days=6)
         data = f"Semana de {start_date.strftime('%d/%m/%Y')} a {end_date.strftime('%d/%m/%Y')}"
+    elif tipo_filtro == 'horario':
+        data = data_base.strftime('%d/%m/%Y %H:%M:%S')
 
     return data

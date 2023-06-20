@@ -8,12 +8,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from django.http.response import JsonResponse
 from rest_framework.pagination import PageNumberPagination
-from django.shortcuts import redirect
 from rest_framework.response import Response
-from django.contrib import messages
 import stripe
-import time
 from decouple import config
+from global_functions.functions import refatorar_data_por_periodo
+from django.db.models import Sum
+from dateutil.relativedelta import relativedelta
+from datetime import date, datetime, timedelta
 
 stripe_secret_key = config('STRIPE_SECRET_KEY')
 stripe.api_key = stripe_secret_key
@@ -270,3 +271,123 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
       return JsonResponse({"message":'success'})
 
+    @action(detail=True, methods=['get'])
+    def validar_cupom(self,request,pk):
+        pedido = Pedidos.objects.filter(id=pk)
+        cod_cupom = request.GET.get('cod_cupom',None)
+        if pedido.filter(cupom__cod_cupom=cod_cupom).exists():
+            return JsonResponse({"message":'success'})
+        else:
+            return JsonResponse({"message":'cupom não existe'})
+
+
+#--------------------------- relatorio para grafico------------------------------
+
+    @action(detail=False, methods=['get'])
+    def relatorio_por_periodo(self,request):
+        parametros = self.request.query_params
+
+        todos_pedidos = Pedidos.objects.all()
+
+        # manipulação do periodo
+        data_atual = date.today()
+
+        data_inicial = parametros.get('data_inicial', False)
+        data_final = parametros.get('data_final', False)
+        tipo_filtro = parametros.get('tipo_filtro', 'diario') if parametros.get('tipo_filtro', 'diario') else 'diario'
+
+
+        if not data_inicial and not data_final:
+
+            ### Tipo de periodo por dia/mes/ano
+            if tipo_filtro=='diario':
+                data_inicial = data_atual - relativedelta(days=10)
+            elif tipo_filtro=='mensal':
+                data_inicial = data_atual - relativedelta(months=12)
+            elif tipo_filtro=='anual':
+                data_inicial = data_atual - relativedelta(years=2)
+            else:
+                return JsonResponse(
+                    {
+                        "error": "Tipo de filtro inválido"
+                    },
+                    content_type="application/json",
+                    status=400
+                )
+
+            data_final = data_atual
+
+        else:
+            try:
+                data_inicial = datetime.strptime(data_inicial, '%d-%m-%Y').date()
+                data_final = datetime.strptime(data_final, '%d-%m-%Y').date()
+
+                if data_final < data_inicial:
+                    raise ValueError()
+            except:
+                return JsonResponse(
+                    {
+                        "error": "Periodo inválido"
+                    },
+                    content_type="application/json",
+                    status=400
+                )
+
+        # gerando o objeto para o relatório de contas a receber
+        valor_total = 0
+        total_venda = 0
+        relatorio_pedidos = []
+        data_base = data_inicial
+        while(data_base <= data_final):
+            if tipo_filtro == 'diario':
+                pedidos = todos_pedidos.filter(
+                    data_criacao__day=data_base.day,
+                    data_criacao__month=data_base.month,
+                    data_criacao__year=data_base.year,
+                )
+            elif tipo_filtro == 'mensal':
+                pedidos = todos_pedidos.filter(
+                    data_criacao__month=data_base.month,
+                    data_criacao__year=data_base.year,
+                )
+            elif tipo_filtro == 'anual':
+                pedidos = todos_pedidos.filter(
+                    data_criacao__year=data_base.year,
+                )
+
+            venda = 0
+            valor = 0
+            for pedido in pedidos:
+                valor += pedido.total if pedido.total else 0
+                valor_total += pedido.total if pedido.total else 0
+                venda +=1
+                total_venda += 1
+
+            data = refatorar_data_por_periodo(data_base, tipo_filtro)
+
+            relatorio_pedidos.append({
+                "data": data,
+                "valor":valor,
+                "numero_de_vendas":venda,
+                "vendas":[PedidosSerializer(s).data for s in pedidos],
+
+            })
+
+            if tipo_filtro=='diario':
+                data_base+=relativedelta(days=1)
+            elif tipo_filtro=='mensal':
+                data_base+= relativedelta(months=1)
+            elif tipo_filtro=='anual':
+                data_base+= relativedelta(years=1)
+
+
+        context = {
+            "relatorio_pedidos": relatorio_pedidos,
+            "valor_total": valor_total,
+            "total_vendas":total_venda,
+        }
+
+        return JsonResponse(
+            context,
+            content_type="application/json"
+        )
