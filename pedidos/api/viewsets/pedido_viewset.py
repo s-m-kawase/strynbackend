@@ -126,8 +126,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
         }
         line_items.append(line_item_taxa_atendimento)
 
-        success_url = f'https://stryn.netlify.app/cliente/sucesso?tab=andamento&status_pedido=Pago&id={pedido.id}'
-        cancel_url = f'https://stryn.netlify.app/cliente/sucesso?tab=andamento&status_pedido=Cancelado&id={pedido.id}'
+        success_url = f'https://stryn.netlify.app/cliente/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
+        cancel_url = f'https://stryn.netlify.app/cliente/pedidos/?tab=andamento&status_pedido=Cancelado&id={pedido.id}'
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -270,15 +270,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
       )
 
       return JsonResponse({"message":'success'})
-
-    @action(detail=True, methods=['get'])
-    def validar_cupom(self,request,pk):
-        pedido = Pedidos.objects.filter(id=pk)
-        cod_cupom = request.GET.get('cod_cupom',None)
-        if pedido.filter(cupom__cod_cupom=cod_cupom).exists():
-            return JsonResponse({"message":'success'})
-        else:
-            return JsonResponse({"message":'cupom não existe'})
 
 
 #--------------------------- relatorio para grafico------------------------------

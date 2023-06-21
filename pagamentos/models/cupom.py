@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 
 class Cupom(models.Model):
     nome = models.CharField(
@@ -39,16 +39,36 @@ class Cupom(models.Model):
         null=True
     )
 
-    def calcular_porcentagem_desconto(self):
-      if self.valor is not None:
-          return int(self.valor)  # Não é necessário multiplicar por 100
-      else:
-          return 0
+    STATUS_CHOICES = (
+        ('Valido', 'Valido'),
+        ('Utilizado', 'Utilizado'),
+        ('Expirado', 'Expirado'),
+    )
+
+    status_cupom = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='Valido'
+    )
+
+    def aplicar_cupom(self, pedido):
+        if self.status_cupom == 'Valido' and self.validado_ate >= timezone.now():
+            self.save()
+            pedido.cupom = self
+            pedido.save()
+            return True
+        else:
+            return False
+
+    def marcar_expirado(self):
+        if self.status_cupom == 'Valido' and self.validado_ate < timezone.now():
+            self.status_cupom = 'Expirado'
+            self.save()
 
 
 
-    def validar_cupom(self):
-        pass
+    def valido_para_aplicar(self):
+        return self.status_cupom == 'Valido' and self.validado_ate >= timezone.now()
 
     def __str__(self):
         return self.nome

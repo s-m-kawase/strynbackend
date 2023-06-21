@@ -7,6 +7,8 @@ from ..serializers.cupom_serializers import *
 from rest_framework.permissions import IsAuthenticated
 from datetime import date, datetime
 from rest_framework.pagination import PageNumberPagination
+from pedidos.models import Pedidos
+from django.core.exceptions import ObjectDoesNotExist
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -16,7 +18,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class CupomViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (IsAuthenticated,)
     queryset = Cupom.objects.all()
     serializer_class = CupomSerializer
 
@@ -26,36 +28,43 @@ class CupomViewSet(viewsets.ModelViewSet):
 
     search_fields = ['nome']
 
+    @action(methods=['post'], detail=False)
+    def validar_cupom(self, request):
+      cod_cupom = request.data.get('cod_cupom', None)
+      pedido_id = request.data.get('pedido_id', None)
 
-    @action(methods=['get'], detail=False)
-    def cupom_valido_ate(self, request):
-        cod_cupom = request.query_params.get('cod_cupom',None)
-        data_atual =datetime.today()
-        mensagem = ''
+      try:
+        cupom = Cupom.objects.get(cod_cupom=cod_cupom)
+        pedido = Pedidos.objects.get(id=pedido_id)
 
-        try: 
-            cupom = Cupom.objects.get(cod_cupom=cod_cupom)
-            cupom_serializado = CupomSerializer(cupom).data
-        except:
-            cupom = None
-            cupom_serializado = None
+      except ObjectDoesNotExist:
+          cupom = None
+          pedido = None
+          return JsonResponse({
+              "message":"error, cupom ou pedido nao existe",
+          })
 
-        if cupom and cupom.validado_ate >= data_atual:
-            mensagem = 'Válido'
-            
-        elif cupom:
-            mensagem ='Expirado'
-        
-        else:
-            mensagem = 'Cupom não encontrado'
 
-            
-        return JsonResponse(
+      cupom_valido = False
+      mensagem = 'Cupom inválido ou expirado'
+
+      if cupom:
+          if cupom.valido_para_aplicar():
+              if cupom.aplicar_cupom(pedido):
+                  cupom_valido = True
+                  mensagem = 'Cupom aplicado com sucesso'
+          else:
+              cupom.marcar_expirado()
+              mensagem = 'Cupom expirado'
+              cupom_valido = False
+
+      cupom_serializado = CupomSerializer(cupom).data if cupom else None
+
+      return JsonResponse(
             {
-                "mensagem":mensagem,
-                "cupom":cupom_serializado
-            }, 
-            content_type="application/json",
+                "cupom": cupom_serializado,
+                "mensagem": mensagem,
+                "cupom_valido": cupom_valido
+            }
         )
-      
 

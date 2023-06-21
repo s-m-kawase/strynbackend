@@ -10,7 +10,7 @@ class CupomAdmin(admin.ModelAdmin):
         'valor',
         'cod_cupom',
         #'validado_ate',
-        
+
     ]
 
     search_fields = [
@@ -21,4 +21,8 @@ class CupomAdmin(admin.ModelAdmin):
 
     list_filter = [
         'valor'
+    ]
+
+    readonly_fields = [
+        'status_cupom'
     ]
