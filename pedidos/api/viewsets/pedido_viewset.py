@@ -382,3 +382,57 @@ class PedidosViewSet(viewsets.ModelViewSet):
             context,
             content_type="application/json"
         )
+
+
+    @action(detail=False, methods=['get'])
+    def relatorio_por_hora(self, request):
+        data_atual = datetime.now()
+        data_inicial = data_atual - timedelta(hours=24)
+        data_final = data_atual
+
+        hora_inicial = data_inicial.replace(minute=0, second=0, microsecond=0)
+        hora_final = data_final.replace(minute=59, second=59, microsecond=999)
+
+        relatorio_por_horario = []
+        total_venda = 0
+        total_valor = 0
+        if hora_inicial <= hora_final:
+            hora_arredondada = hora_inicial
+            while hora_arredondada <= hora_final:
+                pedidos = Pedidos.objects.filter(
+                    data_criacao__range=(hora_arredondada, hora_arredondada.replace(minute=59, second=59, microsecond=999))
+                )
+                venda = 0
+                valor = 0
+                for pedido in pedidos:
+                    valor +=pedido.total if pedido.total else 0
+                    total_valor += pedido.total if pedido.total else 0
+                    venda +=1
+                    total_venda += 1
+
+                data_base = hora_arredondada
+                tipo_filtro = 'horario'
+                data = refatorar_data_por_periodo(data_base, tipo_filtro)
+
+                relatorio_por_horario.append({
+                    "data": data,
+                    "valor": valor,
+                    "numero_de_venda":venda,
+                })
+
+
+                hora_arredondada += timedelta(hours=1)
+        else:
+            pedidos = Pedidos.objects.none()
+
+
+        context = {
+            "relatorio_por_horario": relatorio_por_horario,
+            "valor_total": total_valor,
+            "total_vendas":total_venda,
+        }
+
+        return JsonResponse(
+            context,
+            content_type="application/json"
+        )
