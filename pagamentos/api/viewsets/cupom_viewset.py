@@ -66,3 +66,16 @@ class CupomViewSet(viewsets.ModelViewSet):
             }
         )
 
+    @action(methods=['post'], detail=False)
+    def remover_cupom(self, request):
+        pedido_id = request.data.get('pedido_id',None)
+        try:
+            pedido= Pedidos.objects.get(id=pedido_id)
+            if pedido.cupom:
+                pedido.cupom = None
+                pedido.save()
+                return JsonResponse({"mensagem": "Cupom removido com sucesso"})
+            else:
+                return JsonResponse({"mensagem": "Não ha cupom aplicado"})
+        except Pedidos.DoesNotExist:
+            raise JsonResponse({"mensagem": "Pedido não encontrados"})
