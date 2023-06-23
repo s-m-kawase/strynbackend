@@ -6,11 +6,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
 from rest_framework.decorators import action
-from django.db.models import Sum
-from datetime import date, datetime, timedelta
-from dateutil.relativedelta import relativedelta
 from django.http.response import JsonResponse
-from global_functions.functions import refatorar_data_por_periodo
+from django.db import connection
+from pedidos.models import Restaurante
+
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -47,8 +46,94 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         return query
 
 
+    @action(methods=['get'], detail=False)
+    def pedidos_do_dia(self,request):
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
 
-    @action(detail=False, methods=['GET'])
+        sql_query = f""" select count(valor_pago) as pedidos_hoje,  coalesce(sum(valor_pago),0) as valor_hoje
+                        from pagamentos_pagamento
+                        where pedido_id in (
+                        select id from pedidos_pedidos
+                        WHERE
+                            data_criacao::date = CURRENT_DATE::date and restaurante_id = {restaurante_id.id}
+                            );
+                          """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+    @action(methods=['get'], detail=False)
+    def pedido_do_mes(self,request):
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
+        sql_query = f"""   select count(valor_pago) as pedidos_hoje,  coalesce(sum(valor_pago),0) as valor_hoje
+                          from pagamentos_pagamento
+                          where pedido_id in (
+                          select id from pedidos_pedidos
+                          WHERE
+                              EXTRACT(MONTH FROM data_criacao::date) = EXTRACT(MONTH FROM CURRENT_DATE::date) and restaurante_id = {restaurante_id.id}
+                              );
+                          """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+
+    @action(methods=['get'], detail=False)
+    def ticket_medio_do_dia(self,request):
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
+        sql_query = f""" select  round(coalesce(sum(valor_pago),0)/count(valor_pago),2) ticket_medio
+                        from pagamentos_pagamento
+                        where pedido_id in (
+                        select id from pedidos_pedidos
+                        WHERE
+                            data_criacao::date = CURRENT_DATE::date and restaurante_id = {restaurante_id.id}
+                            );
+                          """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+    @action(methods=['get'], detail=False)
+    def ticket_medio_do_mes(self,request):
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
+        sql_query = f""" select round(coalesce(sum(valor_pago),0)/count(valor_pago),2) ticket_medio
+                        from pagamentos_pagamento
+                        where pedido_id in (
+                        select id from pedidos_pedidos
+                        WHERE
+                            EXTRACT(MONTH FROM data_criacao::date) = EXTRACT(MONTH FROM CURRENT_DATE::date) and restaurante_id = {restaurante_id.id}
+                            );
+                          """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+
+    """ @action(detail=False, methods=['GET'])
     def total_repasse(self, request):
 
         todos_pagamentos = Pagamento.objects.all()
@@ -144,4 +229,4 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         return JsonResponse(
             context,
             content_type="application/json"
-        )
+        ) """

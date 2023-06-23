@@ -18,7 +18,7 @@ class PedidosAdmin(NestedModelAdmin):
     ]
 
     filter_horizontal = [
-    
+
         'adicionais'
     ]
 

@@ -1,3 +1,4 @@
+from django.db import connection
 from rest_framework import viewsets ,filters
 import django_filters.rest_framework
 from pedidos.models import Pedidos,Restaurante, ItensPedido
@@ -274,7 +275,114 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
 #--------------------------- relatorio para grafico------------------------------
 
-    @action(detail=False, methods=['get'])
+
+    @action(methods=['get'], detail=False)
+    def pedidos_por_horario(self,request):
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
+        sql_query = f""" SELECT
+                            (DATE_TRUNC('hour', data_criacao)::time AT TIME ZONE 'UTC+3')::time AS intervalo,
+                            COUNT(*) AS pedidos_concluidos
+                        FROM
+                            pedidos_pedidos
+                        WHERE
+                          data_criacao::date = current_date::date and restaurante_id = {restaurante_id.id}
+                        GROUP BY
+                            intervalo
+                        ORDER BY
+                            intervalo;  """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+    @action(methods=['get'], detail=False)
+    def periodos_por_dia(self,request):
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
+        sql_query = f""" SELECT
+                            data_criacao::date AS intervalo,
+                            COUNT(*) AS contagem
+                        FROM
+                            pedidos_pedidos
+                        WHERE
+                            data_criacao::date >= CURRENT_DATE - INTERVAL '7 days' and restaurante_id = {restaurante_id.id}
+                        GROUP BY
+                            intervalo
+                        ORDER BY
+                            intervalo;
+                              """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+    @action(methods=['get'], detail=False)
+    def venda_do_dia(self,request):
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
+        sql_query = f""" SELECT
+                            (DATE_TRUNC('hour', data_criacao)::time AT TIME ZONE 'UTC+3')::time AS intervalo,
+                            COUNT(*) AS pedidos_concluidos
+                        FROM
+                            pedidos_pedidos
+                        WHERE
+                          data_criacao::date = current_date::date
+                          AND status_pedido = 'Concluído' and restaurante_id = {restaurante_id.id}
+                        GROUP BY
+                            intervalo
+                        ORDER BY
+                            intervalo;
+                          """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+    @action(methods=['get'], detail=False)
+    def vendas_por_mes(self,request):
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
+        sql_query = f""" SELECT
+                            data_criacao::date AS intervalo,
+                            COUNT(*) AS contagem
+                        FROM
+                            pedidos_pedidos
+                        WHERE
+                            EXTRACT(MONTH FROM data_criacao::date) >= EXTRACT(MONTH FROM CURRENT_DATE::date)
+                            AND status_pedido = 'Concluído' and restaurante_id = {restaurante_id.id}
+                        GROUP BY
+                            intervalo
+                        ORDER BY
+                            intervalo;
+                          """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+
+
+
+
+
+    """ @action(detail=False, methods=['get'])
     def relatorio_por_periodo(self,request):
         parametros = self.request.query_params
 
@@ -360,7 +468,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 "data": data,
                 "valor":valor,
                 "numero_de_vendas":venda,
-                "vendas":[PedidosSerializer(s).data for s in pedidos],
+
 
             })
 
@@ -435,4 +543,4 @@ class PedidosViewSet(viewsets.ModelViewSet):
         return JsonResponse(
             context,
             content_type="application/json"
-        )
+        ) """

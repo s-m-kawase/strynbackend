@@ -40,13 +40,11 @@ class CupomViewSet(viewsets.ModelViewSet):
       except ObjectDoesNotExist:
           cupom = None
           pedido = None
-          return JsonResponse({
-              "message":"error, cupom ou pedido nao existe",
-          })
+          cupom_valido = False
+          mensagem = 'Cupom não existe'
 
 
-      cupom_valido = False
-      mensagem = 'Cupom inválido ou expirado'
+
 
       if cupom:
           if cupom.valido_para_aplicar():
