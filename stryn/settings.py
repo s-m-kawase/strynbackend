@@ -94,7 +94,12 @@ DATABASES = {
         'PORT': '5432'#'13829',
     }
 }
-
+""" DATABASES = {
+    'default': config(
+        'DATABASE_URL', default=default_dburl, cast=dburl
+    )
+}
+ """
 USE_AWS = config('USE_AWS', default=False, cast=bool)
 if USE_AWS:
     AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
