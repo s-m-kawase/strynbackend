@@ -47,17 +47,21 @@ class PagamentoViewSet(viewsets.ModelViewSet):
 
 
     @action(methods=['get'], detail=False)
-    def pedidos_do_dia(self,request):
+    def venda_do_dia(self,request):
         usuario = request.user.id
         restaurante_id = Restaurante.objects.get(usuario=usuario)
-
-        sql_query = f""" select count(valor_pago) as pedidos_hoje,  coalesce(sum(valor_pago),0) as valor_hoje
-                        from pagamentos_pagamento
-                        where pedido_id in (
-                        select id from pedidos_pedidos
+        sql_query = f""" SELECT
+                            (DATE_TRUNC('hour', data_criacao)::time AT TIME ZONE 'UTC+3')::time AS intervalo,
+                            COUNT(*) AS pedidos_concluidos
+                        FROM
+                            pedidos_pedidos
                         WHERE
-                            data_criacao::date = CURRENT_DATE::date and restaurante_id = {restaurante_id.id}
-                            );
+                          data_criacao::date = current_date::date
+                          AND status_pedido = 'Concluído' and restaurante_id = {restaurante_id.id}
+                        GROUP BY
+                            intervalo
+                        ORDER BY
+                            intervalo;
                           """
 
         with connection.cursor() as cursor:
@@ -69,16 +73,21 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         return JsonResponse(result_dict, safe=False)
 
     @action(methods=['get'], detail=False)
-    def pedido_do_mes(self,request):
+    def vendas_por_mes(self,request):
         usuario = request.user.id
         restaurante_id = Restaurante.objects.get(usuario=usuario)
-        sql_query = f"""   select count(valor_pago) as pedidos_hoje,  coalesce(sum(valor_pago),0) as valor_hoje
-                          from pagamentos_pagamento
-                          where pedido_id in (
-                          select id from pedidos_pedidos
-                          WHERE
-                              EXTRACT(MONTH FROM data_criacao::date) = EXTRACT(MONTH FROM CURRENT_DATE::date) and restaurante_id = {restaurante_id.id}
-                              );
+        sql_query = f""" SELECT
+                            data_criacao::date AS intervalo,
+                            COUNT(*) AS contagem
+                        FROM
+                            pedidos_pedidos
+                        WHERE
+                            EXTRACT(MONTH FROM data_criacao::date) >= EXTRACT(MONTH FROM CURRENT_DATE::date)
+                            AND status_pedido = 'Concluído' and restaurante_id = {restaurante_id.id}
+                        GROUP BY
+                            intervalo
+                        ORDER BY
+                            intervalo;
                           """
 
         with connection.cursor() as cursor:
