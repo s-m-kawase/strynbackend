@@ -82,24 +82,27 @@ LOGOUT_REDIRECT_URL = "login"
 
 WSGI_APPLICATION = 'stryn.wsgi.application'
 
-
-default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-DATABASES = {
+DEV = config('DEV', default=False, cast=bool)
+if DEV:
+  default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+  DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'stryn_local',#'datacartes_db',
+        'NAME': 'stryn_local',
         'USER': 'postgres',
-        'PASSWORD':'1234',# '820325157f60e02b9c23fd7326748dda',
+        'PASSWORD':'1234',
         'HOST': 'localhost',
-        'PORT': '5432'#'13829',
-    }
-}
-""" DATABASES = {
-    'default': config(
-        'DATABASE_URL', default=default_dburl, cast=dburl
-    )
-}
- """
+          'PORT': '5432'
+      }
+  }
+else:
+  default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+  DATABASES = {
+      'default': config(
+          'DATABASE_URL', default=default_dburl, cast=dburl
+      )
+  }
+
 USE_AWS = config('USE_AWS', default=False, cast=bool)
 if USE_AWS:
     AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
