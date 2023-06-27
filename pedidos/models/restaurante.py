@@ -35,6 +35,11 @@ class Restaurante(models.Model):
         blank=True, null=True,
     )
 
+    baner = models.ImageField(
+        verbose_name='Baner do Restaurante',
+        blank=True, null=True,
+    )
+
     total_mesa = models.IntegerField(
         verbose_name="Total de Mesas",
         blank=True, null=True,

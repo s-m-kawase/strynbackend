@@ -368,6 +368,20 @@ class PedidosViewSet(viewsets.ModelViewSet):
         result_dict = [dict(zip(keys, row)) for row in result]
         return JsonResponse(result_dict, safe=False)
 
+    @action(methods=['get'], detail=False)
+    def select_data(self,request):
+        sql_query = f"""  SELECT DISTINCT to_char( data_criacao::date, 'FMMonthYYYY')
+                          FROM pedidos_pedidos
+                              """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
 
     """ @action(detail=False, methods=['get'])
     def relatorio_por_periodo(self,request):

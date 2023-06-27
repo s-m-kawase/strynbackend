@@ -18,7 +18,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class PagamentoViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (IsAuthenticated,)
     queryset = Pagamento.objects.all()
     serializer_class = PagamentoSerializer
 
@@ -131,6 +131,95 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         WHERE
                             EXTRACT(MONTH FROM data_criacao::date) = EXTRACT(MONTH FROM CURRENT_DATE::date) and restaurante_id = {restaurante_id.id}
                             );
+                          """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+    @action(methods=['post'], detail=False)
+    def financeiro_total_de_venda(self,request):
+        mesano = request.data.get('mesano',None)
+
+        sql_query = f"""  SELECT SUM( ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) , 2) ) AS "Total de vendas"
+                          FROM pagamentos_pagamento pag
+                          LEFT JOIN pedidos_pedidos ped
+                          ON pag.pedido_id = ped.id
+                          LEFT JOIN pagamentos_cupom cup
+                          ON ped.cupom_id = cup.id
+                          WHERE to_char(ped.data_criacao::date, 'FMMonthYYYY') = {mesano}
+                          """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+
+    @action(methods=['post'], detail=False)
+    def financeiro_tabela(self,request):
+        mesano = request.data.get('mesano',None)
+
+        sql_query = f"""  SELECT
+                          ped.data_criacao_f AS "Periodo"
+                          ,ROUND( SUM( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) ) , 2) AS "Recebidos pela operadora"
+                            ,ROUND( SUM( pag.valor_pago * (COALESCE(cup.valor, 0)/100) ) , 2)AS incentivo
+                            ,SUM( pag.valor_pago ) AS total_repasse
+                        FROM pagamentos_pagamento pag
+                        LEFT JOIN (
+                            SELECT
+                                id
+                                ,TO_CHAR(data_criacao::DATE, 'DD/MM') as data_criacao_f
+                                ,data_criacao
+                                ,cupom_id
+                              FROM pedidos_pedidos
+                            ) "ped"
+                        ON pag.pedido_id = ped.id
+                        LEFT JOIN pagamentos_cupom cup
+                        ON ped.cupom_id = cup.id
+                        WHERE to_char(ped.data_criacao::DATE, 'FMMonthYYYY') = {mesano}
+                        GROUP BY ped.data_criacao_f
+                        ORDER BY ped.data_criacao_f DESC
+                          """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+    @action(methods=['post'], detail=False)
+    def financeiro_tabela_por_dia(self,request):
+        data_selecionada = request.data.get('data',None)
+
+        sql_query = f"""  SELECT
+                              ped.data_criacao_f AS "Periodo"
+                              ,ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) , 2) AS "Recebidos pela operadora"
+                              ,ROUND( pag.valor_pago * (COALESCE(cup.valor, 0)/100) , 2) AS incentivo
+                              ,pag.valor_pago AS total_repasse
+                          FROM pagamentos_pagamento pag
+                          LEFT JOIN (
+                              SELECT
+                                  id
+                                  ,TO_CHAR(data_criacao::DATE, 'DD/MM') AS data_criacao_f
+                                  ,data_criacao
+                                  ,cupom_id
+                                FROM pedidos_pedidos
+                              ) "ped"
+                          ON pag.pedido_id = ped.id
+                          LEFT JOIN pagamentos_cupom cup
+                          ON ped.cupom_id = cup.id
+                          WHERE ped.data_criacao::DATE = {data_selecionada}
+                          ORDER BY ped.data_criacao_f DESC
                           """
 
         with connection.cursor() as cursor:
