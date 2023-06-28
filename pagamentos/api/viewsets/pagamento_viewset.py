@@ -151,7 +151,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                           ON pag.pedido_id = ped.id
                           LEFT JOIN pagamentos_cupom cup
                           ON ped.cupom_id = cup.id
-                          WHERE to_char(ped.data_criacao::date, 'FMMonthYYYY') = {mesano}
+                          WHERE to_char(ped.data_criacao::date, 'FMMonthYYYY') = '{mesano}'
                           """
 
         with connection.cursor() as cursor:
@@ -184,7 +184,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         ON pag.pedido_id = ped.id
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
-                        WHERE to_char(ped.data_criacao::DATE, 'FMMonthYYYY') = {mesano}
+                        WHERE to_char(ped.data_criacao::DATE, 'FMMonthYYYY') = '{mesano}'
                         GROUP BY ped.data_criacao_f
                         ORDER BY ped.data_criacao_f DESC
                           """
@@ -218,7 +218,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                           ON pag.pedido_id = ped.id
                           LEFT JOIN pagamentos_cupom cup
                           ON ped.cupom_id = cup.id
-                          WHERE ped.data_criacao::DATE = {data_selecionada}
+                          WHERE ped.data_criacao::DATE = '{data_selecionada}'
                           ORDER BY ped.data_criacao_f DESC
                           """
 
