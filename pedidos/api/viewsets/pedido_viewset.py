@@ -370,8 +370,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def select_data(self,request):
-        sql_query = f"""  SELECT DISTINCT to_char( data_criacao::date, 'FMMonthYYYY')
-                          FROM pedidos_pedidos
+        sql_query = f"""  SELECT DISTINCT to_char( data_criacao::date, 'MM-YYYY')
+                            FROM pedidos_pedidos
                               """
 
         with connection.cursor() as cursor:
