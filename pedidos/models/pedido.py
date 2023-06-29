@@ -115,7 +115,7 @@ class Pedidos(models.Model):
 
     @property
     def total(self):
-
+        taxa_servico = 0
         adicionais = 0
         for adicional in self.adicionais.all():
             adicionais += float(adicional.valor)
@@ -143,7 +143,7 @@ class Pedidos(models.Model):
         return round(total, 2)
     @property
     def total_taxa_servico_no_pedido(self):
-      taxa = float(self.restaurante.taxa_servico ) if self.restaurante else None
+      taxa = float(self.restaurante.taxa_servico ) if self.restaurante else 0
       taxa_total_servico = round(float(self.subtotal) * (taxa/100),2)
 
       context = ({

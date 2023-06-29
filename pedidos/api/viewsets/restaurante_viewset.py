@@ -16,7 +16,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class RestauranteViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = Restaurante.objects.all()
     serializer_class = RestauranteSerializer
 

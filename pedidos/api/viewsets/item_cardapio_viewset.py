@@ -16,7 +16,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class ItemCardapioViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = ItemCardapio.objects.all()
     serializer_class = ItemCardapioSerializer
 

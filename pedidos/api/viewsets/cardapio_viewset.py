@@ -20,7 +20,7 @@ class IsAdminOrReadOnly(BasePermission):
 
 class CardapioViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = [IsAuthenticated | IsAdminOrReadOnly ]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
     queryset = Cardapio.objects.all()
     serializer_class = CardapioSerializer
 
