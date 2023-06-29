@@ -145,14 +145,15 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     def financeiro_total_de_venda(self,request):
         mesano = request.data.get('mesano',None)
 
-        sql_query = f"""  SELECT SUM( ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) , 2) ) AS "Total de vendas"
-                          FROM pagamentos_pagamento pag
-                          LEFT JOIN pedidos_pedidos ped
-                          ON pag.pedido_id = ped.id
-                          LEFT JOIN pagamentos_cupom cup
-                          ON ped.cupom_id = cup.id
-                          WHERE to_char(ped.data_criacao::date, 'FMMonthYYYY') = '{mesano}'
-                          """
+        sql_query = f"""SELECT
+                            SUM( ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) , 2) ) AS "total_de_vendas"
+                        FROM pagamentos_pagamento pag
+                        LEFT JOIN pedidos_pedidos ped
+                        ON pag.pedido_id = ped.id
+                        LEFT JOIN pagamentos_cupom cup
+                        ON ped.cupom_id = cup.id
+                        WHERE to_char(ped.data_criacao::date, 'DD/MM/YYYY') = '{mesano}'
+                    """
 
         with connection.cursor() as cursor:
             cursor.execute(sql_query)
@@ -167,9 +168,9 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     def financeiro_tabela(self,request):
         mesano = request.data.get('mesano',None)
 
-        sql_query = f"""  SELECT
-                          ped.data_criacao_f AS "Periodo"
-                          ,ROUND( SUM( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) ) , 2) AS "Recebidos pela operadora"
+        sql_query = f"""SELECT
+                            ped.data_criacao_f AS "periodo", data_criacao2 AS "data_criacao"
+                            ,ROUND( SUM( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) ) , 2) AS "recebidos_pela_operadora"
                             ,ROUND( SUM( pag.valor_pago * (COALESCE(cup.valor, 0)/100) ) , 2)AS incentivo
                             ,SUM( pag.valor_pago ) AS total_repasse
                         FROM pagamentos_pagamento pag
@@ -177,17 +178,18 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                             SELECT
                                 id
                                 ,TO_CHAR(data_criacao::DATE, 'DD/MM') as data_criacao_f
+                                ,TO_CHAR(data_criacao::DATE, 'DD/MM/YYYY') as data_criacao2
                                 ,data_criacao
                                 ,cupom_id
-                              FROM pedidos_pedidos
+                            FROM pedidos_pedidos
                             ) "ped"
                         ON pag.pedido_id = ped.id
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
-                        WHERE to_char(ped.data_criacao::DATE, 'FMMonthYYYY') = '{mesano}'
-                        GROUP BY ped.data_criacao_f
+                        WHERE to_char(ped.data_criacao::date, 'YYYY/MM') = '{mesano}'
+                        GROUP BY ped.data_criacao_f,data_criacao2
                         ORDER BY ped.data_criacao_f DESC
-                          """
+                    """
 
         with connection.cursor() as cursor:
             cursor.execute(sql_query)
@@ -202,8 +204,8 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         data_selecionada = request.data.get('data',None)
 
         sql_query = f"""  SELECT
-                              ped.data_criacao_f AS "Periodo"
-                              ,ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) , 2) AS "Recebidos pela operadora"
+                              ped.data_criacao_f AS "periodo"
+                              ,ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) , 2) AS "recebidos_pela_operadora"
                               ,ROUND( pag.valor_pago * (COALESCE(cup.valor, 0)/100) , 2) AS incentivo
                               ,pag.valor_pago AS total_repasse
                           FROM pagamentos_pagamento pag
