@@ -183,11 +183,11 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                                 ,cupom_id
                             FROM pedidos_pedidos
                             ) "ped"
-                        ON pag.pedido_id = ped.id
-                        LEFT JOIN pagamentos_cupom cup
-                        ON ped.cupom_id = cup.id
-                        WHERE to_char(ped.data_criacao::date, 'YYYY/MM') = TO_CHAR('{mesano}'::date,'YYYY/MM')
-                        GROUP BY ped.data_criacao_f,data_criacao2
+                        ON pag.pedido_id = ped.id 
+                        LEFT JOIN pagamentos_cupom cup 
+                        ON ped.cupom_id = cup.id 
+                        WHERE to_char(ped.data_criacao::DATE, 'FMMonthYYYY') = '{mesano}'
+                        GROUP BY ped.data_criacao_f,data_criacao2 
                         ORDER BY ped.data_criacao_f DESC
                     """
 

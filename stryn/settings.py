@@ -84,15 +84,15 @@ WSGI_APPLICATION = 'stryn.wsgi.application'
 
 DEV = config('DEV', default=False, cast=bool)
 if DEV:
-  default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-  DATABASES = {
+    default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'stryn_local',
-        'USER': 'postgres',
-        'PASSWORD':'1234',
+        'USER': 'Altamiro',
+        'PASSWORD':'Teste123',
         'HOST': 'localhost',
-          'PORT': '5432'
+        'PORT': '5432'
       }
   }
 else:
