@@ -13,7 +13,7 @@ class CardapioComOrdemViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
 
     search_fields = [
-        
+
     ]
 
 
