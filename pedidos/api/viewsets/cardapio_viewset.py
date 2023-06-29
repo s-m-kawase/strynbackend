@@ -34,12 +34,26 @@ class CardapioViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         query = super().get_queryset()
+        parametro = self.request.query_params
+        cardapio = parametro.get('cardapio',None)
+        restaurante = parametro.get('restaurante',None)
 
         # Verifica se o usuário é anônimo
-        if not self.request.user.is_anonymous:
-            usuario = self.request.user
-            query = query.filter(restaurante__usuario=usuario)
+        if self.request.user.is_authenticated:
+            if cardapio:
+                query = query.filter(id=cardapio)
+            else:
+              usuario = self.request.user
+              print(usuario)
+              query = query.filter(restaurante__usuario=usuario)
 
-        """ usuario = self.request.user
-        query = query.filter(restaurante__usuario=usuario)"""
+
+        elif self.request.user.is_anonymous:
+            if cardapio and restaurante:
+              query = query.filter(
+                  id=cardapio,
+                  restaurante=restaurante
+              )
+            
+
         return query
