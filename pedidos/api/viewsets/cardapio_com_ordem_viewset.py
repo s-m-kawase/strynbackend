@@ -13,14 +13,35 @@ class CardapioComOrdemViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
 
     search_fields = [
-        
+
     ]
 
 
     def get_queryset(self):
-            query = super().get_queryset()
+        query = super().get_queryset()
 
-            usuario = self.request.user
-            query = query.filter(restaurante__usuario=usuario)
+        parametro = self.request.query_params
+        cardapio = parametro.get('cardapio',None)
+        restaurante = parametro.get('restaurante',None)
+        ordem = parametro.get('ordem',None)
 
-            return query
+        # Verifica se o usuário é anônimo
+        if self.request.user.is_authenticated:
+            if cardapio:
+                query = query.filter(cardapio=cardapio)
+            else:
+              usuario = self.request.user
+              print(usuario)
+              query = query.filter(restaurante__usuario=usuario)
+
+
+        elif self.request.user.is_anonymous:
+            if cardapio and restaurante:
+              query = query.filter(
+                  id=ordem,
+                  cardapio=cardapio,
+                  cardapio_restaurante=restaurante
+              )
+
+
+        return query
