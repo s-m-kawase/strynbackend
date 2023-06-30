@@ -23,12 +23,12 @@ class CardapioComOrdemViewSet(viewsets.ModelViewSet):
         parametro = self.request.query_params
         cardapio = parametro.get('cardapio',None)
         restaurante = parametro.get('restaurante',None)
-        ordem = parametro.get('ordem',None)
+        
 
         # Verifica se o usuário é anônimo
         if self.request.user.is_authenticated:
             if cardapio:
-                query = query.filter(cardapio=cardapio)
+                query = query.filter(id=cardapio)
             else:
               usuario = self.request.user
               print(usuario)
@@ -38,9 +38,8 @@ class CardapioComOrdemViewSet(viewsets.ModelViewSet):
         elif self.request.user.is_anonymous:
             if cardapio and restaurante:
               query = query.filter(
-                  id=ordem,
-                  cardapio=cardapio,
-                  cardapio_restaurante=restaurante
+                  id=cardapio,
+                  restaurante=restaurante
               )
 
 
