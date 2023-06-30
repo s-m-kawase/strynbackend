@@ -13,7 +13,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class ClienteViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
 
