@@ -89,8 +89,8 @@ if DEV:
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'stryn_local',
-        'USER': 'Altamiro',
-        'PASSWORD':'Teste123',
+        'USER': 'postgres',
+        'PASSWORD':'1234',
         'HOST': 'localhost',
         'PORT': '5432'
       }

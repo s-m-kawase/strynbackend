@@ -1,6 +1,7 @@
 from rest_framework import viewsets , filters
 import django_filters.rest_framework
 from pedidos.models import ItemCardapio
+from rest_framework.permissions import BasePermission
 from ..serializers.grupo_complemento_item_serializer import GrupoComplementosSerializer
 from ..serializers.item_cardapio_serializer import *
 from rest_framework.permissions import IsAuthenticated
@@ -13,10 +14,16 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 1000
 
+class IsAdminOrReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        if request.method in ('GET', 'HEAD', 'OPTIONS'):
+            return True
+        return request.user and request.user.is_superuser
+
 
 class ItemCardapioViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminOrReadOnly,)
     queryset = ItemCardapio.objects.all()
     serializer_class = ItemCardapioSerializer
 
@@ -47,7 +54,7 @@ class ItemCardapioViewSet(viewsets.ModelViewSet):
 
         context = {
             "relatorio_complemento": relatorio_complementos,
-            
+
         }
 
         return JsonResponse(
