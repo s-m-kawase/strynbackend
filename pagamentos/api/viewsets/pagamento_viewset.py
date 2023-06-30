@@ -103,9 +103,9 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     def ticket_medio_do_dia(self,request):
         usuario = request.user.id
         restaurante_id = Restaurante.objects.get(usuario=usuario)
-        sql_query = f"""SELECT 
+        sql_query = f"""SELECT
                             CASE
-                                WHEN COUNT(valor_pago) = 0 THEN 0 
+                                WHEN COUNT(valor_pago) = 0 THEN 0
                                 ELSE ROUND(SUM(valor_pago) / COUNT(valor_pago), 2)
                             END AS ticket_medio
                         FROM pagamentos_pagamento
@@ -129,7 +129,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         restaurante_id = Restaurante.objects.get(usuario=usuario)
         sql_query = f""" SELECT
                             CASE
-                                WHEN COUNT(valor_pago) = 0 THEN 0 
+                                WHEN COUNT(valor_pago) = 0 THEN 0
                                 ELSE ROUND(SUM(valor_pago) / COUNT(valor_pago), 2)
                             END AS ticket_medio
                         FROM pagamentos_pagamento
@@ -138,8 +138,8 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                             WHERE EXTRACT(MONTH FROM data_criacao::date) = EXTRACT(MONTH FROM CURRENT_DATE::date)
                                 AND restaurante_id = {restaurante_id.id});
                           """
-        
-        
+
+
 
         with connection.cursor() as cursor:
             cursor.execute(sql_query)
@@ -160,7 +160,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         ON pag.pedido_id = ped.id
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
-                        WHERE to_char(ped.data_criacao::date, 'DD/MM/YYYY') = TO_CHAR('{mesano}'::date,'YYYY/MM')
+                        WHERE to_char(ped.data_criacao::date, 'YYYY/MM') = to_char(to_date('{mesano}', 'MonthYYYY'), 'YYYY/MM')
                     """
 
         with connection.cursor() as cursor:
@@ -191,11 +191,11 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                                 ,cupom_id
                             FROM pedidos_pedidos
                             ) "ped"
-                        ON pag.pedido_id = ped.id 
-                        LEFT JOIN pagamentos_cupom cup 
-                        ON ped.cupom_id = cup.id 
+                        ON pag.pedido_id = ped.id
+                        LEFT JOIN pagamentos_cupom cup
+                        ON ped.cupom_id = cup.id
                         WHERE to_char(ped.data_criacao::DATE, 'FMMonthYYYY') = '{mesano}'
-                        GROUP BY ped.data_criacao_f,data_criacao2 
+                        GROUP BY ped.data_criacao_f,data_criacao2
                         ORDER BY ped.data_criacao_f DESC
                     """
 
@@ -233,7 +233,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         ON ped.cupom_id = cup.id
                         LEFT JOIN pedidos_restaurante rest
                         ON ped.restaurante_id = rest.id
-                        WHERE ped.data_criacao::DATE = '{data_selecionada}'::DATE  --'2023-06-20'::date  --{data_selecionada} 
+                        WHERE ped.data_criacao::DATE = '{data_selecionada}'::DATE  --'2023-06-20'::date  --{data_selecionada}
                         ORDER BY ped.data_criacao_f DESC
                           """
 
