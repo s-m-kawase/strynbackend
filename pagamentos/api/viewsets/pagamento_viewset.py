@@ -18,7 +18,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class PagamentoViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     queryset = Pagamento.objects.all()
     serializer_class = PagamentoSerializer
 
@@ -40,9 +40,14 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         query = super().get_queryset()
 
+        mesa = self.request.query_params.get('mesa', None)
         usuario = self.request.user
-        query = query.filter(Q(pedido__cliente__usuario=usuario) |
-                             Q(pedido__restaurante__usuario=usuario))
+        if usuario.is_authenticated:
+          query = query.filter(Q(pedido__cliente__usuario=usuario) |
+                              Q(pedido__restaurante__usuario=usuario))
+        else:
+            query = query.filter(Q(pedido__numero_mesa=mesa,pagamento='Pagamento na mesa')|
+                                 Q(pedido__numero_mesa=mesa,pagamento='Pagamento online'))
         return query
 
 

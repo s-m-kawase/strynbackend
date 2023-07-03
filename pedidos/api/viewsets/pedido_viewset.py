@@ -73,8 +73,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
             elif status:
               query = query.filter(status_pedido=status)
         else:
-            query = query.filter(Q(restaurante=restaurante)|
-                                 Q(numero_mesa=mesa))
+            query = query.filter(numero_mesa=mesa,
+                                 status_pedido='Em preparo')
 
         return query
 
