@@ -103,13 +103,16 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     def ticket_medio_do_dia(self,request):
         usuario = request.user.id
         restaurante_id = Restaurante.objects.get(usuario=usuario)
-        sql_query = f""" select  round(coalesce(sum(valor_pago),0)/count(valor_pago),2) ticket_medio
-                        from pagamentos_pagamento
-                        where pedido_id in (
-                        select id from pedidos_pedidos
-                        WHERE
-                            data_criacao::date = CURRENT_DATE::date and restaurante_id = {restaurante_id.id}
-                            );
+        sql_query = f"""SELECT
+                            CASE
+                                WHEN COUNT(valor_pago) = 0 THEN 0
+                                ELSE ROUND(SUM(valor_pago) / COUNT(valor_pago), 2)
+                            END AS ticket_medio
+                        FROM pagamentos_pagamento
+                        WHERE pedido_id in (
+                            SELECT id FROM pedidos_pedidos
+                            WHERE data_criacao::date = CURRENT_DATE::date
+                                AND restaurante_id = {restaurante_id.id});
                           """
 
         with connection.cursor() as cursor:
@@ -124,14 +127,19 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     def ticket_medio_do_mes(self,request):
         usuario = request.user.id
         restaurante_id = Restaurante.objects.get(usuario=usuario)
-        sql_query = f""" select round(coalesce(sum(valor_pago),0)/count(valor_pago),2) ticket_medio
-                        from pagamentos_pagamento
-                        where pedido_id in (
-                        select id from pedidos_pedidos
-                        WHERE
-                            EXTRACT(MONTH FROM data_criacao::date) = EXTRACT(MONTH FROM CURRENT_DATE::date) and restaurante_id = {restaurante_id.id}
-                            );
+        sql_query = f""" SELECT
+                            CASE
+                                WHEN COUNT(valor_pago) = 0 THEN 0
+                                ELSE ROUND(SUM(valor_pago) / COUNT(valor_pago), 2)
+                            END AS ticket_medio
+                        FROM pagamentos_pagamento
+                        WHERE pedido_id in (
+                            SELECT id from pedidos_pedidos
+                            WHERE EXTRACT(MONTH FROM data_criacao::date) = EXTRACT(MONTH FROM CURRENT_DATE::date)
+                                AND restaurante_id = {restaurante_id.id});
                           """
+
+
 
         with connection.cursor() as cursor:
             cursor.execute(sql_query)
@@ -152,7 +160,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         ON pag.pedido_id = ped.id
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
-                        WHERE to_char(ped.data_criacao::date, 'DD/MM/YYYY') = TO_CHAR('{mesano}'::date,'YYYY/MM')
+                        WHERE to_char(ped.data_criacao::date, 'YYYY/MM') = to_char(to_date('{mesano}', 'MonthYYYY'), 'YYYY/MM')
                     """
 
         with connection.cursor() as cursor:
@@ -203,25 +211,30 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     def financeiro_tabela_por_dia(self,request):
         data_selecionada = request.data.get('data',None)
 
-        sql_query = f"""  SELECT
-                              ped.data_criacao_f AS "periodo"
-                              ,ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) , 2) AS "recebidos_pela_operadora"
-                              ,ROUND( pag.valor_pago * (COALESCE(cup.valor, 0)/100) , 2) AS incentivo
-                              ,pag.valor_pago AS total_repasse
-                          FROM pagamentos_pagamento pag
-                          LEFT JOIN (
-                              SELECT
-                                  id
-                                  ,TO_CHAR(data_criacao::DATE, 'DD/MM') AS data_criacao_f
-                                  ,data_criacao
-                                  ,cupom_id
-                                FROM pedidos_pedidos
-                              ) "ped"
-                          ON pag.pedido_id = ped.id
-                          LEFT JOIN pagamentos_cupom cup
-                          ON ped.cupom_id = cup.id
-                          WHERE ped.data_criacao::DATE = '{data_selecionada}'
-                          ORDER BY ped.data_criacao_f DESC
+        sql_query = f""" SELECT
+                            ped.data_criacao_f AS periodo
+                            ,ped.id--,pag.codigo_pagamento AS pedido
+                            ,ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/110)) - (pag.valor_pago * (rest.taxa_servico::numeric(10, 2)/110::numeric(10, 2))), 2)::numeric(10, 2) AS valor_dos_itens
+                            ,ROUND( pag.valor_pago * taxa_servico::numeric(10, 2)/110::numeric(10, 2) , 2) AS taxa_servico
+                            ,ROUND( pag.valor_pago * (COALESCE(cup.valor, 0)::numeric(10, 2) / 100::numeric(10, 2)) , 2) AS incentivo
+                            ,pag.valor_pago AS total
+                        FROM pagamentos_pagamento pag
+                        LEFT JOIN (
+                            SELECT
+                                id
+                                ,TO_CHAR(data_criacao::DATE, 'DD/MM/YYYY') AS data_criacao_f
+                                ,data_criacao
+                                ,cupom_id
+                                ,restaurante_id
+                            FROM pedidos_pedidos
+                        ) "ped"
+                        ON pag.pedido_id = ped.id
+                        LEFT JOIN pagamentos_cupom cup
+                        ON ped.cupom_id = cup.id
+                        LEFT JOIN pedidos_restaurante rest
+                        ON ped.restaurante_id = rest.id
+                        WHERE ped.data_criacao::DATE = '{data_selecionada}'::DATE  --'2023-06-20'::date  --{data_selecionada}
+                        ORDER BY ped.data_criacao_f DESC
                           """
 
         with connection.cursor() as cursor:

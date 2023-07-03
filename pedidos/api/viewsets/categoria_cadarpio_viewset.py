@@ -1,5 +1,6 @@
 from rest_framework import viewsets, filters
 import django_filters.rest_framework
+from rest_framework.permissions import BasePermission
 from pedidos.models.cardapio import Cardapio
 from pedidos.models import CategoriaCardapio
 from ..serializers.categoria_cardapio_serializer import *
@@ -12,9 +13,15 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 1000
 
+class IsAdminOrReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        if request.method in ('GET', 'HEAD', 'OPTIONS'):
+            return True
+        return request.user and request.user.is_superuser
+
 class CategoriaCardapioViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminOrReadOnly,)
     queryset = CategoriaCardapio.objects.all()
     serializer_class = CategoriaCardapioSerializer
 
@@ -36,5 +43,5 @@ class CategoriaCardapioViewSet(viewsets.ModelViewSet):
             ids_categorias = list(set(ids_categorias))
 
             query = query.filter(id__in=ids_categorias)
-        
+
         return query
