@@ -53,6 +53,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         usuario = self.request.user
         restaurante = self.request.query_params.get('restaurante',None)
+        mesa = self.request.query_params.get('mesa',None)
         status = self.request.query_params.get('status_pedido',None)
         data_inicial =  self.request.query_params.get('data_inicial',None)
         data_final = self.request.query_params.get('data_final', None)
@@ -63,14 +64,17 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 data_criacao__gte=data_inicial
             )
 
-        elif usuario.is_authenticated:
-          query = query.filter(Q(cliente__usuario=usuario) |
-                          Q(restaurante__usuario=usuario))
-        elif restaurante:
-            query = query.filter(restaurante=restaurante)
+        if usuario.is_authenticated:
+            query = query.filter(Q(cliente__usuario=usuario) |
+                            Q(restaurante__usuario=usuario))
+            if restaurante:
+              query = query.filter(restaurante=restaurante)
 
-        elif status:
-            query = query.filter(status_pedido=status)
+            elif status:
+              query = query.filter(status_pedido=status)
+        else:
+            query = query.filter(Q(restaurante=restaurante)|
+                                 Q(numero_mesa=mesa))
 
         return query
 
