@@ -1,21 +1,18 @@
 from django.db import connection
 from rest_framework import viewsets ,filters
 import django_filters.rest_framework
-from pedidos.models import Pedidos,Restaurante, ItensPedido
+from pedidos.models import Pedidos,Restaurante
 from pagamentos.models import Pagamento
 from django.db.models import Q
 from ..serializers.pedido_serializer import *
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from django.http.response import JsonResponse
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 import stripe
 from decouple import config
-from global_functions.functions import refatorar_data_por_periodo
-from django.db.models import Sum
-from dateutil.relativedelta import relativedelta
-from datetime import date, datetime, timedelta
+
 
 stripe_secret_key = config('STRIPE_SECRET_KEY')
 stripe.api_key = stripe_secret_key
@@ -40,7 +37,7 @@ def criar_cupom(pedido):
 
 class PedidosViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     queryset = Pedidos.objects.all().order_by('-data_criacao')
     serializer_class = PedidosSerializer
 
@@ -55,9 +52,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
         query = super().get_queryset()
 
         usuario = self.request.user
-        query = query.filter(Q(cliente__usuario=usuario) |
-                             Q(restaurante__usuario=usuario))
-
         restaurante = self.request.query_params.get('restaurante',None)
         status = self.request.query_params.get('status_pedido',None)
         data_inicial =  self.request.query_params.get('data_inicial',None)
@@ -69,14 +63,14 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 data_criacao__gte=data_inicial
             )
 
-        if restaurante:
+        elif usuario.is_authenticated:
+          query = query.filter(Q(cliente__usuario=usuario) |
+                          Q(restaurante__usuario=usuario))
+        elif restaurante:
             query = query.filter(restaurante=restaurante)
 
-        if status:
+        elif status:
             query = query.filter(status_pedido=status)
-
-        if usuario:
-            query = query.filter(restaurante__usuario=usuario)
 
         return query
 
@@ -383,165 +377,3 @@ class PedidosViewSet(viewsets.ModelViewSet):
         return JsonResponse(result_dict, safe=False)
 
 
-    """ @action(detail=False, methods=['get'])
-    def relatorio_por_periodo(self,request):
-        parametros = self.request.query_params
-
-        todos_pedidos = Pedidos.objects.all()
-
-        # manipulação do periodo
-        data_atual = date.today()
-
-        data_inicial = parametros.get('data_inicial', False)
-        data_final = parametros.get('data_final', False)
-        tipo_filtro = parametros.get('tipo_filtro', 'diario') if parametros.get('tipo_filtro', 'diario') else 'diario'
-
-
-        if not data_inicial and not data_final:
-
-            ### Tipo de periodo por dia/mes/ano
-            if tipo_filtro=='diario':
-                data_inicial = data_atual - relativedelta(days=10)
-            elif tipo_filtro=='mensal':
-                data_inicial = data_atual - relativedelta(months=12)
-            elif tipo_filtro=='anual':
-                data_inicial = data_atual - relativedelta(years=2)
-            else:
-                return JsonResponse(
-                    {
-                        "error": "Tipo de filtro inválido"
-                    },
-                    content_type="application/json",
-                    status=400
-                )
-
-            data_final = data_atual
-
-        else:
-            try:
-                data_inicial = datetime.strptime(data_inicial, '%d-%m-%Y').date()
-                data_final = datetime.strptime(data_final, '%d-%m-%Y').date()
-
-                if data_final < data_inicial:
-                    raise ValueError()
-            except:
-                return JsonResponse(
-                    {
-                        "error": "Periodo inválido"
-                    },
-                    content_type="application/json",
-                    status=400
-                )
-
-        # gerando o objeto para o relatório de contas a receber
-        valor_total = 0
-        total_venda = 0
-        relatorio_pedidos = []
-        data_base = data_inicial
-        while(data_base <= data_final):
-            if tipo_filtro == 'diario':
-                pedidos = todos_pedidos.filter(
-                    data_criacao__day=data_base.day,
-                    data_criacao__month=data_base.month,
-                    data_criacao__year=data_base.year,
-                )
-            elif tipo_filtro == 'mensal':
-                pedidos = todos_pedidos.filter(
-                    data_criacao__month=data_base.month,
-                    data_criacao__year=data_base.year,
-                )
-            elif tipo_filtro == 'anual':
-                pedidos = todos_pedidos.filter(
-                    data_criacao__year=data_base.year,
-                )
-
-            venda = 0
-            valor = 0
-            for pedido in pedidos:
-                valor += pedido.total if pedido.total else 0
-                valor_total += pedido.total if pedido.total else 0
-                venda +=1
-                total_venda += 1
-
-            data = refatorar_data_por_periodo(data_base, tipo_filtro)
-
-            relatorio_pedidos.append({
-                "data": data,
-                "valor":valor,
-                "numero_de_vendas":venda,
-
-
-            })
-
-            if tipo_filtro=='diario':
-                data_base+=relativedelta(days=1)
-            elif tipo_filtro=='mensal':
-                data_base+= relativedelta(months=1)
-            elif tipo_filtro=='anual':
-                data_base+= relativedelta(years=1)
-
-
-        context = {
-            "relatorio_pedidos": relatorio_pedidos,
-            "valor_total": valor_total,
-            "total_vendas":total_venda,
-        }
-
-        return JsonResponse(
-            context,
-            content_type="application/json"
-        )
-
-
-    @action(detail=False, methods=['get'])
-    def relatorio_por_hora(self, request):
-        data_atual = datetime.now()
-        data_inicial = data_atual - timedelta(hours=24)
-        data_final = data_atual
-
-        hora_inicial = data_inicial.replace(minute=0, second=0, microsecond=0)
-        hora_final = data_final.replace(minute=59, second=59, microsecond=999)
-
-        relatorio_por_horario = []
-        total_venda = 0
-        total_valor = 0
-        if hora_inicial <= hora_final:
-            hora_arredondada = hora_inicial
-            while hora_arredondada <= hora_final:
-                pedidos = Pedidos.objects.filter(
-                    data_criacao__range=(hora_arredondada, hora_arredondada.replace(minute=59, second=59, microsecond=999))
-                )
-                venda = 0
-                valor = 0
-                for pedido in pedidos:
-                    valor +=pedido.total if pedido.total else 0
-                    total_valor += pedido.total if pedido.total else 0
-                    venda +=1
-                    total_venda += 1
-
-                data_base = hora_arredondada
-                tipo_filtro = 'horario'
-                data = refatorar_data_por_periodo(data_base, tipo_filtro)
-
-                relatorio_por_horario.append({
-                    "data": data,
-                    "valor": valor,
-                    "numero_de_venda":venda,
-                })
-
-
-                hora_arredondada += timedelta(hours=1)
-        else:
-            pedidos = Pedidos.objects.none()
-
-
-        context = {
-            "relatorio_por_horario": relatorio_por_horario,
-            "valor_total": total_valor,
-            "total_vendas":total_venda,
-        }
-
-        return JsonResponse(
-            context,
-            content_type="application/json"
-        ) """

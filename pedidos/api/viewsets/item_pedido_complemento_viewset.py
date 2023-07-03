@@ -13,7 +13,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class ItensPedidoComplementosViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     queryset = ItensPedidoComplementos.objects.all()
     serializer_class = ItensPedidoComplementosSerializer
 

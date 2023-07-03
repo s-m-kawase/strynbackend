@@ -13,13 +13,12 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class ItensPedidoViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     queryset = ItensPedido.objects.all()
     serializer_class = ItensPedidoSerializer
 
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
 
-    filterset_fields = ['quantidade','item']
+    filterset_fields = ['quantidade','item','pedido']
 
     search_fields = ['item__name']
-   

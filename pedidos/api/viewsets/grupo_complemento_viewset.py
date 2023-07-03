@@ -14,7 +14,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class GrupoComplementosViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     queryset = GrupoComplementos.objects.all()
     serializer_class = GrupoComplementosSerializer
 
@@ -23,11 +23,11 @@ class GrupoComplementosViewSet(viewsets.ModelViewSet):
     filterset_fields = ['obrigatoriedade','quantidade_minima','quantidade_maxima']
 
     search_fields = ['nome']
-    
+
     def get_queryset(self):
         query = super().get_queryset()
         usuario = self.request.user.id
         #usuario = usuario.get_username()
         query = query.filter(cardapio__restaurante__usuario=usuario).distinct()
 
-        return query 
+        return query

@@ -14,7 +14,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class ComplementosViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     queryset = Complementos.objects.all()
     serializer_class = ComplementosSerializer
 
@@ -23,7 +23,7 @@ class ComplementosViewSet(viewsets.ModelViewSet):
     filterset_fields = ['status_venda']
 
     search_fields = ['nome']
-    
+
     def get_queryset(self):
         query = super().get_queryset()
         usuario = self.request.user.id

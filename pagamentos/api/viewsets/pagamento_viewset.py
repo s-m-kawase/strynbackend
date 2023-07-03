@@ -183,11 +183,11 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                                 ,cupom_id
                             FROM pedidos_pedidos
                             ) "ped"
-                        ON pag.pedido_id = ped.id 
-                        LEFT JOIN pagamentos_cupom cup 
-                        ON ped.cupom_id = cup.id 
+                        ON pag.pedido_id = ped.id
+                        LEFT JOIN pagamentos_cupom cup
+                        ON ped.cupom_id = cup.id
                         WHERE to_char(ped.data_criacao::DATE, 'FMMonthYYYY') = '{mesano}'
-                        GROUP BY ped.data_criacao_f,data_criacao2 
+                        GROUP BY ped.data_criacao_f,data_criacao2
                         ORDER BY ped.data_criacao_f DESC
                     """
 
@@ -232,101 +232,3 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         result_dict = [dict(zip(keys, row)) for row in result]
         return JsonResponse(result_dict, safe=False)
 
-
-    """ @action(detail=False, methods=['GET'])
-    def total_repasse(self, request):
-
-        todos_pagamentos = Pagamento.objects.all()
-      # Filtros por dia , semana ,mes e ano
-        parametros = self.request.query_params
-        data_atual = date.today()
-
-        data_inicial = parametros.get('data_inicial',None)
-        data_final = parametros.get('data_final',None)
-        tipo_filtro = parametros.get('tipo_filtro','diario') if parametros.get('tipo_filtro','diario') else 'diario'
-
-        try:
-            data_inicial = datetime.strptime(data_inicial, '%d-%m-%Y').date()
-            data_final = datetime.strptime(data_final, '%d-%m-%Y').date()
-
-            if data_final < data_inicial:
-                raise ValueError()
-        except ValueError:
-            return JsonResponse(
-                {
-                    "error": "Período inválido"
-                },
-                content_type="application/json",
-                status=400
-            )
-        valor_total = 0
-        total_repasse = 0
-        relatorio_diario = []
-        relatorio_repase = []
-        data_base = data_inicial
-        while data_base <= data_final:
-            if tipo_filtro == 'diario':
-                pagamentos = todos_pagamentos.filter(
-                   pedido__data_criacao__day=data_base.day,
-                   pedido__data_criacao__month=data_base.month,
-                   pedido__data_criacao__year=data_base.year,
-                )
-            elif tipo_filtro == 'semanal':
-                start_date = data_base - timedelta(days=data_base.weekday())
-                end_date = start_date + timedelta(days=6)
-                pagamentos = todos_pagamentos.filter(
-                    pedido__data_criacao__range=(start_date, end_date)
-                )
-            elif tipo_filtro == 'mensal':
-                pagamentos = todos_pagamentos.filter(
-                    pedido__data_criacao__month=data_base.month,
-                    pedido__data_criacao__year=data_base.year
-                )
-            elif tipo_filtro == 'anual':
-                pagamentos = todos_pagamentos.filter(
-                    pedido__data_criacao__year=data_base.year
-                )
-            repasse = 0
-            valor = 0
-            for pagamento in pagamentos:
-                valor += pagamento.valor_pago
-                valor_total += pagamento.valor_pago if pagamento.valor_pago else 0
-                repasse += 1
-                total_repasse += 1
-                relatorio_diario.append({
-                    "data": pagamento.pedido.data_criacao.strftime('%d/%m/%Y'),
-                    "valor": pagamento.valor_pago,
-                    "repasse": repasse
-                })
-            print(f"Data base: {data_base}, Pagamentos encontrados: {len(pagamentos)}")
-
-
-            data = refatorar_data_por_periodo(data_base, tipo_filtro)
-
-            relatorio_repase.append({
-                "data": data,
-                "valor": valor,
-                "Numero_repasse": repasse,
-                "repasase":[PagamentoSerializer(s).data for s in pagamentos],
-            })
-
-            if tipo_filtro == 'diario':
-                data_base += timedelta(days=1)
-            elif tipo_filtro == 'semanal':
-                data_base += timedelta(weeks=1)
-            elif tipo_filtro == 'mensal':
-                data_base += relativedelta(months=1)
-            elif tipo_filtro == 'anual':
-                data_base += relativedelta(years=1)
-
-        context = {
-            "relatorio_diario": relatorio_diario,
-            "relatorio_repase": relatorio_repase,
-            "valor_total": valor_total,
-            "total_repasse": total_repasse
-        }
-
-        return JsonResponse(
-            context,
-            content_type="application/json"
-        ) """
