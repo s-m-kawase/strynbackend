@@ -16,7 +16,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class RestauranteViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     queryset = Restaurante.objects.all()
     serializer_class = RestauranteSerializer
 
@@ -68,15 +68,15 @@ class RestauranteViewSet(viewsets.ModelViewSet):
             valor = 0
             for pedido in pedidos_mes_atual:
                 valor += pedido.total
-            
+
             total_pedidos_mes = {
                 "quantidade": pedidos_mes_atual.count(),
                 "valor": valor
             }
             total_ticket_medio_mes = round(float(total_pedidos_mes.get('valor')) / (float(total_pedidos_mes.get("quantidade")) if total_pedidos_mes.get("quantidade") != 0 else 1), 2)
 
-            
-            
+
+
             for pedido in pedidos:
                 encontrado = False
                 for des in quantidade_kda_hora:
@@ -104,12 +104,12 @@ class RestauranteViewSet(viewsets.ModelViewSet):
                 quantidade_itens = 0
                 for pedido in pedidos_hoje:
                     quantidade_itens+=pedido.itens_quantidade
-                
+
                 vendas_dia.append({
                     "data": f"{data_base_semanal.day}/{data_base_semanal.month}",
                     "quantidade": quantidade_itens
                 })
-                
+
 
                 data_base_semanal += relativedelta(days=1)
 
@@ -124,15 +124,15 @@ class RestauranteViewSet(viewsets.ModelViewSet):
                 quantidade_itens = 0
                 for pedido in pedidos_hoje:
                     quantidade_itens+=pedido.itens_quantidade
-                
+
                 vendas_dia.append({
                     "data": f"{data_base_mensal.month}/{data_base_mensal.year}",
                     "quantidade": quantidade_itens
                 })
-                
+
 
                 data_base_mensal += relativedelta(months=1)
-            
+
             data = {
                 "nome__restaurante": restaurante.nome,
                 "id__restaurante": restaurante.id,
@@ -156,12 +156,16 @@ class RestauranteViewSet(viewsets.ModelViewSet):
                 "errors": "Restaurante inválido."
             }
         return JsonResponse(data, content_type="application/json", safe=False)
-    
+
     def get_queryset(self):
         query = super().get_queryset()
+        restaurante = self.request.query_params.get('restaurante',None)
 
         usuario = self.request.user
-        query = query.filter(usuario=usuario)
+        if usuario.is_authenticated:
+          query = query.filter(usuario=usuario)
+        else:
+            query = query.filter(id=restaurante)
 
         categoria = self.request.query_params.get('categoria',None)
 
