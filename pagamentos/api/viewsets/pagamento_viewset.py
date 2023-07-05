@@ -46,8 +46,14 @@ class PagamentoViewSet(viewsets.ModelViewSet):
           query = query.filter(Q(pedido__cliente__usuario=usuario) |
                               Q(pedido__restaurante__usuario=usuario))
         else:
-            query = query.filter(Q(pedido__numero_mesa=mesa,pagamento='Pagamento na mesa')|
-                                 Q(pedido__numero_mesa=mesa,pagamento='Pagamento online'))
+            query = query.filter(
+                Q(pedido__numero_mesa=mesa,
+                  pagamento='Pagamento na mesa',
+                  pedido__status_pedido__in=['Pago','Aguardando Preparo','Em preparo'])|
+                Q(pedido__numero_mesa=mesa,
+                  pagamento='Pagamento online',
+                  pedido__status_pedido__in=['Pago','Aguardando Preparo','Em preparo']
+                  ))
         return query
 
 
