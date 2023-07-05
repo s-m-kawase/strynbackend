@@ -163,8 +163,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
       pagamento = Pagamento.objects.get(pedido=pedido)
 
       # Verifica se o pedido já foi reembolsado
-      if pedido.status_pedido == 'Estornado':
-          return Response({'mensagem': 'Pedido já foi reembolsado'}, status=200)
+      # if pedido.status_pedido == 'Estornado':
+      #     return Response({'mensagem': 'Pedido já foi reembolsado'}, status=200)
 
       # Verifica se o pedido está associado a uma sessão de pagamento
       if pagamento.pagamento == 'Pagamento online':
@@ -202,7 +202,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                     )
 
                     # Atualiza o status do pedido
-                    pedido.status_pedido = 'Estornado'
+                    pedido.status_pedido = 'Cancelado'
                     pedido.save()
 
                     return Response({'mensagem': 'Reembolso realizado com sucesso'}, status=200)
@@ -214,7 +214,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         return Response({'erro': 'Dados de pagamento não encontrados'}, status=500)
       else:
         # aqui sera feito reembolso se o status for pagamento pagar na mesa
-        pedido.status_pedido = 'Estornado'
+        pedido.status_pedido = 'Cancelado'
         pedido.save()
         return Response({'mensagem': 'Reembolso realizado com sucesso'}, status=200)
 
