@@ -256,3 +256,47 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         result_dict = [dict(zip(keys, row)) for row in result]
         return JsonResponse(result_dict, safe=False)
 
+    @action(methods=['post','get'], detail=False)
+    def financeiro_quantidade_venda_mes(self,request):
+        mesano = request.data.get('mesano',None)
+
+        sql_query = f"""SELECT
+                            COUNT(id) AS "numero_de_vendas"
+                        FROM pedidos_pedidos
+                        WHERE to_char(data_criacao::date, 'FMMonthYYYY') = '{mesano}';
+                      """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
+    @action(methods=['post'], detail=False)
+    def financeiro_tickt_indicador(self,request):
+        # usuario = request.user.id
+        # restaurante_id = Restaurante.objects.get(usuario=usuario)
+        restaurante_id = request.data.get('restaurante_id',None)
+        mesano = request.data.get('mesano',None)
+        sql_query = f"""SELECT
+                            CASE
+                                WHEN COUNT(valor_pago) = 0 THEN 0
+                                ELSE ROUND(SUM(valor_pago) / COUNT(valor_pago), 2)
+                            END AS ticket_medio
+                        FROM pagamentos_pagamento
+                        WHERE pedido_id in (
+                                  SELECT id FROM pedidos_pedidos
+                                  WHERE to_char(data_criacao::date, 'FMMonthYYYY') = '{mesano}'
+                                      AND restaurante_id = '{restaurante_id}');
+                      """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+
+        keys = [column[0] for column in cursor.description]
+        result_dict = [dict(zip(keys, row)) for row in result]
+        return JsonResponse(result_dict, safe=False)
+
