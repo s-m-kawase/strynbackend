@@ -29,16 +29,21 @@ class ClienteViewSet(viewsets.ModelViewSet):
     def usuario_logado(self, request):
 
       user = request.user
-      cliente = Cliente.objects.get(usuario=user)
-      context = ({
-          "id_cliente":cliente.id,
-          "username":cliente.usuario.username,
-          "first_name":cliente.usuario.first_name,
-          "last_name":cliente.usuario.last_name,
-          "email":cliente.usuario.email,
-          "is_staff":cliente.usuario.is_staff,
-          "is_superuser":cliente.usuario.is_superuser
-      })
+      cliente = Cliente.objects.filter(usuario=user).first()
+      if cliente:
+        context = ({
+            "id_cliente":cliente.id,
+            "username":cliente.usuario.username,
+            "first_name":cliente.usuario.first_name,
+            "last_name":cliente.usuario.last_name,
+            "email":cliente.usuario.email,
+            "is_staff":cliente.usuario.is_staff,
+            "is_superuser":cliente.usuario.is_superuser
+        })
+      else:
+         context = {
+            "message": "Cliente não encontrado."
+        }
 
 
       return JsonResponse(context, content_type="application/json", safe=False)
