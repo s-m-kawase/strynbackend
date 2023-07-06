@@ -66,7 +66,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         if usuario.is_authenticated:
             query = query.filter(Q(cliente__usuario=usuario) |
-                            Q(restaurante__usuario=usuario))
+                            Q(restaurante__usuario=usuario)).distinct()
             if restaurante:
               query = query.filter(restaurante=restaurante)
 
