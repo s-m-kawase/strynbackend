@@ -40,14 +40,19 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         query = super().get_queryset()
 
-        mesa = self.request.query_params.get('mesa', None)
+        hash_cliente = self.request.query_params.get('hash',None)
         usuario = self.request.user
         if usuario.is_authenticated:
           query = query.filter(Q(pedido__cliente__usuario=usuario) |
-                              Q(pedido__restaurante__usuario=usuario))
+                              Q(pedido__restaurante__usuario=usuario)).distinct()
         else:
-            query = query.filter(Q(pedido__numero_mesa=mesa,pagamento='Pagamento na mesa')|
-                                 Q(pedido__numero_mesa=mesa,pagamento='Pagamento online'))
+            query = query.filter(
+                Q(pedido__numero_mesa=hash_cliente,
+                  pagamento='Pagamento na mesa',
+                  status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'])|
+                Q(pedido__numero_mesa=hash_cliente,
+                  pagamento='Pagamento online',
+                  status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Concluído','Cancelado','Sacola','Estornado']))
         return query
 
 

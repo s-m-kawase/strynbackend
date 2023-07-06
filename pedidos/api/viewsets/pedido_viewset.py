@@ -53,7 +53,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         usuario = self.request.user
         restaurante = self.request.query_params.get('restaurante',None)
-        mesa = self.request.query_params.get('mesa',None)
+        hash_cliente = self.request.query_params.get('hash',None)
         status = self.request.query_params.get('status_pedido',None)
         data_inicial =  self.request.query_params.get('data_inicial',None)
         data_final = self.request.query_params.get('data_final', None)
@@ -73,8 +73,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
             elif status:
               query = query.filter(status_pedido=status)
         else:
-            query = query.filter(numero_mesa=mesa,
-                                 status_pedido='Em preparo')
+            query = query.filter(hash_cliente=hash_cliente,
+                                 status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado']
+                                )
 
         return query
 
