@@ -47,12 +47,14 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                               Q(pedido__restaurante__usuario=usuario)).distinct()
         else:
             query = query.filter(
+
                 Q(pedido__numero_mesa=hash_cliente,
                   pagamento='Pagamento na mesa',
                   status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'])|
                 Q(pedido__numero_mesa=hash_cliente,
                   pagamento='Pagamento online',
                   status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Concluído','Cancelado','Sacola','Estornado']))
+
         return query
 
 
