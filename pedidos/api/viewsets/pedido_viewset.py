@@ -38,7 +38,7 @@ def criar_cupom(pedido):
 class PedidosViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
     permission_classes = ()
-    queryset = Pedidos.objects.all().order_by('-data_criacao')
+    queryset = Pedidos.objects.all().order_by('-data_criacao','status_pedido','cupom')
     serializer_class = PedidosSerializer
 
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
