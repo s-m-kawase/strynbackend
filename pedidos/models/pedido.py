@@ -91,14 +91,21 @@ class Pedidos(models.Model):
         max_length=100,
         blank=True, null=True
     )
-
-    checkou_url=models.CharField(
-        max_length=500,
-        blank=True, null=True
-    )
+    
     payment_intent_id = models.CharField(
         max_length=500,
         blank=True, null=True
+    )
+
+    hash_cliente = models.CharField(
+        verbose_name="Hash_cliente",
+        max_length=200,
+        blank=True, null=True
+    )
+
+    cliente_identificado = models.BooleanField(
+        verbose_name="cliente cadastrado",
+        default=True,
     )
 
     @property
