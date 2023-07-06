@@ -32,6 +32,11 @@ class Cliente(models.Model):
         null=True
     )
 
+
+    def usuario_nao_logado(request):
+        hask = request.GET.get('cliente')
+        user = User(username='novo_usuario')
+
     def __str__(self):
         return self.nome_cliente
 
