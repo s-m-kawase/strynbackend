@@ -31,13 +31,13 @@ class ClienteViewSet(viewsets.ModelViewSet):
       user = request.user
       cliente = Cliente.objects.get(usuario=user)
       context = ({
-          "id":cliente.id,
-          "username":cliente.user.username,
-          "first_name":cliente.user.first_name,
-          "last_name":cliente.user.last_name,
-          "email":cliente.user.email,
-          "is_staff":cliente.user.is_staff,
-          "is_superuser":cliente.user.is_superuser
+          "id_cliente":cliente.id,
+          "username":cliente.usuario.username,
+          "first_name":cliente.usuario.first_name,
+          "last_name":cliente.usuario.last_name,
+          "email":cliente.usuario.email,
+          "is_staff":cliente.usuario.is_staff,
+          "is_superuser":cliente.usuario.is_superuser
       })
 
 
