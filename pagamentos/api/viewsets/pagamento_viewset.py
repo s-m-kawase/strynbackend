@@ -50,10 +50,10 @@ class PagamentoViewSet(viewsets.ModelViewSet):
 
                 Q(pedido__numero_mesa=hash_cliente,
                   pagamento='Pagamento na mesa',
-                  status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'])|
+                  pedido__status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'])|
                 Q(pedido__numero_mesa=hash_cliente,
                   pagamento='Pagamento online',
-                  status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Concluído','Cancelado','Sacola','Estornado']))
+                  pedido__status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Concluído','Cancelado','Sacola','Estornado']))
 
         return query
 
@@ -257,7 +257,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         result_dict = [dict(zip(keys, row)) for row in result]
         return JsonResponse(result_dict, safe=False)
 
-    @action(methods=['post','get'], detail=False)
+    @action(methods=['post'], detail=False)
     def financeiro_quantidade_venda_mes(self,request):
         mesano = request.data.get('mesano',None)
 
