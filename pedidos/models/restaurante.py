@@ -68,6 +68,11 @@ class Restaurante(models.Model):
         default=10
         )
 
+    link_restaurante = models.TextField(
+        verbose_name="Qr code Restaurante",
+        null=True, blank=True,
+    )
+
     def __str__(self):
         return self.nome
 

@@ -129,8 +129,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
         }
         line_items.append(line_item_taxa_atendimento)
 
-        success_url = f'https://stryn.netlify.app/cliente/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
-        cancel_url = f'https://stryn.netlify.app/cliente/pedidos/?tab=andamento&status_pedido=Cancelado&id={pedido.id}'
+        success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
+        cancel_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Cancelado&id={pedido.id}'
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
