@@ -12,6 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 import stripe
 from decouple import config
+from django.http import HttpResponseBadRequest
 
 
 stripe_secret_key = config('STRIPE_SECRET_KEY')
@@ -74,16 +75,21 @@ class PedidosViewSet(viewsets.ModelViewSet):
               query = query.filter(status_pedido=status)
         else:
             hash_query = query.filter(hash_cliente=hash_cliente)
-            if hash_query:
+            if hash_query.exists():
                 query= hash_query.filter(status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado']
                 )
             else:
-                query = query.filter(hash_cliente=hash_cliente)
+                query = query.none()
 
         return query
 
     @action(detail=True, methods=['get'])
     def create_checkout_session(self, request, pk):
+        hash_value = request.GET.get('hash')
+
+        # Verifica se o valor do "hash" está presente
+        if not hash_value:
+            return HttpResponseBadRequest("O parâmetro 'hash' é obrigatório.")
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
 
