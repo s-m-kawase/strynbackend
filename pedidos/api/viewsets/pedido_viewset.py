@@ -85,13 +85,14 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def create_checkout_session(self, request, pk):
-        hash_value = request.GET.get('hash')
 
-        # Verifica se o valor do "hash" está presente
-        if not hash_value:
-            return HttpResponseBadRequest("O parâmetro 'hash' é obrigatório.")
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
+
+        hash_value = pedido.hash_cliente
+
+        if not hash_value:
+            return HttpResponseBadRequest("O parâmetro 'hash' é obrigatório.")
 
         cupom = criar_cupom(pedido)
         cupom_id = cupom.id if cupom else None
