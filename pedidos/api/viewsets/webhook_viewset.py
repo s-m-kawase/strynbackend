@@ -137,7 +137,7 @@ class StripeWebhookViewSet(ViewSet):
         elif event['type'] == 'charge.refunded':
           payment_intent_id = event['data']['object']['payment_intent']
           pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
-          if pedido.status_pedido == 'Estornado':
+          if pedido.status_pedido == 'Cancelado':
               # Enviar email
               remetente = settings.EMAIL_HOST_USER
               recipient_email = event['data']['object']['billing_details']['email']
