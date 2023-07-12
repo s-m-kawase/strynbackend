@@ -73,6 +73,11 @@ class Restaurante(models.Model):
         null=True, blank=True,
     )
 
+    num_obrigatorio = models.BooleanField(
+        verbose_name="Número da mesa é obrigatorio? ",
+        default=False
+    )
+
     def __str__(self):
         return self.nome
 
