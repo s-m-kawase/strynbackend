@@ -89,10 +89,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
 
-        hash_value = pedido.hash_cliente
+        """ hash_value = pedido.hash_cliente
 
         if not hash_value:
-            return HttpResponseBadRequest("O parâmetro 'hash' é obrigatório.")
+            return HttpResponseBadRequest("O parâmetro 'hash' é obrigatório.") """
 
         cupom = criar_cupom(pedido)
         cupom_id = cupom.id if cupom else None
