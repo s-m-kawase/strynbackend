@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 from django.http.response import JsonResponse
+from rest_framework.response import Response
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -23,6 +24,8 @@ class ClienteViewSet(viewsets.ModelViewSet):
     filterset_fields = []
 
     search_fields = ['nome_cliente']
+
+    
 
 
     @action(methods=['get'], detail=False)

@@ -32,6 +32,13 @@ class Cliente(models.Model):
         null=True
     )
 
+    email = models.EmailField(
+        verbose_name="E-mail",
+        max_length=254,
+        null=True,
+        blank=True
+    )
+
   
     def __str__(self):
         return self.nome_cliente

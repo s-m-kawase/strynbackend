@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from .profile_serializers import ProfileSerializer
 class UserSerializer(serializers.ModelSerializer):
 
-    profile = ProfileSerializer()
+    #profile = ProfileSerializer()
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['username', 'password',]
