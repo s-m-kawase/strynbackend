@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .tempo import TempoEstimado
 from pedidos.models.categoria_cardapio import CategoriaCardapio
 
+
 class Restaurante(models.Model):
 
     nome = models.CharField(
@@ -20,7 +21,7 @@ class Restaurante(models.Model):
     categoria = models.ForeignKey(
         CategoriaCardapio,
         on_delete=models.SET_NULL,
-        verbose_name='Categoria do Cardapio',
+        verbose_name='Categoria do Cardápio',
         blank=True, null=True,
     )
 
@@ -36,7 +37,7 @@ class Restaurante(models.Model):
     )
 
     baner = models.ImageField(
-        verbose_name='Baner do Restaurante',
+        verbose_name='Banner do Restaurante',
         blank=True, null=True,
     )
 
@@ -46,12 +47,12 @@ class Restaurante(models.Model):
     )
 
     horario_abertura = models.TimeField(
-        verbose_name='Horario de Abertura',
+        verbose_name='Horário de Abertura',
         blank=True, null=True,
     )
 
     horario_encerramento = models.TimeField(
-        verbose_name='Horario de Encerramento',
+        verbose_name='Horário de Encerramento',
         blank=True, null=True,
     )
     tempo_estimado = models.ForeignKey(
@@ -61,21 +62,147 @@ class Restaurante(models.Model):
         blank=True, null=True,
     )
 
-
     taxa_servico = models.IntegerField(
-        verbose_name="Taxa de serviço",
+        verbose_name="Taxa de serviço em porcentagem",
         blank=True, null=True,
         default=10
-        )
+    )
 
     link_restaurante = models.TextField(
-        verbose_name="Qr code Restaurante",
+        verbose_name="QR code Restaurante",
         null=True, blank=True,
     )
 
     num_obrigatorio = models.BooleanField(
-        verbose_name="Número da mesa é obrigatorio? ",
+        verbose_name="Número da mesa é obrigatório? ",
         default=False
+    )
+
+    razao_social = models.CharField(
+        max_length=255,
+        verbose_name="Razão Social",
+        blank=True, null=True,
+    )
+
+    cnpj = models.CharField(
+        max_length=14,
+        verbose_name="CNPJ",
+        blank=True, null=True,
+    )
+
+    rua = models.CharField(
+        max_length=255,
+        verbose_name="Rua",
+        blank=True, null=True
+    )
+
+    numero = models.CharField(
+        max_length=10,
+        verbose_name="Número",
+        blank=True, null=True
+    )
+
+    complemento = models.CharField(
+        max_length=255,
+        verbose_name="Complemento",
+        blank=True, null=True
+    )
+
+    bairro = models.CharField(
+        max_length=255,
+        verbose_name="Bairro",
+        blank=True, null=True
+    )
+
+    cep = models.CharField(
+        max_length=8,
+        verbose_name="CEP",
+        blank=True, null=True
+    )
+
+    UF_CHOICE = (
+        ('AC', 'AC'),
+        ('AL', 'AL'),
+        ('AP', 'AP'),
+        ('AM', 'AM'),
+        ('BA', 'BA'),
+        ('CE', 'CE'),
+        ('DF', 'DF'),
+        ('ES', 'ES'),
+        ('GO', 'GO'),
+        ('MA', 'MA'),
+        ('MT', 'MT'),
+        ('MS', 'MS'),
+        ('MG', 'MG'),
+        ('PA', 'PA'),
+        ('PB', 'PB'),
+        ('PR', 'PR'),
+        ('PE', 'PE'),
+        ('PI', 'PI'),
+        ('RR', 'RR'),
+        ('RO', 'RO'),
+        ('RJ', 'RJ'),
+        ('RN', 'RN'),
+        ('RS', 'RS'),
+        ('SC', 'SC'),
+        ('SP', 'SP'),
+        ('SE', 'SE'),
+        ('TO', 'TO'),
+    )
+
+    uf = models.CharField(
+        verbose_name='UF',
+        choices=UF_CHOICE,
+        max_length=2,
+        default='AC'
+    )
+
+    cidade = models.CharField(
+        max_length=255,
+        verbose_name="Cidade",
+        blank=True, null=True
+    )
+
+    inscricao_estadual = models.CharField(
+        max_length=255,
+        verbose_name="Inscricão Estadual",
+        blank=True, null=True
+    )
+
+    inscricao_municipal = models.CharField(
+        max_length=255,
+        verbose_name="Inscrição Municipal",
+        blank=True, null=True
+    )
+
+    agencia = models.CharField(
+        max_length=6,
+        verbose_name="Agência",
+        blank=True, null=True
+    )
+
+    conta = models.CharField(
+        max_length=9,
+        verbose_name="Conta",
+        blank=True, null=True
+    )
+
+    digito = models.CharField(
+        max_length=1,
+        verbose_name="Dígito",
+        blank=True, null=True
+    )
+
+    banco = models.CharField(
+        max_length=255,
+        verbose_name="Banco",
+        blank=True, null=True
+    )
+
+    cvc = models.CharField(
+        max_length=3,
+        verbose_name="CVC",
+        blank=True, null=True
     )
 
     def __str__(self):

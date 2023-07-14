@@ -1,4 +1,4 @@
-from pedidos.models.restaurante import Restaurante 
+from pedidos.models.restaurante import Restaurante
 from django.contrib import admin
 
 
@@ -16,7 +16,7 @@ class RestauranteAdmin(admin.ModelAdmin):
         'total_mesa',
         'horario_abertura',
         'horario_encerramento',
-        
+
     ]
 
     list_filter = [
@@ -26,3 +26,65 @@ class RestauranteAdmin(admin.ModelAdmin):
     filter_horizontal=[
         'usuario',
     ]
+
+    fieldsets = [
+    (
+        'Dados Restaurante',
+        {
+            'fields': [
+                'nome',
+                'descricao',
+                'razao_social',
+                'inscricao_estadual',
+                'inscricao_municipal',
+                'cnpj',
+                'logo',
+                'baner',
+
+            ]
+        }
+    ),
+    (
+        'Dados Localização',
+        {
+            'fields': [
+                'rua',
+                'numero',
+                'complemento',
+                'bairro',
+                'cep',
+                'uf',
+                'cidade',
+
+            ]
+        }
+    ),
+    (
+        'Dados Funcinamentos',
+        {
+            'fields': [
+                'horario_abertura',
+                'horario_encerramento',
+                'total_mesa',
+                'num_obrigatorio',
+                'tempo_estimado',
+                'taxa_servico',
+                'categoria',
+                'link_restaurante',
+                'usuario',
+            ]
+        }
+    ),
+    (
+        'Dados Bancários',
+        {
+            'fields': [
+                'agencia',
+                'conta',
+                'digito',
+                'banco',
+                'cvc',
+            ]
+        }
+    ),
+]
