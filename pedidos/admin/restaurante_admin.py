@@ -16,75 +16,80 @@ class RestauranteAdmin(admin.ModelAdmin):
         'total_mesa',
         'horario_abertura',
         'horario_encerramento',
-
     ]
 
     list_filter = [
         'horario_encerramento'
     ]
 
-    filter_horizontal=[
+    filter_horizontal = [
         'usuario',
     ]
 
     fieldsets = [
-    (
-        'Dados Restaurante',
-        {
-            'fields': [
-                'nome',
-                'descricao',
-                'razao_social',
-                'inscricao_estadual',
-                'inscricao_municipal',
-                'cnpj',
-                'logo',
-                'baner',
+        (
+            'Dados Restaurante',
+            {
+                'fields': [
+                    'nome',
+                    'descricao',
+                    'razao_social',
+                    'inscricao_estadual',
+                    'inscricao_municipal',
+                    'cnpj',
+                    'logo',
+                    'baner',
+                ]
+            }
+        ),
+        (
+            'Dados Localização',
+            {
+                'fields': [
+                    'rua',
+                    'numero',
+                    'complemento',
+                    'bairro',
+                    'cep',
+                    'uf',
+                    'cidade',
+                ]
+            }
+        ),
+        (
+            'Dados Funcinamentos',
+            {
+                'fields': [
+                    'horario_abertura',
+                    'horario_encerramento',
+                    'total_mesa',
+                    'num_obrigatorio',
+                    'tempo_estimado',
+                    'taxa_servico',
+                    'categoria',
+                    'link_restaurante',
+                    'usuario',
+                ]
+            }
+        ),
+        (
+            'Dados Bancários',
+            {
+                'fields': [
+                    'agencia',
+                    'conta',
+                    'digito',
+                    'banco',
+                    'cvc',
+                ]
+            }
+        ),
+    ]
 
-            ]
-        }
-    ),
-    (
-        'Dados Localização',
-        {
-            'fields': [
-                'rua',
-                'numero',
-                'complemento',
-                'bairro',
-                'cep',
-                'uf',
-                'cidade',
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(usuario=request.user)
 
-            ]
-        }
-    ),
-    (
-        'Dados Funcinamentos',
-        {
-            'fields': [
-                'horario_abertura',
-                'horario_encerramento',
-                'total_mesa',
-                'num_obrigatorio',
-                'tempo_estimado',
-                'taxa_servico',
-                'categoria',
-                'link_restaurante',
-                'usuario',
-            ]
-        }
-    ),
-    (
-        'Dados Bancários',
-        {
-            'fields': [
-                'agencia',
-                'conta',
-                'digito',
-                'banco',
-                'cvc',
-            ]
-        }
-    ),
-]
+    

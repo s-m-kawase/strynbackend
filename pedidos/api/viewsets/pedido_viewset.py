@@ -138,6 +138,18 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
         cancel_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Cancelado&id={pedido.id}'
+
+        payment_intent_data = {
+            'application_fee_amount': int(taxa_atendimento * 100),
+            'transfer_data': {
+                'amount': int(subtotal * 100),
+                'destination': 'acct_1NUsb493l8WNMF7B'
+            }
+        }
+
+        if taxa_atendimento > 0:
+            payment_intent_data['transfer_data']['amount'] += int(taxa_atendimento * 100)
+
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -150,7 +162,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
             }] if cupom_id else [],  # Adicionar o desconto ao carrinho
             metadata={
                 'pedido_id': str(pedido.id),  # Adiciona o ID do pedido como metadado
-            }
+            },
+            payment_intent_data=payment_intent_data,
         )
 
         # Salva o session_id no objeto pedido
