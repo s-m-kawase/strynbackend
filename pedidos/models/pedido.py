@@ -111,7 +111,7 @@ class Pedidos(models.Model):
     nome_cliente = models.CharField(
         verbose_name="Nome do cliente",
         max_length=200,
-        blank=False, null=False
+        blank=True, null=True
     )
 
     email_cliente = models.EmailField(
