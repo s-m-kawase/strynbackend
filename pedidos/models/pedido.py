@@ -117,8 +117,7 @@ class Pedidos(models.Model):
     email_cliente = models.EmailField(
         verbose_name="E-mail do cliente",
         max_length=254,
-        null=True,
-        blank=True
+        null=True, blank=True
     )
 
     @property
