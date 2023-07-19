@@ -108,6 +108,19 @@ class Pedidos(models.Model):
         default=True,
     )
 
+    nome_cliente = models.CharField(
+        verbose_name="Nome do cliente",
+        max_length=200,
+        blank=False, null=False
+    )
+
+    email_cliente = models.EmailField(
+        verbose_name="E-mail do cliente",
+        max_length=254,
+        null=True,
+        blank=True
+    )
+
     @property
     def subtotal(self):
         subtotal = 0
