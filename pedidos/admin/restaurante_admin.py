@@ -68,6 +68,9 @@ class RestauranteAdmin(admin.ModelAdmin):
                     'taxa_servico',
                     'categoria',
                     'link_restaurante',
+                    'tempo_ideal',
+                    'tempo_medio',
+                    'tempo_limite',
                     'usuario',
                 ]
             }

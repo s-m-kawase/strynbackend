@@ -205,6 +205,22 @@ class Restaurante(models.Model):
         blank=True, null=True
     )
 
+    tempo_ideal = models.TimeField(
+        verbose_name= 'Tempo Bom',
+        blank=True, null=True,
+    )
+
+    tempo_medio = models.TimeField(
+        verbose_name= 'Tempo Médío',
+        blank=True, null=True,
+    )
+
+    tempo_limite = models.TimeField(
+        verbose_name= 'Tempo Limite',
+        blank=True, null=True,
+    )
+
+
     def __str__(self):
         return self.nome
 
