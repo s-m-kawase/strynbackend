@@ -1,180 +1,399 @@
+{% load home_tags %}
+
 {% load static %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+{% get_site as site %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
 <head>
-	<!--[if gte mso 9]>
-	<xml>
-		<o:OfficeDocumentSettings>
-		<o:AllowPNG/>
-		<o:PixelsPerInch>96</o:PixelsPerInch>
-		</o:OfficeDocumentSettings>
-	</xml>
-	<![endif]-->
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="format-detection" content="date=no" />
-	<meta name="format-detection" content="address=no" />
-	<meta name="format-detection" content="telephone=no" />
-	<meta name="x-apple-disable-message-reformatting" />
-    <!--[if !mso]><!-->
-   	<link href="https://fonts.googleapis.com/css?family=Arial:400,700|Playfair+Display:400,400i,700,700i|Raleway:400,400i,700,700i|Roboto:400,400i,700,700i" rel="stylesheet" />
-    <!--<![endif]-->
-	<title>Email Template</title>
-	<!--[if gte mso 9]>
-	<style type="text/css" media="all">
-		sup { font-size: 100% !important; }
-	</style>
-	<![endif]-->
-	
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<style type="text/css" media="screen">
-		/* Linked Styles */
-		body { padding:0 !important; margin:0 !important; display:block !important; min-width:100% !important; width:100% !important; background:#ffffff; -webkit-text-size-adjust:none }
-		a { color:#000001; text-decoration:none }
-		p { padding:0 !important; margin:0 !important } 
-		img { -ms-interpolation-mode: bicubic; /* Allow smoother rendering of resized image in Internet Explorer */ }
-		.mcnPreviewText { display: none !important; }
-		.text-footer2 a { color: #ffffff; } 
-		
-		/* Mobile styles */
-		@media only screen and (max-device-width: 480px), only screen and (max-width: 480px) {
-			.mobile-shell { width: 100% !important; min-width: 100% !important; }
-			
-			.m-center { text-align: center !important; }
-			.m-left { text-align: left !important; margin-right: auto !important; }
-			
-			.center { margin: 0 auto !important; }
-			.content2 { padding: 8px 15px 12px !important; }
-			.t-left { float: left !important; margin-right: 30px !important; }
-			.t-left-2  { float: left !important; }
-			
-			.td { width: 100% !important; min-width: 100% !important; }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
 
-			.content { padding: 30px 15px !important; }
-			.section { padding: 30px 15px 0px !important; }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
+    
+    <script src="https://kit.fontawesome.com/a0808fc22f.js" crossorigin="anonymous"></script>
+    <title></title>
+    <style>
+        /* A simple css reset */
+        * {
+            margin: 0;
+            padding: 0;
+        }
 
-			.m-br-15 { height: 15px !important; }
-			.mpb5 { padding-bottom: 5px !important; }
-			.mpb15 { padding-bottom: 15px !important; }
-			.mpb20 { padding-bottom: 20px !important; }
-			.mpb30 { padding-bottom: 30px !important; }
-			.m-padder { padding: 0px 15px !important; }
-			.m-padder2 { padding-left: 15px !important; padding-right: 15px !important; }
-			.p70 { padding: 30px 0px !important; }
-			.pt70 { padding-top: 30px !important; }
-			.p0-15 { padding: 0px 15px !important; }
-			.p30-15 { padding: 30px 15px !important; }			
-			.p30-15-0 { padding: 30px 15px 0px 15px !important; }			
-			.p0-15-30 { padding: 0px 15px 30px 15px !important; }			
+        body,
+        table,
+        thead,
+        tbody,
+        tr,
+        td,
+        img {
+            padding: 0;
+            margin: 0;
+            border: none;
+            border-spacing: 0px;
+            border-collapse: collapse;
+            vertical-align: top;
+        }
 
 
-			.text-footer { text-align: center !important; }
 
-			.m-td,
-			.m-hide { display: none !important; width: 0 !important; height: 0 !important; font-size: 0 !important; line-height: 0 !important; min-height: 0 !important; }
+        /* Add some padding for small screens */
 
-			.m-block { display: block !important; }
 
-			.fluid-img img { width: 100% !important; max-width: 100% !important; height: auto !important; }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+            margin: 0;
+            padding: 0;
+            padding-bottom: 16px;
+            line-height: 1.3;
+            font-family: 'Space Grotesk', sans-serif;
+        }
 
-			.column,
-			.column-dir,
-			.column-top,
-			.column-empty,
-			.column-top-30,
-			.column-top-60,
-			.column-empty2,
-			.column-bottom { float: left !important; width: 100% !important; display: block !important; }
+        p,
+        a,
+        li {
+            font-family: 'Space Grotesk', sans-serif;
+        }
 
-			.column-empty { padding-bottom: 15px !important; }
-			.column-empty2 { padding-bottom: 30px !important; }
+        #secaologo {
 
-			.content-spacing { width: 15px !important; }
-		}
-	</style>
+            padding: 1.5rem 4rem;
+        }
+
+        #logo {
+            /* max-width: 250px; */
+            margin: 0 auto;
+        }
+
+        img {
+            width: 100%;
+            display: block;
+        }
+
+
+        @media (max-width: 767px) {
+
+            
+            #primeiro {
+                width: 100%;
+
+            }
+
+            #secaologo {
+                max-width: 80%;
+                margin: 0 auto;
+                padding: 1.375rem 2rem;
+            }
+
+            #logo {
+                /* max-width: 200px; */
+                max-width: 100%;
+                margin: 0 auto;
+            }
+
+
+            .wrapper {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .wrapper .section {
+                width: 100%;
+            }
+
+            .wrapper .column {
+                width: 100%;
+                display: block;
+            }
+        }
+
+
+
+
+        /* CSS Custom */
+
+        /* --- Type text --- */
+        .title-email{
+            margin: 0 !important;
+            padding: 0 !important;
+
+            font-size: clamp(1.2rem, 3vw, 1.5rem) !important;
+            font-family: 'Space Grotesk', sans-serif !important;
+
+            padding: 0 !important;
+
+        }
+
+        .title-card-v1{
+            margin: 0 !important;
+            padding: 0 !important;
+
+            font-size: 1.25rem !important;
+            font-family: 'Space Grotesk', sans-serif !important;
+
+            padding: 0 .5rem !important;
+        }
+
+        .p-normal-v1{
+            margin: 0 !important;
+            padding: 0 !important;
+
+            font-size: clamp(.875rem, 3vw, 1rem) !important;
+            font-family: 'Space Grotesk', sans-serif !important;
+            font-weight: 400 !important;
+
+            padding: 0 !important;
+        }
+
+        .p-normal-v2{
+            margin: 0 !important;
+            padding: 0 !important;
+
+            font-size: .875rem !important;
+            font-family: 'Space Grotesk', sans-serif !important;
+            font-weight: 500 !important;
+
+            padding: 0 .5rem !important;
+        }
+
+        .p-sub-normal-v1{
+            margin: 0 !important;
+            padding: 0 !important;
+
+            font-size: .75rem !important;
+            font-family: 'Space Grotesk', sans-serif !important;
+            font-weight: 500 !important;
+
+            padding: 0 .5rem !important;
+        }
+
+
+        /* --- Color --- */
+        .color-1{
+            color: #090A1A !important;
+        }
+        .color-2{
+            color: #5C5D5E !important;
+        }
+        .color-3{
+            color: #000000 !important;
+        }
+        .color-4{
+            color: #ffffffff !important;
+        }
+        .color-5{
+            color: #7c7c7c !important;
+        }
+
+
+        /* --- Link Style --- */
+
+        
+        .container-link{
+            width: 15.625rem !important;
+            height: 3rem !important;
+        }
+
+
+        .link-1{
+            
+            display: inline-block !important;
+
+            margin: 0 !important;
+            padding: 0 !important;
+
+            text-decoration: none !important;
+            font-weight: 500 !important;
+            font-size: .875rem !important;
+
+            color: #000000 !important;
+            
+            font-family: 'Space Grotesk', sans-serif !important;
+
+
+            padding: .5rem .75rem !important;
+            text-align: center !important;
+        }
+
+        .link-2{
+            display: inline-block !important;
+            
+            margin: 0 !important;
+            padding: 0 !important;
+
+            font-family: 'Space Grotesk', sans-serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            font-size: clamp(.875rem, 3vw, 1rem) !important;
+            line-height: 1.5rem !important;
+
+            /* identical to box height, or 150% */
+            letter-spacing: -0.02em !important;
+            text-decoration-line: underline !important;
+
+            /* Ds Neutral/L/100 */
+            color: #090A1A !important;
+        }
+
+
+
+
+        @media only screen and (max-width: 480px){
+            /*.title-email{
+                font-size: 1.625rem !important;
+            }*/
+
+            .title-card-v1{
+                font-size: 1.25rem !important;
+            }
+
+            /*.p-normal-v1{
+                font-size: .75rem !important;
+            }*/
+
+            .p-normal-v2{
+                font-size: .75rem !important;
+            }
+
+            .p-sub-normal-v1{
+                font-size: .7rem !important;
+            }
+
+
+            .container-link{
+                width: 14rem !important;
+                height: 4rem !important;
+            }
+            .link-1{
+                font-size: .75rem !important;
+            }
+        }
+    </style>
 </head>
-<body class="body"style="padding:0 !important; margin:0 !important; display:block !important; min-width:100% !important; width:100% !important; background:#f0f0ff; -webkit-text-size-adjust:none;">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f0f0ff">
-		<tr>
-			<td align="center" valign="top">
-				<!-- Main -->
-				<table width="650" border="0" cellspacing="0" cellpadding="0" class="mobile-shell" style="margin-bottom: 30px;">
-					<tr>
-						<td class="td" style="width:650px; min-width:650px; font-size:0pt; line-height:0pt; padding:0; margin:0; font-weight:normal;" >
-							<!-- Header -->
-							<table width="100%" border="0" cellspacing="0" cellpadding="0" >
-								<tr>
-									<td class="p30-15" style="padding: 40px 0px 20px 0px;">
-										<table width="100%" border="0" cellspacing="0" cellpadding="0" >
-										
-										</table>
-									</td>
-								</tr>
-								<!-- END Top bar -->
-								<!-- Logo -->
-								<tr>
-									<td bgcolor="#ffffff" class="p30-15 img-center" style="border:1px solid #d4d4d9;padding: 30px; border-radius: 20px 20px 0px 0px; font-size:0pt; line-height:0pt; text-align:center;"><a href="#" target="_blank"><img src="https://django-datacartes.s3.amazonaws.com/static/logo.png" width="146" height="auto" border="0" alt="" /></a></td>
-								</tr>
-								<!-- END Logo -->
-								<!-- Nav -->
-								<tr>
-									<td class="text-nav-white" bgcolor="#00E12B"style="color:#ffffff; font-family:'Roboto', Arial, sans-serif; font-size:12px; line-height:22px; text-align:center; text-transform:uppercase; padding:12px 0px;">
-										<a href="https://hub.novadata.com.br/" target="_blank" class="link-white"style="color:#ffffff; text-decoration:none;"><span class="link-white"style="color:#000000; text-decoration:none;">Home</span></a>
-										 &nbsp; &nbsp; &nbsp;<span class="m-hide"> &nbsp; &nbsp; </span>
-										<a href="https://hub.novadata.com.br/admin/" target="_blank" class="link-white"style="color:#ffffff; text-decoration:none;"><span class="link-white"style="color:#000000; text-decoration:none;">Admin</span></a>
-										 &nbsp; &nbsp; &nbsp;<span class="m-hide"> &nbsp; &nbsp; </span>
-									</td>
-								</tr>
-								<!-- END Nav -->
-							</table>
-							<!-- END Header -->
-								
-							<!-- Section 1 -->
-							<table width="100%" border="0" cellspacing="0" cellpadding="0"  >
-								<tr>
-									<td class="fluid-img"style="font-size:0pt; line-height:0pt; text-align:left;"><img src="{% static 'assets/img/logo.png' %}" width="650" height="auto" border="0" alt="" /></td>
-								</tr>
-								<tr>
-									<td class="p30-15-0" style="border:1px solid #d4d4d9;padding: 50px 30px 25px;border-radius:0px 0px 30px 30px;" bgcolor="#ffffff">
-										<table width="100%" border="0" cellspacing="0" cellpadding="0">
-											<tr>
-												<td class="h5-center"style="color:#a1a1a1; font-family:'Raleway', Arial,sans-serif; font-size:16px; line-height:22px; text-align:center; padding-bottom:5px;">Novidades no Hub</td>
-											</tr>
-											<tr>
-												<td class="h2-center"style="color:#000000; font-family:'Arial', Times, 'Arial', sans-serif; font-size:32px; line-height:36px; text-align:center; padding-bottom:20px;font-weight:600;">{{titulo_email}}</td>
-											</tr>
-                                            <tr>
-                                        		<td class="text-center"style="color:#5d5c5c;  font-family:'Raleway', Arial,sans-serif; font-size:14px; line-height:22px; text-align:center; padding-bottom:22px;">{{html_text}}</td>
-                                        	</tr>
-											<tr>
-												<td align="center">
-													<table border="0" cellspacing="0" cellpadding="0">
-														<tr>
-															<td class="text-button-orange"style="border: 5px solid white;background:#00E12B; color:#ffffff; font-family:'Arial', 'Arial', Arial, sans-serif; font-size:14px; line-height:18px; text-align:center; padding:10px 30px; border-radius:20px; margin-right:10px !important;"><a href="https://hub.novadata.com.br/projetos/{{id}}" target="_blank" class="link-white"style="color:#ffffff; text-decoration:none;margin:10px;"><span class="link-white"style="color:#000000; text-decoration:none;">Visualizar</span></a></td>
-															<td class="text-button-orange"style="border: 5px solid white;background:#ffffff; color:#00E12B; font-family:'Arial', 'Arial', Arial, sans-serif; font-size:14px; line-height:18px; text-align:center; padding:10px 30px; border-radius:20px; margin-right:10px !important;"><a href="https://hub.novadata.com.br/admin/control/caso/{{id}}/change/" target="_blank" class="link-white"style="color:#ffffff; text-decoration:none;margin:10px;"><span class="link-white"style="color:#000000; text-decoration:none;">Editar</span></a></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-										</table>
-									</td>
-								</tr>
-							</table>
-							<!-- END Section 1 -->
-							<tr>
-								<td class="p30-15" style="padding: 40px 0px 20px 0px;">
-									<table width="100%" border="0" cellspacing="0" cellpadding="0" >
-									
-									</table>
-								</td>
-							</tr>
-						</td>
-					</tr>
-				</table>
-				<!-- END Main -->
-			</td>
-		</tr>
-	</table>
+<body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f5f6fa; 
+    font-family: 'Poppins', sans-serif !important;" id="primeiro">
+        <tbody>
+            <tr>
+                <td class="wrapper" align="center">
+                    <!-- Header Image -->
+                    <table style="background-color: #F5F6FA; background-image: url(''); background-repeat: no-repeat; background-size: 100% 100%;" class="section header" border="0" cellpadding="0" cellspacing="0" width="600">
+                        
+                        <tr>
+                            <td align="center" class="column" style="padding: 4em 0; box-sizing: border-box;">
+
+                               
+                                <table style="width: 85%; max-width: 480px;" border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                            <td align="center" style="box-sizing: border-box; border-radius: 10px;">
+                                                
+                                                <!-- Cabeçalho -->
+                                                <table style="width: 100%; background: linear-gradient(92.74deg, var(--primary-dark) 0%, var(primary-pure) 100%); border-radius: .5rem .5rem 0 0;" border="0" cellpadding="0" cellspacing="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align="left" style="padding: 2rem;">
+                                                                <img style="max-width: 200px;" src="{{site.logo.url}}" alt="{{site.titulo_global}}" />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <!-- Fim Cabeçalho -->
+
+                                                <!-- Content Email -->
+                                                <table style="width: 100%; min-height: 26rem;" border="0" cellpadding="0" cellspacing="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align="left" style="padding: 2rem; background-color: #ffffff;">
+
+                                                                <h1
+                                                                  class="title-email color-1"
+                                                                  style="line-height: 1.875rem !important; font-weight: 500 !important;"
+                                                                >
+                                                                    {{titulo_email}}
+                                                                </h1>
+
+                                                                <p
+                                                                  class="p-normal-v1 color-2"
+                                                                  style="padding-top: 1rem !important; text-align: start !important; line-height: 24px;"
+                                                                >
+																	{{html_text}}
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <!-- End Content Email -->
+
+
+                                                <!-- Footer Email -->
+
+                                                <table style="width: 100%;" border="0" cellpadding="0" cellspacing="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align="center" style="padding: 2rem; background: #F5F6FA; border-radius: 0 0 10px 10px; box-shadow: 2px 8px 32px rgba(0, 0, 0, 0.04) !important;">
+                                                                <table style="width: 100%;" border="0" cellpadding="0" cellspacing="0">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td align="left" style="box-sizing: border-box; width: 50%;">
+                                                                                <a
+                                                                                  href="{{site.dominio_oficial}}"
+                                                                                  class="link-2"
+                                                                                  title="{{site.titulo_global|upper}}"
+                                                                                  url-title="{{site.titulo_global|upper}}"
+                                                                                  ses:tags="linkName:{{site.titulo_global|upper}}"
+                                                                                  linkesp="1"
+                                                                                  skip-validate=""
+                                                                                  >
+                                                                                    {{site.dominio_oficial}}
+                                                                                </a>
+                                                                            </td>
+                
+                                                                            <td align="right" style="box-sizing: border-box; width: 50%;">
+                                                                                <a
+                                                                                  href="https://novadata.com.br/"
+                                                                                  style="display: inline-block !important;"
+                                                                                  title="NDT"
+                                                                                  url-title="NDT"
+                                                                                  ses:tags="linkName:NDT"
+                                                                                  linkesp="1"
+                                                                                  skip-validate=""
+                                                                                >
+                                                                                    <img src="{% static 'emails/img/logo_novadata.png' %}" alt="NDT" />
+                                                                                </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <!-- End Footer Email -->
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

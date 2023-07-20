@@ -37,7 +37,14 @@ INSTALLED_APPS = [
     'djrichtextfield',
     'django_filters',
     'nested_admin',
-    'apistripe'
+    'apistripe',
+    'advanced_filters',
+    'django_admin_listfilter_dropdown',
+    'django_object_actions',
+    'import_export',
+    'novadata_utils',
+    'django_quill',
+    
 ]
 
 MIDDLEWARE = [
