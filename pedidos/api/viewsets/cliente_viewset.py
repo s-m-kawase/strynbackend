@@ -25,8 +25,30 @@ class ClienteViewSet(viewsets.ModelViewSet):
 
     search_fields = ['nome_cliente']
 
+    def check_duplicates(self, data):
+        cpf = data.get('cpf', None)
+        username = data.get('usuario.username', {})  
+        email = data.get('email',None)
+
+        duplicates = {}
+
+        if Cliente.objects.filter(cpf=cpf).exists():
+            duplicates.setdefault('cpf', []).append("Cliente com este CPF já existe.")
+
+        if User.objects.filter(username=username).exists():
+            duplicates.setdefault('usuario', {}).setdefault('username', []).append("Um usuário com este nome de usuário já existe.")
+
+        if Cliente.objects.filter(email=email).exists():
+            duplicates.setdefault('usuario', {}).setdefault('email', []).append("Cliente com este email já está em uso.")
+
+        return duplicates
     
     def create(self, request, *args, **kwargs):
+        duplicates = self.check_duplicates(request.data)
+
+        if duplicates:
+            return Response(duplicates, status=400)
+        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -36,17 +58,14 @@ class ClienteViewSet(viewsets.ModelViewSet):
         usuario.set_password(password)
         usuario.save()
 
-        try:
-            
+      
+        cliente = Cliente.objects.create(usuario=usuario, **serializer.validated_data)
+        serializer.instance = cliente
+        headers = self.get_success_headers(serializer.data)
+        
+        return Response(serializer.data, status=201, headers=headers)
 
-            cliente = Cliente.objects.create(usuario=usuario, **serializer.validated_data)
-            serializer.instance = cliente
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=201, headers=headers)
-
-        except Exception as e:
-            # If any exception occurs, return an error response
-            return Response({'error': str(e)}, status=400)
+        
 
     @action(methods=['get'], detail=False)
     def usuario_logado(self, request):
