@@ -39,6 +39,10 @@ class Cliente(models.Model):
         blank=True
     )
 
+    @property
+    def user(self):
+        return self.usuario
+
   
     def __str__(self):
         return self.nome_cliente

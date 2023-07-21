@@ -82,4 +82,5 @@ urlpatterns = [
     path('api/v1/', include('djoser.urls')),
     path(r'^_nested_admin/', include('nested_admin.urls')),
     # path('create-checkout-session', create_checkout_session , name='create_checkout_session' ),
+     path('advanced_filters/', include('advanced_filters.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
