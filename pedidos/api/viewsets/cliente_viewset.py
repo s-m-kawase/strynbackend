@@ -79,6 +79,7 @@ class ClienteViewSet(viewsets.ModelViewSet):
             "nome":cliente.nome_cliente,
             "email":cliente.email,
             "celular":cliente.celular,
+            "id_user":cliente.usuario.id,
             "is_staff":cliente.usuario.is_staff,
             "is_superuser":cliente.usuario.is_superuser
         })
@@ -89,3 +90,23 @@ class ClienteViewSet(viewsets.ModelViewSet):
 
 
       return JsonResponse(context, content_type="application/json", safe=False)
+    
+    @action(methods=['post'], detail=False)
+    def excluir_user(self, request):
+        id_cliente = request.data.get('id_cliente',None)
+        try:
+            cliente = Cliente.objects.get(id=id_cliente)
+            user = cliente.user
+            cliente.delete()
+        except Cliente.DoesNotExist:
+            return JsonResponse({"message": "Cliente não encontrado"})
+        except Exception as e:
+            return JsonResponse({"message": f"Ocorreu um erro durante a exclusão do cliente: {str(e)}"})
+
+        try:
+            user.delete()
+            return JsonResponse({"message": "Cliente e usuário excluídos com sucesso"})
+        except User.DoesNotExist:
+            return JsonResponse({"message": "Cliente excluído, mas o usuário não foi encontrado"})
+        except Exception as e:
+            return JsonResponse({"message": f"Ocorreu um erro durante a exclusão do Usuario: {str(e)}"})

@@ -20,6 +20,7 @@ django-filter==22.1
 django-import-export==3.0.2
 django-nested-admin==3.4.0
 django-object-actions==4.0.0
+django-quill-editor==0.1.40
 django-richtextfield==1.6.1
 django-storages==1.13.1
 django-templated-mail==1.1.1
@@ -38,6 +39,7 @@ jmespath==1.0.1
 jsonschema==4.17.3
 MarkupPy==1.14
 MarkupSafe==2.1.2
+novadata-utils==0.2.5
 oauthlib==3.2.2
 odfpy==1.4.1
 openpyxl==3.0.10
