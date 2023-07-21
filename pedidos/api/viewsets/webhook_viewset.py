@@ -8,6 +8,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from pedidos.models import Pedidos
 from decouple import config
+from emails.models import MensagemEmail, TemplateEmail
+from collections import namedtuple
+from django.http import JsonResponse
 
 
 stripe.api_key = config('STRIPE_SECRET_KEY')
@@ -21,15 +24,53 @@ class StripeWebhookViewSet(ViewSet):
         pedido.status_pedido = 'Pago'
         pedido.save()
 
-        # mensagem detalhes do pedido
-        message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
-        message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
-        # Enviar uma confirmação por e-mail
-        remetente = settings.EMAIL_HOST_USER
-        recipient_email = email
-        subject = 'Confirmação de Pagamento'
+        # # mensagem detalhes do pedido
+        # message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
+        # message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
+        # # Enviar uma confirmação por e-mail
+        # remetente = settings.EMAIL_HOST_USER
+        # recipient_email = email
+        # subject = 'Confirmação de Pagamento'
 
-        send_mail(subject, message, remetente, [recipient_email])
+        # send_mail(subject, message, remetente, [recipient_email])
+
+        ConfirmarPagamento = namedtuple(
+           "confimar_pagamento_object", ['id','pedido']
+        )
+
+        confimar_pagamento_object = ConfirmarPagamento(
+            id=0,
+            pedido=pedido,
+        )
+
+        try:
+            template_email = TemplateEmail.objects.filter(
+                codigo="confirma_pagamento"
+            ).first()
+
+            if not template_email:
+                raise ValueError(
+                    "Serviço indisponível, contate seu administrador!"
+                )
+            mensagem_email = MensagemEmail.objects.create(
+                template_email=template_email
+            )
+            
+            mensagem_email.enviar(confimar_pagamento_object)
+
+            return JsonResponse(
+                {
+                    "status": "200",
+                    "message": "Email enviado com sucesso!",
+                }
+            )
+        except Exception as error:
+            return JsonResponse(
+                {
+                    "status": "404",
+                    "message": error.args[0],
+                }
+            )
 
 
   def cancel_checkout_session(self, pedido, session):
