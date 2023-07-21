@@ -14,7 +14,7 @@ class Cliente(models.Model):
     nome_cliente = models.CharField(
         verbose_name='Nome do Cliente',
         max_length=200,
-        null=True
+        null=True, blank=True
     )
 
     cpf = models.CharField(
