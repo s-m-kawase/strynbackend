@@ -34,14 +34,14 @@ class StripeWebhookViewSet(ViewSet):
 
         # send_mail(subject, message, remetente, [recipient_email])
 
-        ConfirmarPagamento = namedtuple(
-           "confimar_pagamento_object", ['id','pedido']
-        )
+        # ConfirmarPagamento = namedtuple(
+        #    "confimar_pagamento_object", ['id','pedido']
+        # )
 
-        confimar_pagamento_object = ConfirmarPagamento(
-            id=0,
-            pedido=pedido,
-        )
+        # confimar_pagamento_object = ConfirmarPagamento(
+        #     id=0,
+        #     pedido=pedido,
+        # )
 
         try:
             template_email = TemplateEmail.objects.filter(
@@ -56,7 +56,7 @@ class StripeWebhookViewSet(ViewSet):
                 template_email=template_email
             )
             
-            mensagem_email.enviar(confimar_pagamento_object)
+            mensagem_email.enviar(pedido)
 
             return JsonResponse(
                 {
