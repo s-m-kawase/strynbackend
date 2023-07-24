@@ -72,6 +72,8 @@ class RestauranteAdmin(admin.ModelAdmin):
                     'tempo_ideal',
                     'tempo_medio',
                     'tempo_limite',
+                    'chave_connect',
+                    'pedido_no_seu_restaurante',
                     'usuario',
                 ]
             }
