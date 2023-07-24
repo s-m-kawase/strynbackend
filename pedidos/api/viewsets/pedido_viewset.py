@@ -149,6 +149,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         if taxa_atendimento > 0:
             payment_intent_data['transfer_data']['amount'] += int(taxa_atendimento * 100) """
+        # pedido_no_seu_restaurante = False
+
+        # if pedido.restaurante.pedido_no_seu_restaurante == True:
+        #     pedido_no_seu_restaurante = True
 
         # Cria o checkout session do Stripe
         checkout_session = stripe.checkout.Session.create(

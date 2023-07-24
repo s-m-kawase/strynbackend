@@ -26,7 +26,7 @@ class Adicional(models.Model):
         pass
 
     def __str__(self):
-        return f'{self.nome} - R${self.valor}'
+        return f'{self.nome} - R${self.valor}' if f'{self.nome} - R${self.valor}' else f'{self.id}'
     
     class Meta:
         app_label = 'pagamentos'

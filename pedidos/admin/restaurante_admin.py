@@ -5,6 +5,7 @@ from django.contrib import admin
 @admin.register(Restaurante)
 class RestauranteAdmin(admin.ModelAdmin):
     list_display = [
+        'id',
         'nome',
         'total_mesa',
         'horario_abertura',

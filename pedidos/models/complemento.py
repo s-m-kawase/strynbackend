@@ -54,7 +54,7 @@ class Complementos(models.Model):
 
 
     def __str__(self):
-        return f'{self.nome}'
+        return f'{self.nome}' if self.nome else f'{self.id}'
 
     class Meta:
         app_label = 'pedidos'

@@ -71,7 +71,7 @@ class Cupom(models.Model):
         return self.status_cupom == 'Valido' and self.validado_ate >= timezone.now()
 
     def __str__(self):
-        return self.nome
+        return self.nome if self.nome else f'{self.id}'
 
     class Meta:
         app_label = 'pagamentos'

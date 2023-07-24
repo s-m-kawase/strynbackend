@@ -56,7 +56,7 @@ class StripeWebhookViewSet(ViewSet):
                 template_email=template_email
             )
             
-            mensagem_email.enviar(pedido)
+            mensagem_email.enviar(pedido, [email])
 
             return JsonResponse(
                 {

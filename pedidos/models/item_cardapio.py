@@ -81,7 +81,7 @@ class ItemCardapio(models.Model):
             return self.preco
 
     def __str__(self):
-        return str(self.nome)
+        return str(self.nome) if self.nome else f'{self.id}'
 
     class Meta:
         app_label = 'pedidos'

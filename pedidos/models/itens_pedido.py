@@ -87,7 +87,7 @@ class ItensPedido(models.Model):
         self.save()
 
     def __str__(self):
-        return str(self.item)
+        return str(self.item) if self.item else f'{self.id}'
     class Meta:
         app_label = 'pedidos'
         verbose_name = 'Item Pedido'

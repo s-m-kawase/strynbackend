@@ -45,7 +45,7 @@ class Cliente(models.Model):
 
   
     def __str__(self):
-        return self.nome_cliente
+        return self.nome_cliente if self.nome_cliente else f'{self.id}'
 
     class Meta:
         app_label = 'pedidos'

@@ -48,7 +48,7 @@ class Pagamento(models.Model):
         return self.pedido.subtotal
 
     def __str__(self):
-        return self.pagamento
+        return self.pagamento if self.pagamento else f'{self.id}'
 
     class Meta:
         app_label = 'pagamentos'
