@@ -43,34 +43,35 @@ class StripeWebhookViewSet(ViewSet):
         #     pedido=pedido,
         # )
 
-        try:
-            template_email = TemplateEmail.objects.filter(
-                codigo='confirma_pagamento'
-            ).first()
+        
+        template_email = TemplateEmail.objects.filter(
+            codigo='confirma_pagamento'
+        ).first()
 
-            if not template_email:
-                raise ValueError(
-                    "Serviço indisponível, contate seu administrador!"
-                )
-            mensagem_email = MensagemEmail.objects.create(
-                template_email=template_email
+        if not template_email:
+            raise ValueError(
+                "Serviço indisponível, contate seu administrador!"
             )
+        mensagem_email = MensagemEmail.objects.create(
+            template_email=template_email
+        )
             
-            mensagem_email.enviar(pedido, [email])
+        mensagem_email.enviar(pedido, [email])
+        print(mensagem_email)
 
-            return JsonResponse(
-                {
-                    "status": "200",
-                    "message": "Email enviado com sucesso!",
-                }
-            )
-        except Exception as error:
-            return JsonResponse(
-                {
-                    "status": "404",
-                    "message": error.args[0],
-                }
-            )
+        return JsonResponse(
+            {
+                "status": "200",
+                "message": "Email enviado com sucesso!",
+            }
+        )
+    #    Exception as error:
+    #         return JsonResponse(
+    #             {
+    #                 "status": "404",
+    #                 "message": error.args[0],
+    #             }
+    #         )
 
 
   def cancel_checkout_session(self, pedido, session):
