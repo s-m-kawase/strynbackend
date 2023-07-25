@@ -43,9 +43,99 @@ class StripeWebhookViewSet(ViewSet):
         #     pedido=pedido,
         # )
 
-        
+        try:
+            template_email = TemplateEmail.objects.filter(
+                codigo='confirma_pagamento'
+            ).first()
+
+            if not template_email:
+                raise ValueError(
+                    "Serviço indisponível, contate seu administrador!"
+                )
+            mensagem_email = MensagemEmail.objects.create(
+                template_email=template_email
+            )
+            
+            mensagem_email.enviar(pedido, [email])
+            
+
+            return JsonResponse(
+                {
+                    "status": "200",
+                    "message": "Email enviado com sucesso!",
+                }
+            )
+        except Exception as error:
+            return JsonResponse(
+                {
+                    "status": "404",
+                    "message": error.args[0],
+                }
+            )
+
+
+  def cancel_checkout_session(self, pedido, session):
+
+        email = session['customer_details']['email']
+        pedido.status_pedido = 'Cancelado'
+        pedido.save()
+
+    #   # Notificar o cliente sobre o cancelamento do pedido
+    #   remetente = settings.EMAIL_HOST_USER
+    #   recipient_email = email
+    #   subject = 'saldo insuficiente'
+    #   message = f"Seu pagamento foi cancelado. Entre em contato conosco para obter mais informações.\n\n"
+    #   message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
+    #   send_mail(subject, message, remetente, [recipient_email])
+        try:
+                template_email = TemplateEmail.objects.filter(
+                    codigo='pagamento_cancelado'
+                ).first()
+
+                if not template_email:
+                    raise ValueError(
+                        "Serviço indisponível, contate seu administrador!"
+                    )
+                mensagem_email = MensagemEmail.objects.create(
+                    template_email=template_email
+                )
+                
+                mensagem_email.enviar(pedido, [email])
+                
+
+                return JsonResponse(
+                    {
+                        "status": "200",
+                        "message": "Email enviado com sucesso!",
+                    }
+                )
+        except Exception as error:
+                return JsonResponse(
+                    {
+                        "status": "404",
+                        "message": error.args[0],
+                    }
+                )
+
+
+  def handle_payment_failed(self, pedido, payment_intent):
+    email = payment_intent['charges']['data'][0]['billing_details']['email']
+
+
+    # Atualizar o status do pedido
+    pedido.status_pedido = 'Com erro'
+    pedido.save()
+
+    #   # Enviar um e-mail ao cliente informando sobre o pagamento falhado
+    #   remetente = settings.EMAIL_HOST_USER
+    #   recipient_email = email
+    #   subject = 'Falha no Pagamento'
+    #   message = 'O pagamento do seu pedido falhou. Por favor, tente novamente.'
+    #   send_mail(subject, message, remetente, [recipient_email])
+
+    try:
         template_email = TemplateEmail.objects.filter(
-            codigo='confirma_pagamento'
+            codigo='falha_pagamento'
         ).first()
 
         if not template_email:
@@ -55,9 +145,9 @@ class StripeWebhookViewSet(ViewSet):
         mensagem_email = MensagemEmail.objects.create(
             template_email=template_email
         )
-            
+        
         mensagem_email.enviar(pedido, [email])
-        print(mensagem_email)
+        
 
         return JsonResponse(
             {
@@ -65,44 +155,13 @@ class StripeWebhookViewSet(ViewSet):
                 "message": "Email enviado com sucesso!",
             }
         )
-    #    Exception as error:
-    #         return JsonResponse(
-    #             {
-    #                 "status": "404",
-    #                 "message": error.args[0],
-    #             }
-    #         )
-
-
-  def cancel_checkout_session(self, pedido, session):
-
-      email = session['customer_details']['email']
-      pedido.status_pedido = 'Cancelado'
-      pedido.save()
-
-      # Notificar o cliente sobre o cancelamento do pedido
-      remetente = settings.EMAIL_HOST_USER
-      recipient_email = email
-      subject = 'saldo insuficiente'
-      message = f"Seu pagamento foi cancelado. Entre em contato conosco para obter mais informações.\n\n"
-      message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nStatus do Pedido: {pedido.status_pedido}\n"
-      send_mail(subject, message, remetente, [recipient_email])
-
-
-  def handle_payment_failed(self, pedido, payment_intent):
-      email = payment_intent['charges']['data'][0]['billing_details']['email']
-
-
-      # Atualizar o status do pedido
-      pedido.status_pedido = 'Com erro'
-      pedido.save()
-
-      # Enviar um e-mail ao cliente informando sobre o pagamento falhado
-      remetente = settings.EMAIL_HOST_USER
-      recipient_email = email
-      subject = 'Falha no Pagamento'
-      message = 'O pagamento do seu pedido falhou. Por favor, tente novamente.'
-      send_mail(subject, message, remetente, [recipient_email])
+    except Exception as error:
+        return JsonResponse(
+            {
+                "status": "404",
+                "message": error.args[0],
+            }
+        )
 
 
   """ def handle_charge_refunded(refund, payment_intent_id):
@@ -180,12 +239,41 @@ class StripeWebhookViewSet(ViewSet):
           payment_intent_id = event['data']['object']['payment_intent']
           pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
           if pedido.status_pedido == 'Cancelado':
-              # Enviar email
-              remetente = settings.EMAIL_HOST_USER
-              recipient_email = event['data']['object']['billing_details']['email']
-              subject = 'Estorno do Pedido'
-              message = 'O pagamento do seu pedido foi estornado. Entre em contato conosco para mais informações.'
-              send_mail(subject, message, remetente, [recipient_email])
+            #   # Enviar email
+            #   remetente = settings.EMAIL_HOST_USER
+            #   subject = 'Estorno do Pedido'
+            #   message = 'O pagamento do seu pedido foi estornado. Entre em contato conosco para mais informações.'
+            #   send_mail(subject, message, remetente, [recipient_email])
+            email = event['data']['object']['billing_details']['email']
+            try:
+                template_email = TemplateEmail.objects.filter(
+                    codigo='reembolso_pedido'
+                ).first()
+
+                if not template_email:
+                    raise ValueError(
+                        "Serviço indisponível, contate seu administrador!"
+                    )
+                mensagem_email = MensagemEmail.objects.create(
+                    template_email=template_email
+                )
+                
+                mensagem_email.enviar(pedido, [email])
+                
+
+                return JsonResponse(
+                    {
+                        "status": "200",
+                        "message": "Email enviado com sucesso!",
+                    }
+                )
+            except Exception as error:
+                return JsonResponse(
+                    {
+                        "status": "404",
+                        "message": error.args[0],
+                    }
+                )
 
           return Response({'mensagem': 'Estorno realizado com sucesso'}, status=200)
 
