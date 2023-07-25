@@ -45,7 +45,7 @@ class StripeWebhookViewSet(ViewSet):
 
         try:
             template_email = TemplateEmail.objects.filter(
-                codigo="confirma_pagamento"
+                codigo='confirma_pagamento'
             ).first()
 
             if not template_email:
