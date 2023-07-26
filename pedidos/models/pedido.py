@@ -97,6 +97,11 @@ class Pedidos(models.Model):
         blank=True, null=True
     )
 
+    chave_checkout_tranferencia = models.CharField(
+        max_length=500,
+        blank=True, null=True
+    )
+
     hash_cliente = models.CharField(
         verbose_name="Hash_cliente",
         max_length=200,

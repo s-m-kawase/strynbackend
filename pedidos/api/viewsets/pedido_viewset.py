@@ -152,6 +152,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id
         pedido.payment_intent_id = checkout_session.payment_intent
+        pedido.chave_checkout_tranferencia = checkout_session['payment_intent']
         pedido.save()
 
         Pagamento.objects.create(

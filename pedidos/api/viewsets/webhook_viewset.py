@@ -25,22 +25,16 @@ class StripeWebhookViewSet(ViewSet):
         pedido.save()
 
         if pedido.restaurante.pedido_no_seu_restaurante == False:
+           
+            valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
+            transferencia_conta_conectada = stripe.Transfer.create(
+                amount=valor_para_conta_conectada,
+                currency='brl',
+                destination=pedido.restaurante.chave_connect,
+                description=f'Transferência para conta conectada {pedido.restaurante.nome}',
+                source_transaction=pedido.chave_checkout_tranferencia,  
+            )
 
-
-            try:
-                valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
-                transferencia_conta_conectada = stripe.Transfer.create(
-                    amount=valor_para_conta_conectada,
-                    currency='brl',
-                    destination=pedido.restaurante.chave_connect,
-                    description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                    source_transaction=pedido.session_id,  # ID da transação de pagamento do pedido
-                )
-            except stripe.error.StripeError as e:
-                # Captura a exceção e exibe a mensagem de erro
-                error_message = str(e)
-                print(f"Erro ao criar a transferência: {error_message}")
-                return Response({"error": error_message}, status=404)
 
         # # mensagem detalhes do pedido
         # message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
