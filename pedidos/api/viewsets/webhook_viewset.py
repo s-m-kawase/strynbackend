@@ -27,39 +27,12 @@ class StripeWebhookViewSet(ViewSet):
         if pedido.restaurante.pedido_no_seu_restaurante == False:
            
             valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
-            numero_cartao = session['payment_details']['card_number']
-            cliente_email = email
-            cliente_nome = session['customer_details']['name']
-
-            charge = stripe.Charge.create(
-                amount=int(pedido.total * 100),
-                currency='brl',
-                source=numero_cartao,
-                description=f'Venda para o restaurante {pedido.restaurante.nome} ',
-                receipt_email=cliente_email,
-                metadata={
-                    'nome_cliente': cliente_nome,
-                }
-            )
-
             transferencia_conta_conectada = stripe.Transfer.create(
                 amount=valor_para_conta_conectada,
                 currency='brl',
                 destination=pedido.restaurante.chave_connect,
                 description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                source_transaction=charge.id,
             )
-
-
-        # # mensagem detalhes do pedido
-        # message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
-        # message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
-        # # Enviar uma confirmação por e-mail
-        # remetente = settings.EMAIL_HOST_USER
-        # recipient_email = email
-        # subject = 'Confirmação de Pagamento'
-
-        # send_mail(subject, message, remetente, [recipient_email])
 
         try:
             template_email = TemplateEmail.objects.filter(
