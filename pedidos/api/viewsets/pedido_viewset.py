@@ -175,7 +175,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'application_fee_amount': int(valor_da_taxa_de_aplicativo * 100), 
                 'transfer_data': {
                     'amount': int(valor_para_restaurante * 100), 
-                    'destination': f'${pedido.restaurante.chave_connect}',  
+                    'destination': f'{pedido.restaurante.chave_connect}',  
                 }
             } if not pedido_no_seu_restaurante else None
             )
