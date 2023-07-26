@@ -24,6 +24,19 @@ class StripeWebhookViewSet(ViewSet):
         pedido.status_pedido = 'Pago'
         pedido.save()
 
+        if pedido.restaurante.pedido_no_seu_restaurante == True:
+
+            valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
+
+            # Crie a transferência para a conta conectada (restaurante)
+            transferencia_conta_conectada = stripe.Transfer.create(
+                amount=valor_para_conta_conectada,
+                currency='brl',
+                destination=pedido.restaurante.chave_connect,
+                description=f'Transferência para conta conectada {pedido.restaurante.nome}',
+                source_transaction=session['payment_intent'],  # ID da transação de pagamento do pedido
+            )
+
         # # mensagem detalhes do pedido
         # message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
         # message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
@@ -33,15 +46,6 @@ class StripeWebhookViewSet(ViewSet):
         # subject = 'Confirmação de Pagamento'
 
         # send_mail(subject, message, remetente, [recipient_email])
-
-        # ConfirmarPagamento = namedtuple(
-        #    "confimar_pagamento_object", ['id','pedido']
-        # )
-
-        # confimar_pagamento_object = ConfirmarPagamento(
-        #     id=0,
-        #     pedido=pedido,
-        # )
 
         try:
             template_email = TemplateEmail.objects.filter(
