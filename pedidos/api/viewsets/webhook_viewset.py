@@ -27,12 +27,27 @@ class StripeWebhookViewSet(ViewSet):
         if pedido.restaurante.pedido_no_seu_restaurante == False:
            
             valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
+            numero_cartao = session['payment_details']['card_number']
+            cliente_email = email
+            cliente_nome = session['customer_details']['name']
+
+            charge = stripe.Charge.create(
+                amount=int(pedido.total * 100),
+                currency='brl',
+                source=numero_cartao,
+                description=f'Venda para o restaurante {pedido.restaurante.nome} ',
+                receipt_email=cliente_email,
+                metadata={
+                    'nome_cliente': cliente_nome,
+                }
+            )
+
             transferencia_conta_conectada = stripe.Transfer.create(
                 amount=valor_para_conta_conectada,
                 currency='brl',
                 destination=pedido.restaurante.chave_connect,
                 description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                source_transaction='pi_3NYBTtGDTWYeXfjO0YAVVQD6'  
+                source_transaction=charge.id,
             )
 
 
