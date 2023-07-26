@@ -153,14 +153,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
             )
         else:
 
-            porcentagem_restaurante = 0.8 
-            valor_para_restaurante = (subtotal + taxa_atendimento) * porcentagem_restaurante
-            valor_da_taxa_de_aplicativo = subtotal + taxa_atendimento - valor_para_restaurante
-
             payment_intent = stripe.PaymentIntent.create(
             amount=int((subtotal + taxa_atendimento) * 100),  # Montante total, incluindo a taxa de aplicativo
             currency='brl',
-            application_fee_amount=int(valor_da_taxa_de_aplicativo * 100),
             )
                 
 
@@ -180,13 +175,14 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 },
                 
             )
-
+            
+            porcentagem_restaurante = 0.8 
+            valor_para_restaurante = (subtotal + taxa_atendimento) * porcentagem_restaurante
             transfer = stripe.Transfer.create(
-            amount=int(valor_para_restaurante * 100),
-            currency='brl',
-            destination=pedido.restaurante.chave_connect, 
-            transfer_group=pedido.id,
-        )
+                amount=int(valor_para_restaurante * 100),
+                currency='brl',
+                destination=pedido.restaurante.chave_connect, # Chave da conta conectada do restaurante
+            )
 
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id
