@@ -34,7 +34,7 @@ class StripeWebhookViewSet(ViewSet):
                     currency='brl',
                     destination=pedido.restaurante.chave_connect,
                     description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                    source_transaction=pedido.payment_intent_id,  # ID da transação de pagamento do pedido
+                    source_transaction=pedido.session_id,  # ID da transação de pagamento do pedido
                 )
             except stripe.error.StripeError as e:
                 # Captura a exceção e exibe a mensagem de erro
