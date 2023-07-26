@@ -29,7 +29,6 @@ class StripeWebhookViewSet(ViewSet):
 
             try:
                 valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
-        # Crie a transferência para a conta conectada (restaurante)
                 transferencia_conta_conectada = stripe.Transfer.create(
                     amount=valor_para_conta_conectada,
                     currency='brl',
@@ -41,9 +40,7 @@ class StripeWebhookViewSet(ViewSet):
                 # Captura a exceção e exibe a mensagem de erro
                 error_message = str(e)
                 print(f"Erro ao criar a transferência: {error_message}")
-
-        # Ou, se você quiser retornar o erro como uma resposta HTTP, pode fazer assim:
-        return Response({"error": error_message}, status=404)
+                return Response({"error": error_message}, status=404)
 
         # # mensagem detalhes do pedido
         # message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
