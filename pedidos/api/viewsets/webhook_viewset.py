@@ -34,7 +34,7 @@ class StripeWebhookViewSet(ViewSet):
                 currency='brl',
                 destination=pedido.restaurante.chave_connect,
                 description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                source_transaction=session['payment_intent'],  # ID da transação de pagamento do pedido
+                source_transaction=pedido.payment_intent_id,  # ID da transação de pagamento do pedido
             )
 
         # # mensagem detalhes do pedido
