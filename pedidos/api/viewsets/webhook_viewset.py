@@ -24,7 +24,7 @@ class StripeWebhookViewSet(ViewSet):
         pedido.status_pedido = 'Pago'
         pedido.save()
 
-        if pedido.restaurante.pedido_no_seu_restaurante == True:
+        if pedido.restaurante.pedido_no_seu_restaurante == False:
 
             valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
 
