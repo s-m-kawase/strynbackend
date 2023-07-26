@@ -156,6 +156,16 @@ class PedidosViewSet(viewsets.ModelViewSet):
             porcentagem_restaurante = 0.8 
             valor_para_restaurante = (subtotal + taxa_atendimento) * porcentagem_restaurante
             valor_da_taxa_de_aplicativo = subtotal + taxa_atendimento - valor_para_restaurante
+
+            payment_intent = stripe.PaymentIntent.create(
+            amount=int((subtotal + taxa_atendimento) * 100), # Montante total, incluindo a taxa de aplicativo
+            currency='brl',
+            application_fee_amount=int(valor_da_taxa_de_aplicativo * 100),
+            transfer_data={
+                'amount': int(valor_para_restaurante * 100),
+                'destination': f'{pedido.restaurante.chave_connect}',
+            },
+        )
                 
 
             # Cria o checkout session do Stripe
@@ -168,16 +178,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 discounts=[{
                     'coupon': cupom_id
                 }] if cupom_id else [],  # Adicionar o desconto ao carrinho
+                payment_intent=payment_intent['id'],
                 metadata={
                     'pedido_id': str(pedido.id),  # Adiciona o ID do pedido como metadado
                 },
-                payment_intent_data={
-                'application_fee_amount': int(valor_da_taxa_de_aplicativo * 100),
-                },
-                transfer_data={
-                    'amount': int(valor_para_restaurante * 100),
-                    'destination': f'{pedido.restaurante.chave_connect}',
-                }
+                
             )
 
         # Salva o session_id no objeto pedido
