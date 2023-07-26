@@ -28,8 +28,7 @@ class OrdemCategoriaCardapio(models.Model):
     
 
     def __str__(self):
-        '''Método que retorna a representação do objeto como string.'''
-        return str(self.id)
+        return str(self.id) if self.id else f'{self.id}'
 
     class Meta:
         '''Sub classe para definir meta atributos da classe principal.'''

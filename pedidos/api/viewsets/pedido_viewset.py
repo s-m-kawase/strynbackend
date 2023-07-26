@@ -89,11 +89,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Pega o pedido de acordo com o id
         pedido = Pedidos.objects.get(id=pk)
 
-        """ hash_value = pedido.hash_cliente
-
-        if not hash_value:
-            return HttpResponseBadRequest("O parâmetro 'hash' é obrigatório.") """
-
         cupom = criar_cupom(pedido)
         cupom_id = cupom.id if cupom else None
 
@@ -139,19 +134,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
         success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
         cancel_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Cancelado&id={pedido.id}'
 
-        """ payment_intent_data = {
-            'application_fee_amount': int(taxa_atendimento * 100),
-            'transfer_data': {
-                'amount': int(subtotal * 100),
-                'destination': 'acct_1NUsb493l8WNMF7B'
-            }
-        }
+        
 
-        if taxa_atendimento > 0:
-            payment_intent_data['transfer_data']['amount'] += int(taxa_atendimento * 100) """
-
-        # Cria o checkout session do Stripe
-        checkout_session = stripe.checkout.Session.create(
+        pedido_no_seu_restaurante = pedido.restaurante.pedido_no_seu_restaurante
+        if pedido_no_seu_restaurante == True:
+            checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
@@ -163,8 +150,35 @@ class PedidosViewSet(viewsets.ModelViewSet):
             metadata={
                 'pedido_id': str(pedido.id),  # Adiciona o ID do pedido como metadado
             },
-            # payment_intent_data=payment_intent_data,
-        )
+            )
+        else:
+
+            porcentagem_restaurante = 0.8 
+            valor_para_restaurante = (subtotal + taxa_atendimento) * porcentagem_restaurante
+            valor_da_taxa_de_aplicativo = subtotal + taxa_atendimento - valor_para_restaurante
+                
+
+            # Cria o checkout session do Stripe
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=line_items,
+                mode='payment',
+                success_url=success_url,
+                cancel_url=cancel_url,
+                discounts=[{
+                    'coupon': cupom_id
+                }] if cupom_id else [],  # Adicionar o desconto ao carrinho
+                metadata={
+                    'pedido_id': str(pedido.id),  # Adiciona o ID do pedido como metadado
+                },
+                payment_intent_data={
+                'application_fee_amount': int(valor_da_taxa_de_aplicativo * 100), 
+                'transfer_data': {
+                    'amount': int(valor_para_restaurante * 100), 
+                    'destination': f'${pedido.restaurante.chave_connect}',  
+                }
+            } if not pedido_no_seu_restaurante else None
+            )
 
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id

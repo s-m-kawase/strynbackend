@@ -220,9 +220,20 @@ class Restaurante(models.Model):
         blank=True, null=True,
     )
 
+    chave_connect = models.CharField(
+        verbose_name="Chave Connect do Stripe",
+        blank=True, null=True,
+        max_length=50
+    )
+
+    pedido_no_seu_restaurante = models.BooleanField(
+        verbose_name="Pedido No meu Restaurante",
+        default=False
+    )
+
 
     def __str__(self):
-        return self.nome
+        return self.nome if self.nome else f'{self.id}'
 
     class Meta:
         app_label = 'pedidos'

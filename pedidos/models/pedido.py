@@ -204,7 +204,7 @@ class Pedidos(models.Model):
         pass
 
     def __str__(self):
-        return str(self.id)
+        return str(self.id) if self.id else f'{self.id}'
     class Meta:
         app_label = 'pedidos'
         verbose_name = 'Pedido'

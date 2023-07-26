@@ -9,7 +9,7 @@ class TempoEstimado(models.Model):
     )
 
     def __str__(self):
-        return self.tempo
+        return str(self.tempo) if self.tempo else f'{self.id}'
 
     class Meta:
         app_label = 'pedidos'

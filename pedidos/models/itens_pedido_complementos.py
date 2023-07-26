@@ -44,7 +44,7 @@ class ItensPedidoComplementos(models.Model):
         self.save()
 
     def __str__(self):
-        return f'{self.item_pedido} - {self.complemento}'
+        return f'{self.item_pedido} - {self.complemento}' if self.item_pedido and self.complemento else f'{self.id}'
 
     class Meta:
         app_label = 'pedidos'
