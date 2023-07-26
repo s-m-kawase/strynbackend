@@ -32,7 +32,7 @@ class StripeWebhookViewSet(ViewSet):
                 currency='brl',
                 destination=pedido.restaurante.chave_connect,
                 description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                source_transaction=pedido.chave_checkout_tranferencia,  
+                source_transaction='pi_3NYBTtGDTWYeXfjO0YAVVQD6'  
             )
 
 
