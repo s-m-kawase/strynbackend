@@ -293,11 +293,24 @@ class StripeWebhookViewSet(ViewSet):
                         "message": error.args[0],
                     }
                 )
-
           return Response({'mensagem': 'Estorno realizado com sucesso'}, status=200)
+            
+        elif event['type'] == 'payment_intent.succeeded':
+                payment_intent_id = event['data']['object']['id']
+                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+                charge_id = payment_intent['charges']['data'][0]['id']
+                pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
 
-
-
+                if pedido and not pedido.restaurante.pedido_no_seu_restaurante:
+                    
+                    valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
+                    transferencia_conta_conectada = stripe.Transfer.create(
+                        amount=valor_para_conta_conectada,
+                        currency='brl',
+                        destination=pedido.restaurante.chave_connect,
+                        description=f'Transferência para conta conectada {pedido.restaurante.nome}',
+                        source_transaction=charge_id,
+                        )
 
         return Response(status=200)
 
