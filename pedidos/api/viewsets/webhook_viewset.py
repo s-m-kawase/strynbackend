@@ -211,50 +211,35 @@ class StripeWebhookViewSet(ViewSet):
             session = event['data']['object']
             session_id = event['data']['object']['id']
             pedido = Pedidos.objects.get(session_id=session_id)
-            if session['status'] == 'complete':
-                pedido.status_pedido = 'Pago'
-                pedido.save()
+            try:
+                template_email = TemplateEmail.objects.filter(
+                    codigo='confirma_pagamento'
+                ).first()
 
-                if pedido.restaurante.pedido_no_seu_restaurante == False:
+                if not template_email:
+                    raise ValueError(
+                        "Serviço indisponível, contate seu administrador!"
+                    )
+                mensagem_email = MensagemEmail.objects.create(
+                    template_email=template_email
+                )
                 
-                    valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
-                    transferencia_conta_conectada = stripe.Transfer.create(
-                        amount=valor_para_conta_conectada,
-                        currency='brl',
-                        destination=pedido.restaurante.chave_connect,
-                        description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                        source_transaction=session.payment_intent,
-                    )
+                mensagem_email.enviar(pedido, [email])
+                
 
-                try:
-                    template_email = TemplateEmail.objects.filter(
-                        codigo='confirma_pagamento'
-                    ).first()
-
-                    if not template_email:
-                        raise ValueError(
-                            "Serviço indisponível, contate seu administrador!"
-                        )
-                    mensagem_email = MensagemEmail.objects.create(
-                        template_email=template_email
-                    )
-                    
-                    mensagem_email.enviar(pedido, [email])
-                    
-
-                    return JsonResponse(
-                        {
-                            "status": "200",
-                            "message": "Email enviado com sucesso!",
-                        }
-                    )
-                except Exception as error:
-                    return JsonResponse(
-                        {
-                            "status": "404",
-                            "message": error.args[0],
-                        }
-                    )
+                return JsonResponse(
+                    {
+                        "status": "200",
+                        "message": "Email enviado com sucesso!",
+                    }
+                )
+            except Exception as error:
+                return JsonResponse(
+                    {
+                        "status": "404",
+                        "message": error.args[0],
+                    }
+                )
 
         elif event['type'] == 'checkout.session.async_payment_failed':
             session = event['data']['object']
