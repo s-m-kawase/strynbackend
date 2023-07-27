@@ -303,8 +303,7 @@ class StripeWebhookViewSet(ViewSet):
 
                 if pedido and not pedido.restaurante.pedido_no_seu_restaurante:
                     
-                    porcentagem_para_transferencia = pedido.restaurante.porcentagem_para_transferencia
-                    valor_para_conta_conectada = int(pedido.total * pedido.restaurante.calcular_porcentagem_em_decimal(porcentagem_para_transferencia) * 100)
+                    valor_para_conta_conectada = int(pedido.total * pedido.restaurante.passar_porcentagem_em_decimal * 100)
                     transferencia_conta_conectada = stripe.Transfer.create(
                         amount=valor_para_conta_conectada,
                         currency='brl',
