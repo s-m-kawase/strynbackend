@@ -18,60 +18,51 @@ stripe.api_key = config('STRIPE_SECRET_KEY')
 
 class StripeWebhookViewSet(ViewSet):
 
-  def update_order_status(self, pedido ,session):
-    email = session['customer_details']['email']
-    if session['status'] == 'complete':
-        pedido.status_pedido = 'Pago'
-        pedido.save()
+#   def update_order_status(self, pedido ,session):
+#     email = session['customer_details']['email']
+#     if session['status'] == 'complete':
+#         pedido.status_pedido = 'Pago'
+#         pedido.save()
 
-        # # mensagem detalhes do pedido
-        # message = f"Seu pagamento foi processado com sucesso. Obrigado por sua compra!\n\n"
-        # message += f"Detalhes do pedido:\n\nID do Pedido: {pedido.id}\nValor Total: {pedido.total}\nStatus do Pedido: {pedido.status_pedido}"
-        # # Enviar uma confirmação por e-mail
-        # remetente = settings.EMAIL_HOST_USER
-        # recipient_email = email
-        # subject = 'Confirmação de Pagamento'
+#         if pedido.restaurante.pedido_no_seu_restaurante == False:
+           
+#             valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
+#             transferencia_conta_conectada = stripe.Transfer.create(
+#                 amount=valor_para_conta_conectada,
+#                 currency='brl',
+#                 destination=pedido.restaurante.chave_connect,
+#                 description=f'Transferência para conta conectada {pedido.restaurante.nome}',
+#             )
 
-        # send_mail(subject, message, remetente, [recipient_email])
+#         try:
+#             template_email = TemplateEmail.objects.filter(
+#                 codigo='confirma_pagamento'
+#             ).first()
 
-        # ConfirmarPagamento = namedtuple(
-        #    "confimar_pagamento_object", ['id','pedido']
-        # )
-
-        # confimar_pagamento_object = ConfirmarPagamento(
-        #     id=0,
-        #     pedido=pedido,
-        # )
-
-        try:
-            template_email = TemplateEmail.objects.filter(
-                codigo='confirma_pagamento'
-            ).first()
-
-            if not template_email:
-                raise ValueError(
-                    "Serviço indisponível, contate seu administrador!"
-                )
-            mensagem_email = MensagemEmail.objects.create(
-                template_email=template_email
-            )
+#             if not template_email:
+#                 raise ValueError(
+#                     "Serviço indisponível, contate seu administrador!"
+#                 )
+#             mensagem_email = MensagemEmail.objects.create(
+#                 template_email=template_email
+#             )
             
-            mensagem_email.enviar(pedido, [email])
+#             mensagem_email.enviar(pedido, [email])
             
 
-            return JsonResponse(
-                {
-                    "status": "200",
-                    "message": "Email enviado com sucesso!",
-                }
-            )
-        except Exception as error:
-            return JsonResponse(
-                {
-                    "status": "404",
-                    "message": error.args[0],
-                }
-            )
+#             return JsonResponse(
+#                 {
+#                     "status": "200",
+#                     "message": "Email enviado com sucesso!",
+#                 }
+#             )
+#         except Exception as error:
+#             return JsonResponse(
+#                 {
+#                     "status": "404",
+#                     "message": error.args[0],
+#                 }
+#             )
 
 
   def cancel_checkout_session(self, pedido, session):
@@ -220,7 +211,35 @@ class StripeWebhookViewSet(ViewSet):
             session = event['data']['object']
             session_id = event['data']['object']['id']
             pedido = Pedidos.objects.get(session_id=session_id)
-            self.update_order_status(pedido, session)
+            try:
+                template_email = TemplateEmail.objects.filter(
+                    codigo='confirma_pagamento'
+                ).first()
+
+                if not template_email:
+                    raise ValueError(
+                        "Serviço indisponível, contate seu administrador!"
+                    )
+                mensagem_email = MensagemEmail.objects.create(
+                    template_email=template_email
+                )
+                
+                mensagem_email.enviar(pedido, [email])
+                
+
+                return JsonResponse(
+                    {
+                        "status": "200",
+                        "message": "Email enviado com sucesso!",
+                    }
+                )
+            except Exception as error:
+                return JsonResponse(
+                    {
+                        "status": "404",
+                        "message": error.args[0],
+                    }
+                )
 
         elif event['type'] == 'checkout.session.async_payment_failed':
             session = event['data']['object']
@@ -274,11 +293,24 @@ class StripeWebhookViewSet(ViewSet):
                         "message": error.args[0],
                     }
                 )
-
           return Response({'mensagem': 'Estorno realizado com sucesso'}, status=200)
+            
+        elif event['type'] == 'payment_intent.succeeded':
+                payment_intent_id = event['data']['object']['id']
+                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+                charge_id = payment_intent['charges']['data'][0]['id']
+                pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
 
-
-
+                if pedido and not pedido.restaurante.pedido_no_seu_restaurante:
+                    
+                    valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
+                    transferencia_conta_conectada = stripe.Transfer.create(
+                        amount=valor_para_conta_conectada,
+                        currency='brl',
+                        destination=pedido.restaurante.chave_connect,
+                        description=f'Transferência para conta conectada {pedido.restaurante.nome}',
+                        source_transaction=charge_id,
+                        )
 
         return Response(status=200)
 
