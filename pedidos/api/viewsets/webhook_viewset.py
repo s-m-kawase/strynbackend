@@ -36,9 +36,9 @@ class StripeWebhookViewSet(ViewSet):
             mensagem_email = MensagemEmail.objects.create(
                 template_email=template_email
             )
-            
+
             mensagem_email.enviar(pedido, [email])
-            
+
 
             return JsonResponse(
                 {
@@ -201,7 +201,7 @@ class StripeWebhookViewSet(ViewSet):
             session = event['data']['object']
             session_id = event['data']['object']['id']
             pedido = Pedidos.objects.get(session_id=session_id)
-            self.update_order_status(session,session_id)
+            self.update_order_status(pedido, session)
 
         elif event['type'] == 'checkout.session.async_payment_failed':
             session = event['data']['object']
