@@ -403,4 +403,5 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 description=f'Transferência para conta conectada {pedido.restaurante.nome}',
                 source_transaction=pedido.payment_intent,
             )
-
+    
+        return JsonResponse({'mensagem': 'Transferência concluída com sucesso'})
