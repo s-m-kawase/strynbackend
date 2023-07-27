@@ -391,9 +391,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'])
     def tranferencia(self,resquest,pk):
         # ped = self.resquest.params.get['pedido',None]
-        pedido = Pedidos.objects.filter(id=pk)
+        pedido = Pedidos.objects.get(id=pk)
 
-        if pedido and not pedido.restaurante.pedido_no_seu_restaurante:
+        if not pedido.restaurante.pedido_no_seu_restaurante:
         
             valor_para_conta_conectada = int(pedido.total * 0.80 * 100) 
             transferencia_conta_conectada = stripe.Transfer.create(
