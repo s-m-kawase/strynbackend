@@ -388,7 +388,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         result_dict = [dict(zip(keys, row)) for row in result]
         return JsonResponse(result_dict, safe=False)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['get'])
     def tranferencia(self,resquest,pk):
         # ped = self.resquest.params.get['pedido',None]
         pedido = Pedidos.objects.filter(id=pk)
