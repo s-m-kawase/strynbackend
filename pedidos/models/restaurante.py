@@ -239,7 +239,7 @@ class Restaurante(models.Model):
         default=False
     )
 
-    @property
+    
     def passar_porcentagem_em_decimal(self):
         return self.pocentagem_para_tranferencia / 100
 
