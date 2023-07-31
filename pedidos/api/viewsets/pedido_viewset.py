@@ -228,6 +228,15 @@ class PedidosViewSet(viewsets.ModelViewSet):
         pedido.save()
         return Response({'mensagem': 'Reembolso realizado com sucesso'}, status=200)
 
+    @action(detail=True, methods=['get'])
+    def limpar_item(self, request, pk):
+        pedido = Pedidos.objects.get(id=pk)
+
+        try:
+            pedido.itenspedido_set.all().delete()
+            return Response({'message': 'Itens do pedido limpos com sucesso.'}, status=200)
+        except Exception as e:
+            return Response({'error': 'Ocorreu um erro ao limpar os itens do pedido.'}, status=404)
 
 
 
