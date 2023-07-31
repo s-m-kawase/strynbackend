@@ -13,6 +13,9 @@ from rest_framework.response import Response
 import stripe
 from decouple import config
 from django.http import HttpResponseBadRequest
+from rest_framework.response import Response
+from django.http import HttpResponse
+
 
 
 stripe_secret_key = config('STRIPE_SECRET_KEY')
@@ -152,7 +155,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id
         pedido.payment_intent_id = checkout_session.payment_intent
-        pedido.chave_checkout_tranferencia = checkout_session['payment_intent']
         pedido.save()
 
         Pagamento.objects.create(
@@ -387,22 +389,3 @@ class PedidosViewSet(viewsets.ModelViewSet):
         keys = [column[0] for column in cursor.description]
         result_dict = [dict(zip(keys, row)) for row in result]
         return JsonResponse(result_dict, safe=False)
-
-    @action(detail=True, methods=['get'])
-    def transferencia(self, request, pk):
-        # ped = self.resquest.params.get['pedido', None]
-        pedido = Pedidos.objects.filter(id=pk).first()
-
-        if pedido and not pedido.restaurante.pedido_no_seu_restaurante:
-            valor_para_conta_conectada = int(pedido.total * 0.80 * 100)
-            transferencia_conta_conectada = stripe.Transfer.create(
-                amount=valor_para_conta_conectada,
-                currency='brl',
-                destination=pedido.restaurante.chave_connect,
-                description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                source_transaction=charge_id,
-            )
-
-            return JsonResponse({'mensagem': 'Transferência concluída com sucesso'})
-
-        return JsonResponse({'mensagem': 'Pedido não encontrado ou transferência não permitida.'}, status=404)

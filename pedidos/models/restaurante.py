@@ -226,10 +226,22 @@ class Restaurante(models.Model):
         max_length=50
     )
 
+    pocentagem_para_tranferencia = models.DecimalField(
+        verbose_name='Valor em porcentagem que será enviado ao restaurante',
+        max_digits=10,
+        default=90,
+        decimal_places=2,
+        blank=True, null=True
+    )
+
     pedido_no_seu_restaurante = models.BooleanField(
         verbose_name="Pedido No meu Restaurante",
         default=False
     )
+
+    @property
+    def passar_porcentagem_em_decimal(self):
+        return self.pocentagem_para_tranferencia / 100
 
 
     def __str__(self):
