@@ -228,8 +228,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
         pedido.save()
         return Response({'mensagem': 'Reembolso realizado com sucesso'}, status=200)
 
-    @action(detail=True, methods=['get'])
-    def limpar_item(self, request, pk):
+    @action(detail=False, methods=['post'])
+    def limpar_pedido(self, request):
+        pk = request.data.get('pk',None)
         pedido = Pedidos.objects.get(id=pk)
 
         try:
