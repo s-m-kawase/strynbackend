@@ -32,14 +32,23 @@ class ClienteViewSet(viewsets.ModelViewSet):
 
         duplicates = {}
 
-        if Cliente.objects.filter(cpf=cpf).exists():
-            duplicates.setdefault('cpf', []).append("Cliente com este CPF já existe.")
+        try:
+            if Cliente.objects.filter(cpf=cpf).exists():
+                raise ValueError("Já existe um cliente com este CPF.")
+        except ValueError as cpf_error:
+            duplicates['cpf'] = {"mensagem": str(cpf_error)}
 
-        if User.objects.filter(username=username).exists():
-            duplicates.setdefault('usuario', {}).setdefault('username', []).append("Um usuário com este nome de usuário já existe.")
+        try:
+            if User.objects.filter(username=username).exists():
+                raise ValueError("Já existe um cliente com este usuário.")
+        except ValueError as username_error:
+            duplicates['username'] = {"mensagem": str(username_error)}
 
-        if Cliente.objects.filter(email=email).exists():
-            duplicates.setdefault('usuario', {}).setdefault('email', []).append("Cliente com este email já está em uso.")
+        try:
+            if Cliente.objects.filter(email=email).exists():
+                raise ValueError("Já existe um cliente com este email.")
+        except ValueError as email_error:
+            duplicates['email'] = {"mensagem": str(email_error)}
 
         return duplicates
     
