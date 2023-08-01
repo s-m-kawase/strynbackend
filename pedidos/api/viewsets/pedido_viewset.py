@@ -70,7 +70,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         if usuario.is_authenticated:
             query = query.filter(Q(cliente__usuario=usuario) |
-                            Q(restaurante__usuario=usuario)).distinct()
+                            Q(restaurante__usuario=usuario)|
+                            Q(hash_cliente=hash_cliente)).distinct()
             if restaurante:
               query = query.filter(restaurante=restaurante)
 
@@ -205,7 +206,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                     amount = int(total_reembolso * 100)
                     """ amount = int(pedido.valor_pago*100) """
 
-                    # Cria o reembolso com base no ID do pagamento
+                    # Cria o reembolso com base no ID do 
                     refund = stripe.Refund.create(
                         payment_intent=payment_intent_id,
                         amount=amount,
