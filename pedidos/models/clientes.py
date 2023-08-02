@@ -39,6 +39,11 @@ class Cliente(models.Model):
         blank=True
     )
 
+    foto_perfil = models.ImageField(
+        verbose_name="Foto de Perfil",
+        null=True,blank=True
+    )
+
     @property
     def user(self):
         return self.usuario
