@@ -8,7 +8,7 @@ class Cliente(models.Model):
         User,
         verbose_name="Usuário",
         on_delete=models.SET_NULL,
-        null=True
+        null=True, blank=True, 
     )
 
     nome_cliente = models.CharField(

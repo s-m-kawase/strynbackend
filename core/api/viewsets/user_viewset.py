@@ -24,4 +24,9 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     filterset_fields = ('id',)
 
+    @action(methods=['get'], detail=False)
+    def usuario_logado(self, request):
+        dic = UserSerializer(request.user, read_only=True)
+        return JsonResponse(dic.data, content_type="application/json", safe=False)
+
     
