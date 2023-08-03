@@ -7,8 +7,8 @@ class Cliente(models.Model):
     usuario = models.OneToOneField(
         User,
         verbose_name="Usuário",
-        on_delete=models.SET_NULL,
-        null=True
+        on_delete=models.CASCADE,
+        null=True, blank=True, 
     )
 
     nome_cliente = models.CharField(
@@ -37,6 +37,11 @@ class Cliente(models.Model):
         max_length=254,
         null=True,
         blank=True
+    )
+
+    foto_perfil = models.ImageField(
+        verbose_name="Foto de Perfil",
+        null=True,blank=True
     )
 
     @property

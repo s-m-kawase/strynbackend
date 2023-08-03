@@ -7,6 +7,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 from django.http.response import JsonResponse
 from rest_framework.response import Response
+from ...forms import ClienteForm, UserForm
+from django.contrib.auth.hashers import make_password
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -24,55 +26,42 @@ class ClienteViewSet(viewsets.ModelViewSet):
     filterset_fields = []
 
     search_fields = ['nome_cliente']
-
-    def check_duplicates(self, data):
-        cpf = data.get('cpf', None)
-        username = data.get('usuario.username', {})  
-        email = data.get('email',None)
-
-        duplicates = {}
-
-        try:
-            if Cliente.objects.filter(cpf=cpf).exists():
-                raise ValueError("Já existe um cliente com este CPF.")
-        except ValueError as cpf_error:
-            duplicates['cpf'] = {"mensagem": str(cpf_error)}
-
-        try:
-            if User.objects.filter(username=username).exists():
-                raise ValueError("Já existe um cliente com este usuário.")
-        except ValueError as username_error:
-            duplicates['username'] = {"mensagem": str(username_error)}
-
-        try:
-            if Cliente.objects.filter(email=email).exists():
-                raise ValueError("Já existe um cliente com este email.")
-        except ValueError as email_error:
-            duplicates['email'] = {"mensagem": str(email_error)}
-
-        return duplicates
     
     def create(self, request, *args, **kwargs):
-        duplicates = self.check_duplicates(request.data)
 
-        if duplicates:
-            return Response(duplicates, status=400)
+        user_form = UserForm({
+            "username": request.POST.get('usuario.username',None),
+            "password": make_password(request.POST.get('usuario.password',None)),
+        })
         
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        cliente_form = ClienteForm({
+            "nome_cliente": request.POST.get('nome_cliente',None),
+            "cpf": request.POST.get('cpf',None),
+            "celular": request.POST.get('celular',None),
+            "email": request.POST.get('email',None),
+        },request.FILES)
+            
+        success = True
+        message = ''
 
-        usuario_data = serializer.validated_data.pop('usuario')
-        password = usuario_data.pop('password')
-        usuario = User(**usuario_data)
-        usuario.set_password(password)
-        usuario.save()
-
-      
-        cliente = Cliente.objects.create(usuario=usuario, **serializer.validated_data)
-        serializer.instance = cliente
-        headers = self.get_success_headers(serializer.data)
+        if user_form.is_valid():
+            if cliente_form.is_valid():
+                user = user_form.save()
+                cliente_form.usuario = user.id
+                cliente_form.save()
+                message = "Cliente criado com sucesso!"
+            else:
+                message = cliente_form.errors
+                success = False
+        else:
+            
+            message= user_form.errors
+            if not cliente_form.is_valid():
+                for chave, valor in cliente_form.errors.items():
+                    message[f'{chave}'] = valor
+            success = False
         
-        return Response(serializer.data, status=201, headers=headers)
+        return Response({"message":message,"success":success}, status=201,)
 
         
 
