@@ -26,14 +26,24 @@ class UserViewSet(ModelViewSet):
     @action(methods=['get'], detail=False)
     def usuario_logado(self, request):
         dic = UserSerializer(request.user, read_only=True)
-        cliente = Cliente.objects.get(usuario=request.user)
-        cliente_dados = {
-            "id":cliente.id,
-            "nome":cliente.nome_cliente,
-            "email":cliente.email,
-            "celular":cliente.celular,
-            "foto":cliente.foto_perfil.url if cliente and cliente.foto_perfil else None
-        }
+        try:
+            cliente = Cliente.objects.get(usuario=request.user)
+            cliente_dados = {
+                "id": cliente.id,
+                "nome": cliente.nome_cliente,
+                "email": cliente.email,
+                "celular": cliente.celular,
+                "foto": cliente.foto_perfil.url if cliente.foto_perfil else None
+            }
+        except Cliente.DoesNotExist:
+            cliente_dados = {
+                "id": None,
+                "nome": None,
+                "email": None,
+                "celular": None,
+                "foto": None
+            }
+
         context = {
             "usuario":dic.data,
             "cliente":cliente_dados
