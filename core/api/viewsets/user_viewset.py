@@ -6,9 +6,8 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from django.http.response import JsonResponse
-from rest_framework.response import Response
-from django.contrib.auth.models import User
 from rest_framework.pagination import PageNumberPagination
+from pedidos.models import Cliente 
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -27,6 +26,21 @@ class UserViewSet(ModelViewSet):
     @action(methods=['get'], detail=False)
     def usuario_logado(self, request):
         dic = UserSerializer(request.user, read_only=True)
-        return JsonResponse(dic.data, content_type="application/json", safe=False)
+        cliente = Cliente.objects.get(usuario=request.user)
+        cliente_dados = {
+            "id_":cliente.id,
+            "nome":cliente.nome_cliente,
+            "email":cliente.email,
+            "celular":cliente.celular,
+            "foto":cliente.foto_perfil.url if cliente and cliente.foto_perfil else None
+        }
+        context = {
+            "usuario":dic.data,
+            "cliente":cliente_dados
+        }
+        return JsonResponse(context, content_type="application/json", safe=False)
+    
+
+    
 
     
