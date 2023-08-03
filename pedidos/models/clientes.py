@@ -7,7 +7,7 @@ class Cliente(models.Model):
     usuario = models.OneToOneField(
         User,
         verbose_name="Usuário",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True, blank=True, 
     )
 
