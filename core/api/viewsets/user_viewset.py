@@ -28,7 +28,7 @@ class UserViewSet(ModelViewSet):
         dic = UserSerializer(request.user, read_only=True)
         cliente = Cliente.objects.get(usuario=request.user)
         cliente_dados = {
-            "id_":cliente.id,
+            "id":cliente.id,
             "nome":cliente.nome_cliente,
             "email":cliente.email,
             "celular":cliente.celular,
