@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from core.models.profile import Profile 
 from pedidos.models import Cliente
-from core.api.serializers.user_serializer import UserSerializer
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 

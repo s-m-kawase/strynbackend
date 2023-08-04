@@ -8,6 +8,9 @@ from rest_framework.decorators import action
 from django.http.response import JsonResponse
 from rest_framework.pagination import PageNumberPagination
 from pedidos.models import Cliente 
+from pedidos.api.serializers.cliente_serializers import ClienteSerializer
+from pedidos.forms import ClienteForm, UserForm
+from django.contrib.auth.hashers import make_password
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -18,10 +21,49 @@ class StandardResultsSetPagination(PageNumberPagination):
 class UserViewSet(ModelViewSet):
     pagination_class = StandardResultsSetPagination
     authentication_classes = (SessionAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filterset_fields = ('id',)
+
+    
+    def update(self, request, *args, **kwargs):    
+        user_instance = User.objects.get(pk=kwargs['pk'])
+        user_form = UserForm({
+            "username": request.POST.get('username',None),
+            "password": make_password(request.POST.get('password',None)),
+        },instance=user_instance)
+        
+        cliente_instance = Cliente.objects.get(usuario=user_instance.id)
+
+        cliente_form = ClienteForm({
+            "nome_cliente": request.POST.get('nome_cliente',None),
+            "cpf": request.POST.get('cpf',None),
+            "celular": request.POST.get('celular',None),
+            "email": request.POST.get('email',None),
+        },request.FILES, instance=cliente_instance)
+
+        success = True
+        message = ''
+
+        if user_form.is_valid():
+            if cliente_form.is_valid():
+                user = user_form.save()
+                cliente_instance.usuario = user
+                cliente_instance.save()
+                message = "Cliente alterado com sucesso!"
+            else:
+                message = cliente_form.errors
+                success = False
+        else:
+            
+            message= user_form.errors
+            if not cliente_form.is_valid():
+                for chave, valor in cliente_form.errors.items():
+                    message[f'{chave}'] = valor
+            success = False
+        return JsonResponse({"message":message,"success":success}, status=201,)
+
 
     @action(methods=['get'], detail=False)
     def usuario_logado(self, request):
