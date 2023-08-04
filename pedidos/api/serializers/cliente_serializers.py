@@ -25,9 +25,12 @@ class UserByClienteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username','password']
+        fields = ['username','password',]
+        read_only_fields = ('email',) 
+
 class ClienteSerializer(serializers.ModelSerializer):
-    usuario = UserByClienteSerializer(write_only=True)
+    usuario = UserByClienteSerializer()
+    email = serializers.ReadOnlyField()
 
 
     # usuario_read = serializers.SerializerMethodField()
