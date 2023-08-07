@@ -38,17 +38,17 @@ class ClienteViewSet(viewsets.ModelViewSet):
             "nome_cliente": request.POST.get('nome_cliente',None),
             "cpf": request.POST.get('cpf',None),
             "celular": request.POST.get('celular',None),
-            "email": request.POST.get('email',None),
         },request.FILES)
             
         success = True
         message = ''
-
         if user_form.is_valid():
             if cliente_form.is_valid():
                 user = user_form.save()
-                cliente_form.usuario = user.id
-                cliente_form.save()
+                cliente = cliente_form.save(commit=False) 
+                cliente.usuario = user  
+                cliente.email = user.username  
+                cliente.save()  
                 message = "Cliente criado com sucesso!"
             else:
                 message = cliente_form.errors

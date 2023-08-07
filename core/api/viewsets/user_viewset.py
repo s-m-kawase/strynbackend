@@ -28,33 +28,31 @@ class UserViewSet(ModelViewSet):
 
     
     def update(self, request, *args, **kwargs):    
-        user_instance = User.objects.get(pk=kwargs['pk'])
+        user_instance = User.objects.get(pk=kwargs.get('pk'))
         user_form = UserForm({
-            "username": request.POST.get('username',None),
-            "password": make_password(request.POST.get('password',None)),
+            "username": request.POST.get('username',user_instance.username),
+            "password": make_password(request.POST.get('password',user_instance.password)),
         },instance=user_instance)
         
         cliente_instance = Cliente.objects.get(usuario=user_instance.id)
 
         cliente_form = ClienteForm({
-            "nome_cliente": request.POST.get('nome_cliente',None),
-            "cpf": request.POST.get('cpf',None),
-            "celular": request.POST.get('celular',None),
-            "email": request.POST.get('email',None),
+            "nome_cliente": request.POST.get('nome_cliente',cliente_instance.nome_cliente),
+            "cpf": request.POST.get('cpf',cliente_instance.cpf),
+            "celular": request.POST.get('celular',cliente_instance.celular),
+            "email": request.POST.get('email',cliente_instance.email),
         },request.FILES, instance=cliente_instance)
 
         success = True
         message = ''
 
-        if user_form.is_valid():
-            if cliente_form.is_valid():
-                user = user_form.save()
-                cliente_instance.usuario = user
-                cliente_instance.save()
-                message = "Cliente alterado com sucesso!"
-            else:
-                message = cliente_form.errors
-                success = False
+        if user_form.is_valid() and cliente_form.is_valid():
+            
+            user = user_form.save()
+            cliente_instance.usuario = user
+            cliente_instance.save()
+            message = "Cliente alterado com sucesso!"
+
         else:
             
             message= user_form.errors
