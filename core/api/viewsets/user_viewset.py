@@ -49,6 +49,7 @@ class UserViewSet(ModelViewSet):
         if user_form.is_valid() and cliente_form.is_valid():
             
             user = user_form.save()
+            user.email = user.username
             cliente_instance.usuario = user
             cliente_instance.email = user.username
             cliente_instance.save()
