@@ -31,7 +31,7 @@ class UserViewSet(ModelViewSet):
         user_instance = User.objects.get(pk=kwargs.get('pk'))
         user_form = UserForm({
             "username": request.POST.get('username',user_instance.username),
-            "password": make_password(request.POST.get('password',user_instance.password)),
+            "password": request.POST.get('password',user_instance.password),
         },instance=user_instance)
         
         cliente_instance = Cliente.objects.get(usuario=user_instance.id)
