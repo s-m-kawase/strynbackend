@@ -49,8 +49,10 @@ class UserViewSet(ModelViewSet):
         if user_form.is_valid() and cliente_form.is_valid():
             
             user = user_form.save()
-            user.email = user.username
             cliente_instance.usuario = user
+            user_instance.email = user.username
+            teste = user.username
+            user_instance.save()
             cliente_instance.email = user.username
             cliente_instance.save()
             message = "Cliente alterado com sucesso!"
