@@ -25,8 +25,8 @@ class UserByClienteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username','password',]
-        read_only_fields = ('email',) 
+        fields = ['username','password','email']
+        read_only_fields = () 
 
 class ClienteSerializer(serializers.ModelSerializer):
     usuario = UserByClienteSerializer()
