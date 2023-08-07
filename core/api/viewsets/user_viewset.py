@@ -40,7 +40,7 @@ class UserViewSet(ModelViewSet):
             "nome_cliente": request.POST.get('nome_cliente',cliente_instance.nome_cliente),
             "cpf": request.POST.get('cpf',cliente_instance.cpf),
             "celular": request.POST.get('celular',cliente_instance.celular),
-            "email": request.POST.get('email',cliente_instance.email),
+            
         },request.FILES, instance=cliente_instance)
 
         success = True
@@ -50,6 +50,7 @@ class UserViewSet(ModelViewSet):
             
             user = user_form.save()
             cliente_instance.usuario = user
+            cliente_instance.email = user.username
             cliente_instance.save()
             message = "Cliente alterado com sucesso!"
 
