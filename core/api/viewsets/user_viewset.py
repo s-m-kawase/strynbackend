@@ -97,6 +97,28 @@ class UserViewSet(ModelViewSet):
         }
         return JsonResponse(context, content_type="application/json", safe=False)
     
+    @action(methods=['put'],detail=True)
+    def alterar_senha(self,request, pk):
+        atual = request.data.get('senha_atual', None)
+        nova = request.data.get('senha_nova', None)
+
+        try:
+            user = User.objects.get(id=pk)
+            if user.check_password(atual):
+                user.set_password(nova)
+                user.save()
+                return JsonResponse({"message": "Senha alterada com sucesso"})
+            else:
+                return JsonResponse({"message": "Senha atual incorreta"}, status=400)
+        except User.DoesNotExist:
+            return JsonResponse({"message": "Usuario não encontrado"}, status=404)
+
+            
+
+        
+
+        return JsonResponse({"message": "Senha alterada com sucesso"})
+    
 
     
 
