@@ -42,6 +42,7 @@ class ClienteViewSet(viewsets.ModelViewSet):
             
         success = True
         message = ''
+        status_code = 0
         if user_form.is_valid():
             if cliente_form.is_valid():
                 user = user_form.save()
@@ -50,6 +51,7 @@ class ClienteViewSet(viewsets.ModelViewSet):
                 cliente.email = user.username  
                 cliente.save()  
                 message = "Cliente criado com sucesso!"
+                status_code = 200
             else:
                 message = cliente_form.errors
                 success = False
@@ -59,9 +61,10 @@ class ClienteViewSet(viewsets.ModelViewSet):
             if not cliente_form.is_valid():
                 for chave, valor in cliente_form.errors.items():
                     message[f'{chave}'] = valor
+            status_code = 400
             success = False
         
-        return Response({"message":message,"success":success}, status=201,)
+        return Response({"message":message,"success":success}, status=status_code,)
 
         
 
