@@ -51,20 +51,18 @@ class UserViewSet(ModelViewSet):
             user = user_form.save()
             cliente_instance.usuario = user
             user_instance.email = user.username
-            teste = user.username
             user_instance.save()
             cliente_instance.email = user.username
             cliente_instance.save()
             message = "Cliente alterado com sucesso!"
 
         else:
-            
             message= user_form.errors
             if not cliente_form.is_valid():
                 for chave, valor in cliente_form.errors.items():
                     message[f'{chave}'] = valor
             success = False
-        return JsonResponse({"message":message,"success":success}, status=201,)
+        return JsonResponse({"message":message,"success":success})
 
 
     @action(methods=['get'], detail=False)
