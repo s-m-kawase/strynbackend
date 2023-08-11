@@ -29,19 +29,26 @@ class UserViewSet(ModelViewSet):
     
     def update(self, request, *args, **kwargs):    
         user_instance = User.objects.get(pk=kwargs.get('pk'))
-        user_form = UserForm({
-            "username": request.POST.get('username',user_instance.username),
-            "password": request.POST.get('password',user_instance.password),
-        },instance=user_instance)
-        
-        cliente_instance = Cliente.objects.get(usuario=user_instance.id)
 
-        cliente_form = ClienteForm({
-            "nome_cliente": request.POST.get('nome_cliente',cliente_instance.nome_cliente),
-            "cpf": request.POST.get('cpf',cliente_instance.cpf),
-            "celular": request.POST.get('celular',cliente_instance.celular),
-            
-        },request.FILES, instance=cliente_instance)
+        user_fields = {}
+        cliente_fields = {}
+        if  request.POST.get('username',False):
+            user_fields['username'] = request.POST.get('username')
+            user_fields['email'] = request.POST.get('username')
+            cliente_fields['email'] = request.POST.get('username')
+        if request.POST.get('password',False):
+            user_fields['password'] =request.POST.get('password')
+
+        if request.POST.get('nome_cliente',False):
+            cliente_fields['nome_cliente'] =request.POST.get('nome_cliente')
+        if request.POST.get('cpf',False):
+            cliente_fields['cpf'] =request.POST.get('cpf')
+        if request.POST.get('celular',False):
+            cliente_fields['celular'] =request.POST.get('celular')
+
+        user_form = UserForm(user_fields,instance=user_instance)
+        cliente_instance = Cliente.objects.get(usuario=user_instance.id)
+        cliente_form = ClienteForm(cliente_fields,request.FILES, instance=cliente_instance)
 
         success = True
         message = ''
@@ -49,12 +56,9 @@ class UserViewSet(ModelViewSet):
 
         if user_form.is_valid():
             if cliente_form.is_valid():
-                user = user_form.save()
-                cliente_instance.usuario = user
-                user_instance.email = user.username
-                user_instance.save()
-                cliente_instance.email = user.username
-                cliente_instance.save()
+                user_form.save()
+                cliente_instance.usuario = user_form.instance
+                cliente_form.save()
                 message = "Cliente alterado com sucesso!"
                 status_code = 200
             else:

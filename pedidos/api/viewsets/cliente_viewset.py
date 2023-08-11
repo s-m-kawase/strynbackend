@@ -30,8 +30,8 @@ class ClienteViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
 
         user_form = UserForm({
-            "username": request.data.get('usuario.username',None),
-            "password": make_password(request.data.get('usuario.password',None)),
+            "username": request.data.get('username',None),
+            "password": make_password(request.data.get('password',None)),
         })
         
         cliente_form = ClienteForm({
@@ -46,7 +46,7 @@ class ClienteViewSet(viewsets.ModelViewSet):
         if user_form.is_valid():
             if cliente_form.is_valid():
                 user = user_form.save()
-                user.email = user.username
+                user.email = user_form.instance.username
                 user.save()
                 cliente = cliente_form.save(commit=False) 
                 cliente.usuario = user  
