@@ -57,6 +57,7 @@ class ClienteViewSet(viewsets.ModelViewSet):
             else:
                 message = cliente_form.errors
                 success = False
+                status_code = 404
         else:
             
             message= user_form.errors
