@@ -113,11 +113,7 @@ class UserViewSet(ModelViewSet):
         except User.DoesNotExist:
             return JsonResponse({"message": "Usuario não encontrado"}, status=404)
 
-            
-
         
-
-        return JsonResponse({"message": "Senha alterada com sucesso"})
     
 
     
