@@ -33,7 +33,7 @@ class UserViewSet(ModelViewSet):
 
         user_fields = {}
         cliente_fields = {}
-
+        
         if  request.POST.get('username',False):
             user_fields['username'] = request.POST.get('username')
             user_fields['email'] = request.POST.get('username')
@@ -125,12 +125,12 @@ class UserViewSet(ModelViewSet):
 
         try:
             user = User.objects.get(id=pk)
-            # if user.check_password(atual):
-            user.set_password(nova)
-            user.save()
-            return JsonResponse({"message": "Senha alterada com sucesso"})
-            # else:
-            #     return JsonResponse({"message": "Senha atual incorreta"}, status=400)
+            if user.check_password(atual):
+                user.set_password(nova)
+                user.save()
+                return JsonResponse({"message": "Senha alterada com sucesso"})
+            else:
+                return JsonResponse({"message": "Senha atual incorreta"}, status=400)
         except User.DoesNotExist:
             return JsonResponse({"message": "Usuario não encontrado"}, status=404)
 
