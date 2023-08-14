@@ -29,25 +29,41 @@ class UserViewSet(ModelViewSet):
     
     def update(self, request, *args, **kwargs):    
         user_instance = User.objects.get(pk=kwargs.get('pk'))
+        cliente_instance = Cliente.objects.get(usuario=user_instance.id)
 
         user_fields = {}
         cliente_fields = {}
+        
         if  request.POST.get('username',False):
             user_fields['username'] = request.POST.get('username')
             user_fields['email'] = request.POST.get('username')
             cliente_fields['email'] = request.POST.get('username')
+        else:
+            user_fields['username'] = user_instance.username
+            user_fields['email'] = user_instance.username
+            cliente_fields['email'] = user_instance.username
+
         if request.POST.get('password',False):
             user_fields['password'] =request.POST.get('password')
+        else:
+            user_fields['password'] = user_instance
 
         if request.POST.get('nome_cliente',False):
             cliente_fields['nome_cliente'] =request.POST.get('nome_cliente')
+        else:
+            cliente_fields['nome_cliente'] = cliente_instance.nome_cliente
+
         if request.POST.get('cpf',False):
             cliente_fields['cpf'] =request.POST.get('cpf')
+        else:
+            cliente_fields['cpf'] = cliente_instance.cpf
+
         if request.POST.get('celular',False):
             cliente_fields['celular'] =request.POST.get('celular')
+        else:
+            cliente_fields['celular'] = cliente_instance.celular
 
         user_form = UserForm(user_fields,instance=user_instance)
-        cliente_instance = Cliente.objects.get(usuario=user_instance.id)
         cliente_form = ClienteForm(cliente_fields,request.FILES, instance=cliente_instance)
 
         success = True
@@ -64,6 +80,7 @@ class UserViewSet(ModelViewSet):
             else:
                 message = cliente_form.errors
                 success = False
+                status_code = 404
         else:
             message= user_form.errors
             if not cliente_form.is_valid():
