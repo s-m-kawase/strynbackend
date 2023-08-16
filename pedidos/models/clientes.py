@@ -44,6 +44,12 @@ class Cliente(models.Model):
         null=True,blank=True
     )
 
+    hash_cliente = models.CharField(
+        verbose_name="Hash_cliente",
+        max_length=200,
+        blank=True, null=True
+    )
+
     @property
     def user(self):
         return self.usuario

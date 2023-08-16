@@ -38,6 +38,7 @@ class ClienteViewSet(viewsets.ModelViewSet):
             "nome_cliente": request.data.get('nome_cliente',None),
             "cpf": request.data.get('cpf',None),
             "celular": request.data.get('celular',None),
+            "hash_cliente": request.data.get('hash',None),
         },request.FILES)
             
         success = True
