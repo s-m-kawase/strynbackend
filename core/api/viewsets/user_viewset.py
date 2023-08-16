@@ -101,7 +101,8 @@ class UserViewSet(ModelViewSet):
                 "nome": cliente.nome_cliente,
                 "email": cliente.email,
                 "celular": cliente.celular,
-                "foto": cliente.foto_perfil.url if cliente.foto_perfil else None
+                "foto": cliente.foto_perfil.url if cliente.foto_perfil else None,
+                "foto": cliente.hash_cliente if cliente.hash_cliente else None,
             }
         except Cliente.DoesNotExist:
             cliente_dados = {
@@ -109,7 +110,8 @@ class UserViewSet(ModelViewSet):
                 "nome": None,
                 "email": None,
                 "celular": None,
-                "foto": None
+                "foto": None,
+                "hash_cliente": None,
             }
 
         context = {
