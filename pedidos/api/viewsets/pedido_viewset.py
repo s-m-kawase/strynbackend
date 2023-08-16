@@ -56,6 +56,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         query = super().get_queryset()
 
         restaurante = self.request.query_params.get('restaurante',None)
+        hash_pedido = self.request.query_params.get('hash',None)
         hash_cliente = self.request.query_params.get('hash',None)
         status = self.request.query_params.get('status_pedido',None)
         data_inicial =  self.request.query_params.get('data_inicial',None)
@@ -74,8 +75,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 query = query.filter(Q(cliente__usuario=usuario) |
                                 Q(restaurante__usuario=usuario)).distinct()
             
+            if hash_pedido:
+                query = query.filter(Q(hash_cliente=hash_cliente))
+            
             if hash_cliente:
-                query = query.filter(Q(cliente__hash_cliente=hash_cliente))
+                query = query.filter(cliente__hash_cliente=hash_cliente)
                 
             if restaurante:
               query = query.filter(restaurante=restaurante)
