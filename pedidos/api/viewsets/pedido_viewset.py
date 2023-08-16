@@ -69,14 +69,18 @@ class PedidosViewSet(viewsets.ModelViewSet):
             )
 
         if usuario.is_authenticated:
-            query = query.filter(Q(cliente__usuario=usuario) |
+            
+            if not usuario.is_superuser:
+                query = query.filter(Q(cliente__usuario=usuario) |
                                 Q(restaurante__usuario=usuario)).distinct()
+            
             if hash_cliente:
                 query = query.filter(Q(hash_cliente=hash_cliente))
+                
             if restaurante:
               query = query.filter(restaurante=restaurante)
 
-            elif status:
+            if status:
               query = query.filter(status_pedido=status)
         else:
             hash_query = query.filter(hash_cliente=hash_cliente)
