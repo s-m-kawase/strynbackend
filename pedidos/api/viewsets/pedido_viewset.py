@@ -75,7 +75,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                                 Q(restaurante__usuario=usuario)).distinct()
             
             if hash_cliente:
-                query = query.filter(Q(cleinte__hash_cliente=hash_cliente))
+                query = query.filter(Q(cliente__hash_cliente=hash_cliente))
                 
             if restaurante:
               query = query.filter(restaurante=restaurante)
