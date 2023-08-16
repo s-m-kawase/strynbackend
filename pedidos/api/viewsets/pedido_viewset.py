@@ -57,7 +57,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         restaurante = self.request.query_params.get('restaurante',None)
         hash_pedido = self.request.query_params.get('hash_pedido',None)
-        hash_cliente = self.request.query_params.get('hash_cliente',None)
+        # hash_cliente = self.request.query_params.get('hash_cliente',None)
         status = self.request.query_params.get('status_pedido',None)
         data_inicial =  self.request.query_params.get('data_inicial',None)
         data_final = self.request.query_params.get('data_final', None)
@@ -72,24 +72,24 @@ class PedidosViewSet(viewsets.ModelViewSet):
         if usuario.is_authenticated:
             
             if not usuario.is_superuser:
-                query = query.filter(Q(cliente__usuario=usuario) |
+                hash_pedido = usuario.cliente.hash_cliente if usuario.cliente else False
+                if hash_pedido:
+                    query = query.filter(Q(hash_cliente=hash_pedido)|
+                                        Q(cliente__usuario=usuario) |
+                                        Q(restaurante__usuario=usuario)).distinct()
+                else:
+                    query = query.filter(Q(cliente__usuario=usuario) |
                                 Q(restaurante__usuario=usuario)).distinct()
-            
-            if hash_pedido:
-                query = query.filter(Q(hash_cliente=hash_cliente))
-            
-            if hash_cliente:
-                query = query.filter(cliente__hash_cliente=hash_cliente)
-                
+                    
             if restaurante:
               query = query.filter(restaurante=restaurante)
 
             if status:
               query = query.filter(status_pedido=status)
-        else:
-            hash_query = query.filter(hash_cliente=hash_cliente)
-            if hash_query.exists():
-                query= hash_query.filter(status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado']
+        else:   
+            if hash_pedido:
+                query = query.filter(status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'],
+                                         hash_cliente=hash_pedido
                 )
             else:
                 query = query.none()
