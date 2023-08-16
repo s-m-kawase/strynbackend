@@ -56,8 +56,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
         query = super().get_queryset()
 
         restaurante = self.request.query_params.get('restaurante',None)
-        hash_pedido = self.request.query_params.get('hash',None)
-        hash_cliente = self.request.query_params.get('hash',None)
+        hash_pedido = self.request.query_params.get('hash_pedido',None)
+        hash_cliente = self.request.query_params.get('hash_cliente',None)
         status = self.request.query_params.get('status_pedido',None)
         data_inicial =  self.request.query_params.get('data_inicial',None)
         data_final = self.request.query_params.get('data_final', None)
