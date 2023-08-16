@@ -55,13 +55,13 @@ class PedidosViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         query = super().get_queryset()
 
-        usuario = self.request.user
         restaurante = self.request.query_params.get('restaurante',None)
         hash_cliente = self.request.query_params.get('hash',None)
         status = self.request.query_params.get('status_pedido',None)
         data_inicial =  self.request.query_params.get('data_inicial',None)
         data_final = self.request.query_params.get('data_final', None)
-
+        usuario = self.request.user
+        
         if data_inicial and data_final and data_final >= data_inicial:
             query = query.filter(
                 data_criacao__lte=data_final,
@@ -70,8 +70,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
         if usuario.is_authenticated:
             query = query.filter(Q(cliente__usuario=usuario) |
-                            Q(restaurante__usuario=usuario)|
-                            Q(hash_cliente=hash_cliente)).distinct()
+                                Q(restaurante__usuario=usuario)).distinct()
+            if hash_cliente:
+                query = query.filter(Q(hash_cliente=hash_cliente))
             if restaurante:
               query = query.filter(restaurante=restaurante)
 
