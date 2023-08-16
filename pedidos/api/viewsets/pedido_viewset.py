@@ -72,7 +72,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
             
             if not usuario.is_superuser:
                 query = query.filter(Q(cliente__usuario=usuario) |
-                                Q(restaurante__usuario=usuario)).distinct()
+                                Q(restaurante__usuario=usuario)|
+                                Q(cliente__hash_cliente=hash_cliente)).distinct()
             
             if hash_cliente:
                 query = query.filter(Q(hash_cliente=hash_cliente))
