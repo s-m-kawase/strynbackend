@@ -102,7 +102,7 @@ class UserViewSet(ModelViewSet):
                 "email": cliente.email,
                 "celular": cliente.celular,
                 "foto": cliente.foto_perfil.url if cliente.foto_perfil else None,
-                "foto": cliente.hash_cliente if cliente.hash_cliente else None,
+                "hash_cliente": cliente.hash_cliente if cliente.hash_cliente else None,
             }
         except Cliente.DoesNotExist:
             cliente_dados = {
