@@ -56,7 +56,8 @@ class ClienteViewSet(viewsets.ModelViewSet):
                 message = "Cliente criado com sucesso!"
                 status_code = 200
             else:
-                message = cliente_form.errors
+                message = {"error":cliente_form.errors}
+                # erro = cliente_form.errors
                 success = False
                 status_code = 404
         else:
@@ -68,7 +69,7 @@ class ClienteViewSet(viewsets.ModelViewSet):
             status_code = 400
             success = False
         
-        return Response({"message":message,"success":success}, status=status_code,)
+        return Response({"message":message,"success":success,}, status=status_code,)
 
         
 
