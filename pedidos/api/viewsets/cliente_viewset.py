@@ -69,7 +69,7 @@ class ClienteViewSet(viewsets.ModelViewSet):
             status_code = 400
             success = False
         
-        return Response({"message":message,"success":success}, status=status_code,)
+        return Response({"message":message,"success":success,}, status=status_code,)
 
         
 
