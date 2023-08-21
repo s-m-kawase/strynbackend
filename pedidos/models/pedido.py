@@ -120,6 +120,10 @@ class Pedidos(models.Model):
         null=True, blank=True
     )
 
+    hora_status_pago = models.DateTimeField(
+        verbose_name="Hora que status mudou para pago",
+        null=True, blank=True)
+
     @property
     def subtotal(self):
         subtotal = 0
