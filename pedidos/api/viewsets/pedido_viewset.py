@@ -86,13 +86,13 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
             if status:
               query = query.filter(status_pedido=status)
-        else:   
+        else:  
             if hash_pedido:
                 query = query.filter(status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'],
                                          hash_cliente=hash_pedido
                 )
-            else:
-                query = query.none()
+            if restaurante:
+              query = query.filter(restaurante=restaurante)
 
         return query
 

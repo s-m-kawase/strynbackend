@@ -9,6 +9,7 @@ from django.http.response import JsonResponse
 from rest_framework.response import Response
 from ...forms import ClienteForm, UserForm
 from django.contrib.auth.hashers import make_password
+from rest_framework import status
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -40,10 +41,11 @@ class ClienteViewSet(viewsets.ModelViewSet):
             "celular": request.data.get('celular',None),
             "hash_cliente": request.data.get('hash',None),
         },request.FILES)
-            
+
         success = True
         message = ''
-        status_code = 0
+        status_code = 1
+        error_messages = []
         if user_form.is_valid():
             if cliente_form.is_valid():
                 user = user_form.save()
@@ -54,22 +56,20 @@ class ClienteViewSet(viewsets.ModelViewSet):
                 cliente.email = user.username  
                 cliente.save()  
                 message = "Cliente criado com sucesso!"
-                status_code = 200
+                status_code = status.HTTP_200_OK
             else:
-                message = {"error":cliente_form.errors}
-                # erro = cliente_form.errors
+                error_messages.extend([error[0] for error in user_form.errors.values()])
+                error_messages.extend([error[0] for error in cliente_form.errors.values()])
                 success = False
-                status_code = 404
+                status_code = status.HTTP_400_BAD_REQUEST
         else:
             
-            message= user_form.errors
             if not cliente_form.is_valid():
-                for chave, valor in cliente_form.errors.items():
-                    message[f'{chave}'] = valor
-            status_code = 400
+                error_messages.extend([error[0] for error in cliente_form.errors.values()])
+            status_code = status.HTTP_400_BAD_REQUEST
             success = False
         
-        return Response({"message":message,"success":success,}, status=status_code,)
+        return Response({"message": error_messages if not success else message, "success": success}, status=status_code)
 
         
 
