@@ -11,6 +11,7 @@ from decouple import config
 from emails.models import MensagemEmail, TemplateEmail
 from collections import namedtuple
 from django.http import JsonResponse
+from django.utils import timezone
 
 
 stripe.api_key = config('STRIPE_SECRET_KEY')
@@ -22,6 +23,7 @@ class StripeWebhookViewSet(ViewSet):
     email = session['customer_details']['email']
     if session['status'] == 'complete':
         pedido.status_pedido = 'Pago'
+        pedido.hora_status_pago = timezone.now()
         pedido.save()
 
         try:
