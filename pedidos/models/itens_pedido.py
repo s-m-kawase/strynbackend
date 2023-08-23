@@ -58,6 +58,12 @@ class ItensPedido(models.Model):
         blank=True, null=True,
     )
 
+    item_pronto = models.BooleanField(
+        verbose_name="Item pronto",
+        default=False,
+        blank=True,null=True
+    )
+
 
     @property
     def total_complementos(self):
