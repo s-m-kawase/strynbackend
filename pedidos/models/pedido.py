@@ -129,6 +129,12 @@ class Pedidos(models.Model):
         null=True, blank=True
     )
 
+    item_pronto = models.BooleanField(
+        verbose_name="Item pronto",
+        default=False,
+        blank=True,null=True
+    )
+
     @property
     def subtotal(self):
         subtotal = 0
