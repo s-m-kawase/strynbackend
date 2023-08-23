@@ -58,13 +58,8 @@ class ClienteViewSet(viewsets.ModelViewSet):
                 message = "Cliente criado com sucesso!"
                 status_code = status.HTTP_200_OK
             else:
-<<<<<<< HEAD
-                #outra abordagem para retornar os erros
-                message = cliente_form.errors
-=======
                 error_messages.extend([error[0] for error in user_form.errors.values()])
                 error_messages.extend([error[0] for error in cliente_form.errors.values()])
->>>>>>> c0a26b1d33a79323ffcf35bf703d26e2a4dedc40
                 success = False
                 status_code = status.HTTP_400_BAD_REQUEST
         else:

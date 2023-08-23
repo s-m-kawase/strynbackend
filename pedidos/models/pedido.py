@@ -123,17 +123,7 @@ class Pedidos(models.Model):
     hora_status_pago = models.DateTimeField(
         verbose_name="Hora que status mudou para pago",
         null=True, blank=True)
-    
-    hora_status_aguardando_preparo = models.DateTimeField(
-        verbose_name="Hora que status mudou para aguardando preparo",
-        null=True, blank=True
-    )
 
-    # item_pronto = models.BooleanField(
-    #     verbose_name="Item pronto",
-    #     default=False,
-    #     blank=True,null=True
-    # )
 
     @property
     def subtotal(self):
