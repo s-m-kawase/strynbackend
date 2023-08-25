@@ -35,6 +35,7 @@ class PedidosSerializer(serializers.ModelSerializer):
             "foto_item": item.item.foto.url if item.item and item.item.foto else None,
             "quantidade": item.quantidade,
             "valor_unitario_item": item.valor_unitario_item if item.valor_unitario_item else None,
+            "item_pronto": item.item_pronto,
             #"preco_promocao": item.item.preco_promocao if item.item else None,
             "valor_total_item": item.total_item,
             "valor_total_complementos": item.total_complementos,
