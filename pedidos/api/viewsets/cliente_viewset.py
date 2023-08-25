@@ -60,8 +60,12 @@ class ClienteViewSet(viewsets.ModelViewSet):
                 
                 message = "Cliente criado com sucesso!"
                 success = True
-                status_code = status.HTTP_200_OK
-                return Response({"message": message, "success": success}, status=status_code)
+                
+                return JsonResponse({
+                        "message": message,
+                        "error":error_messages,
+                        "success": success
+                      })
             else:
                 error_messages = {}
                 for field, messages in user_form.errors.items():
@@ -72,10 +76,23 @@ class ClienteViewSet(viewsets.ModelViewSet):
                     if field not in error_messages:
                         error_messages[field] = messages[0]
 
-                status_code = status.HTTP_400_BAD_REQUEST
-                return JsonResponse({"errors": error_messages}, status=status_code)
+                message = "Falha ao criar usuário!"
+                success = False
+                return JsonResponse({
+                    "message": message,
+                    "error": error_messages,
+                    "success":success
+                    })
         except Exception as e:
-            return JsonResponse({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            message = "Falha ao criar usuário!"
+            success = False
+            
+            return JsonResponse({
+                "message": message,
+                "error": str(e),
+                 "success":success
+                })
         
 
         
