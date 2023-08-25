@@ -45,31 +45,38 @@ class ClienteViewSet(viewsets.ModelViewSet):
         success = True
         message = ''
         status_code = 1
-        error_messages = []
-        if user_form.is_valid():
-            if cliente_form.is_valid():
+        error_messages = {}
+
+        try:
+            if user_form.is_valid() and cliente_form.is_valid():
                 user = user_form.save()
                 user.email = user_form.instance.username
                 user.save()
-                cliente = cliente_form.save(commit=False) 
-                cliente.usuario = user  
-                cliente.email = user.username  
-                cliente.save()  
+                
+                cliente = cliente_form.save(commit=False)
+                cliente.usuario = user
+                cliente.email = user.username
+                cliente.save()
+                
                 message = "Cliente criado com sucesso!"
+                success = True
                 status_code = status.HTTP_200_OK
+                return Response({"message": message, "success": success}, status=status_code)
             else:
-                error_messages.extend([error[0] for error in user_form.errors.values()])
-                error_messages.extend([error[0] for error in cliente_form.errors.values()])
-                success = False
+                error_messages = {}
+                for field, messages in user_form.errors.items():
+                    if field not in error_messages:
+                        error_messages[field] = messages[0]
+
+                for field, messages in cliente_form.errors.items():
+                    if field not in error_messages:
+                        error_messages[field] = messages[0]
+
                 status_code = status.HTTP_400_BAD_REQUEST
-        else:
-            
-            if not cliente_form.is_valid():
-                error_messages.extend([error[0] for error in cliente_form.errors.values()])
-            status_code = status.HTTP_400_BAD_REQUEST
-            success = False
+                return JsonResponse({"errors": error_messages}, status=status_code)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        return Response({"message": error_messages if not success else message, "success": success}, status=status_code)
 
         
 
