@@ -44,7 +44,6 @@ class ClienteViewSet(viewsets.ModelViewSet):
 
         success = True
         message = ''
-        status_code = 1
         error_messages = {}
 
         try:

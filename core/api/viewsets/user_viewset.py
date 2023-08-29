@@ -68,28 +68,35 @@ class UserViewSet(ModelViewSet):
 
         success = True
         message = ''
-        status_code = 0
+        error_messages = {}
 
-        if user_form.is_valid():
-            if cliente_form.is_valid():
+        if user_form.is_valid() and cliente_form.is_valid():
                 user_form.save()
                 cliente_instance.usuario = user_form.instance
                 cliente_form.save()
                 message = "Cliente alterado com sucesso!"
-                status_code = 200
-            else:
-                message = cliente_form.errors
-                success = False
-                status_code = 404
+                return JsonResponse({
+                        "message": message,
+                        "error":error_messages,
+                        "success": success
+                      })
         else:
-            message= user_form.errors
-            if not cliente_form.is_valid():
-                for chave, valor in cliente_form.errors.items():
-                    message[f'{chave}'] = valor
-            status_code = 400
-            success = False
-        return JsonResponse({"message":message,"success":success},status=status_code)
+                error_messages = {}
+                for field, messages in user_form.errors.items():
+                    if field not in error_messages:
+                        error_messages[field] = messages[0]
 
+                for field, messages in cliente_form.errors.items():
+                    if field not in error_messages:
+                        error_messages[field] = messages[0]
+
+                message = "Falha ao alterar usuário!"
+                success = False
+                return JsonResponse({
+                    "message": message,
+                    "error": error_messages,
+                    "success":success
+                    })
 
     @action(methods=['get'], detail=False)
     def usuario_logado(self, request):
