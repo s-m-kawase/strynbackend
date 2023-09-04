@@ -18,6 +18,7 @@ ALLOWED_HOSTS = [
 ]
 
 INSTALLED_APPS = [
+   'django_app_novadata',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
