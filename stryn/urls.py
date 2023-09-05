@@ -65,7 +65,8 @@ router.register(r'webhook', StripeWebhookViewSet, basename='webhook')
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls, name='admin'),
+    path('admin/', admin.site.urls),
+    path('', include('django_app_novadata.urls')),
     path ("accounts/",  include ( "django.contrib.auth.urls" ),name='login'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('api/webhook/', StripeWebhookViewSet.as_view({'post': 'webhook'}), name='webhook'),
