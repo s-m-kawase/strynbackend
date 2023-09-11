@@ -36,12 +36,8 @@ class UserViewSet(ModelViewSet):
         
         if  request.POST.get('username',False):
             user_fields['username'] = request.POST.get('username')
-            user_fields['email'] = request.POST.get('username')
-            cliente_fields['email'] = request.POST.get('username')
         else:
             user_fields['username'] = user_instance.username
-            user_fields['email'] = user_instance.username
-            cliente_fields['email'] = user_instance.username
 
         if request.POST.get('password',False):
             raw_password = request.POST.get('password')
@@ -65,6 +61,11 @@ class UserViewSet(ModelViewSet):
         else:
             cliente_fields['celular'] = cliente_instance.celular
 
+        if request.POST.get('email',False):
+            cliente_fields['email'] = request.POST.get('email')
+        else:
+            cliente_fields['email'] = cliente_instance.email
+
         user_form = UserForm(user_fields,instance=user_instance)
         cliente_form = ClienteForm(cliente_fields,request.FILES, instance=cliente_instance)
 
@@ -76,6 +77,8 @@ class UserViewSet(ModelViewSet):
                 user_form.save()
                 cliente_instance.usuario = user_form.instance
                 cliente_form.save()
+                user_instance.email = cliente_form.instance.email
+                user_instance.save()
                 message = "Cliente alterado com sucesso!"
                 return JsonResponse({
                         "message": message,
