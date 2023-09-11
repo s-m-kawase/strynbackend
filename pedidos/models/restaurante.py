@@ -234,10 +234,10 @@ class Restaurante(models.Model):
         blank=True, null=True
     )
 
-    pedido_no_seu_restaurante = models.BooleanField(
-        verbose_name="Pedido No meu Restaurante",
-        default=False
-    )
+    # pedido_no_seu_restaurante = models.BooleanField(
+    #     verbose_name="Pedido No meu Restaurante",
+    #     default=False
+    # )
 
     @property
     def passar_porcentagem_em_decimal(self):
