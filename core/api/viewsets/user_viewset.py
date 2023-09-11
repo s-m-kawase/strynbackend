@@ -44,12 +44,14 @@ class UserViewSet(ModelViewSet):
             cliente_fields['email'] = user_instance.username
 
         if request.POST.get('password',False):
-            user_fields['password'] =request.POST.get('password')
+            raw_password = request.POST.get('password')
+            hashed_password = make_password(raw_password)
+            user_fields['password'] = hashed_password
         else:
-            user_fields['password'] = user_instance
+            user_fields['password'] = user_instance.password
 
         if request.POST.get('nome_cliente',False):
-            cliente_fields['nome_cliente'] =request.POST.get('nome_cliente')
+            cliente_fields['nome_cliente'] = request.POST.get('nome_cliente')
         else:
             cliente_fields['nome_cliente'] = cliente_instance.nome_cliente
 

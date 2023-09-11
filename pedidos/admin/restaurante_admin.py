@@ -74,7 +74,6 @@ class RestauranteAdmin(admin.ModelAdmin):
                     'tempo_limite',
                     'chave_connect',
                     'pocentagem_para_tranferencia',
-                    'pedido_no_seu_restaurante',
                     'usuario',
                 ]
             }
