@@ -1,3 +1,6 @@
+import decimal
+from os import listxattr
+from tokenize import Double
 from rest_framework import viewsets , filters
 import django_filters.rest_framework
 from pedidos.models import ItemCardapio
@@ -8,7 +11,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
 from django.http.response import JsonResponse
-
+from rest_framework.response import Response
+from decimal import *
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
@@ -23,7 +27,8 @@ class IsAdminOrReadOnly(BasePermission):
 
 class ItemCardapioViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAdminOrReadOnly,)
+    # permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = ()
     queryset = ItemCardapio.objects.all()
     serializer_class = ItemCardapioSerializer
 
@@ -61,6 +66,18 @@ class ItemCardapioViewSet(viewsets.ModelViewSet):
             context,
             content_type="application/json"
         )
+    
+    def create(self, request, *args, **kwargs):
+    
+        if request.data.get('preco', False):
+            preco = str(request.data.get('preco'))
+            preco = preco.replace('.', '')
+            preco = preco.replace(',', '.')
+            request.data._mutable = True
+            request.data['preco'] = preco
+            request.data._mutable = False
+
+        return super().create(request, *args, **kwargs)
 
 
 

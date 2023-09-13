@@ -7,7 +7,6 @@ class CategoriaCardapio(models.Model):
         max_length=40,
         verbose_name='Nome da Categoria',
         null=True,
-        unique=True
     )
 
     status = models.BooleanField(
