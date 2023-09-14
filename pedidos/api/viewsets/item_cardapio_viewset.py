@@ -67,17 +67,4 @@ class ItemCardapioViewSet(viewsets.ModelViewSet):
             content_type="application/json"
         )
     
-    def create(self, request, *args, **kwargs):
-    
-        if request.data.get('preco', False):
-            preco = str(request.data.get('preco'))
-            preco = preco.replace('.', '')
-            preco = preco.replace(',', '.')
-            request.data._mutable = True
-            request.data['preco'] = preco
-            request.data._mutable = False
-
-        return super().create(request, *args, **kwargs)
-
-
 
