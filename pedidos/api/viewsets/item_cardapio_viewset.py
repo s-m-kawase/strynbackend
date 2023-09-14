@@ -1,5 +1,4 @@
 import decimal
-from os import listxattr
 from tokenize import Double
 from rest_framework import viewsets , filters
 import django_filters.rest_framework
