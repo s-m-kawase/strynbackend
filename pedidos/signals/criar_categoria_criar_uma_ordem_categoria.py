@@ -15,16 +15,16 @@ def criar_ordem_categoria_cardapio(sender, instance, created, **kwargs):
                 ordem.save()
 
 
-@receiver(post_save, sender=Cardapio)
-def criar_ordem_categoria_cardapio2(sender, instance, created, **kwargs):
-    if created:
-        categorias = CategoriaCardapio.objects.all()
+# @receiver(post_save, sender=Cardapio)
+# def criar_ordem_categoria_cardapio2(sender, instance, created, **kwargs):
+#     if created:
+#         categorias = CategoriaCardapio.objects.all()
         
-        for categoria in categorias:
-            ordem_existe = OrdemCategoriaCardapio.objects.filter(categoria=categoria, cardapio=instance).exists()
-            if not ordem_existe:
-                ordem = OrdemCategoriaCardapio.objects.create(categoria=categoria, cardapio=instance)
-                ordem.save()
+#         for categoria in categorias:
+#             ordem_existe = OrdemCategoriaCardapio.objects.filter(categoria=categoria, cardapio=instance).exists()
+#             if not ordem_existe:
+#                 ordem = OrdemCategoriaCardapio.objects.create(categoria=categoria, cardapio=instance)
+#                 ordem.save()
 
 
 @receiver(post_save, sender=OrdemCategoriaCardapio)
