@@ -4,6 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from ...models.ordem_categoria_cardapio import OrdemCategoriaCardapio
 from ..serializers.ordem_categoria_serializers import OrdemCategoriaCardapioSerializer
+import django_filters.rest_framework
+
 
 
 class OrdemCategoriaCardapioViewSet(viewsets.ModelViewSet):
@@ -11,11 +13,11 @@ class OrdemCategoriaCardapioViewSet(viewsets.ModelViewSet):
     serializer_class = OrdemCategoriaCardapioSerializer
     # permission_classes = [IsAuthenticated]
 
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
 
-    search_fields = [
-        
-    ]
+    filterset_fields = ['cardapio']
+
+    search_fields = []
 
     
 
@@ -30,12 +32,5 @@ class OrdemCategoriaCardapioViewSet(viewsets.ModelViewSet):
         return Response({'status': 'success'})
     
 
-    def get_queryset(self):
-        query = super().get_queryset()
-        parametro = self.request.query_params
-        cardapio = parametro.get('cardapio',None)
-
-        query = query.filter(cardapio=cardapio)
-        
-        return query
+   
     
