@@ -29,4 +29,13 @@ class OrdemCategoriaCardapioViewSet(viewsets.ModelViewSet):
 
         return Response({'status': 'success'})
     
+
+    def get_queryset(self):
+        query = super().get_queryset()
+        parametro = self.request.query_params
+        cardapio = parametro.get('cardapio',None)
+
+        query = query.filter(cardapio=cardapio)
+        
+        return query
     
