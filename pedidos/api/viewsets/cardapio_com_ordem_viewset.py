@@ -1,7 +1,7 @@
 from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import BasePermission
-from ...models import Cardapio
+from ...models import Cardapio, CategoriaCardapio
 from ..serializers.cardapio_com_ordem_serializer import CardapioComOrdemSerializer
 
 
@@ -30,12 +30,17 @@ class CardapioComOrdemViewSet(viewsets.ModelViewSet):
         parametro = self.request.query_params
         cardapio = parametro.get('cardapio',None)
         restaurante = parametro.get('restaurante',None)
+        categoria = parametro.get('categoria',None)
 
 
         # Verifica se o usuário é anônimo
         if self.request.user.is_authenticated:
             if cardapio:
-                query = query.filter(id=cardapio)
+
+                cardapio_obj = Cardapio.objects.get(id=cardapio)
+                categorias_do_cardapio = cardapio_obj.categorias.all()
+                
+                query = query.filter(id=cardapio, categorias__in=categorias_do_cardapio)
             else:
               usuario = self.request.user
               print(usuario)
