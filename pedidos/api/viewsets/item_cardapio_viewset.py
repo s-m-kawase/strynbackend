@@ -33,7 +33,7 @@ class ItemCardapioViewSet(viewsets.ModelViewSet):
 
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
 
-    filterset_fields = ['tamanho_fome','status_venda']
+    filterset_fields = ['tamanho_fome','status_venda','categoria']
 
     search_fields = ['nome','preco']
 
