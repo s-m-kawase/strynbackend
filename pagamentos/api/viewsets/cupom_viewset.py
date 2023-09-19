@@ -79,3 +79,14 @@ class CupomViewSet(viewsets.ModelViewSet):
                 return JsonResponse({"mensagem": "Não ha cupom aplicado"})
         except Pedidos.DoesNotExist:
             raise JsonResponse({"mensagem": "Pedido não encontrados"})
+        
+    def get_queryset(self):
+        from pedidos.models import Restaurante
+        query = super().get_queryset()
+        # restaurante = self.request.params.get('restaurante', None)
+        user = self.request.user
+        restaurante = Restaurante.objects.get(usuario=user)
+        if restaurante:
+            query = query.filter(restaurante=restaurante)
+
+        return query

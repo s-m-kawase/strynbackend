@@ -14,18 +14,18 @@ class Cupom(models.Model):
     )
 
     valor = models.DecimalField(
-        verbose_name='Valor',
+        verbose_name='porcentagem do cupom',
         max_digits=10,
         decimal_places=2,
         blank=True, null=True
     )
 
-    porcentagem = models.DecimalField(
-        verbose_name="porcentagem",
-        max_digits=5,
-        decimal_places=2,
-        blank=True, null=True
-        )
+    # porcentagem = models.DecimalField(
+    #     verbose_name="porcentagem",
+    #     max_digits=5,
+    #     decimal_places=2,
+    #     blank=True, null=True
+    #     )
 
     cod_cupom = models.CharField(
         max_length=200,
@@ -49,6 +49,13 @@ class Cupom(models.Model):
         max_length=20,
         choices=STATUS_CHOICES,
         default='Valido'
+    )
+
+    restaurante = models.ForeignKey(
+        'pedidos.Restaurante',
+        on_delete=models.SET_NULL,
+        verbose_name='Restaurante',
+        null=True, blank=True
     )
 
     def aplicar_cupom(self, pedido):

@@ -175,16 +175,16 @@ class Pedidos(models.Model):
         total -= round(float(cupom),2)
 
         return round(total, 2)
-    @property
-    def total_taxa_servico_no_pedido(self):
-      taxa = float(self.restaurante.taxa_servico ) if self.restaurante else 0
-      taxa_total_servico = round(float(self.subtotal) * (taxa/100),2)
+    # @property
+    # def total_taxa_servico_no_pedido(self):
+    #   taxa = float(self.restaurante.taxa_servico ) if self.restaurante else 0
+    #   taxa_total_servico = round(float(self.subtotal) * (taxa/100),2)
 
-      context = ({
-          "porcentagem":taxa,
-          "taxa_de_servico":taxa_total_servico
-      })
-      return context
+    #   context = ({
+    #       "porcentagem":taxa,
+    #       "taxa_de_servico":taxa_total_servico
+    #   })
+    #   return context
 
     @property
     def itens_quantidade(self):
