@@ -62,11 +62,11 @@ class Restaurante(models.Model):
         blank=True, null=True,
     )
 
-    taxa_servico = models.IntegerField(
-        verbose_name="Taxa de serviço em porcentagem",
-        blank=True, null=True,
-        default=10
-    )
+    # taxa_servico = models.IntegerField(
+    #     verbose_name="Taxa de serviço em porcentagem",
+    #     blank=True, null=True,
+    #     default=10
+    # )
 
     link_restaurante = models.TextField(
         verbose_name="QR code Restaurante",

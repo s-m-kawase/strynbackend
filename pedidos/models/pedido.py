@@ -127,7 +127,12 @@ class Pedidos(models.Model):
     hora_status_aguardando_preparo = models.DateTimeField(
         verbose_name="Hora que status mudou para aguardando preparo",
         null=True, blank=True,
-        
+    )
+
+    taxa_de_atendimento = models.IntegerField(
+        verbose_name="Taxa de atendimento ",
+        blank=True, null=True,
+        default=0
     )
 
     # item_pronto = models.BooleanField(
@@ -150,23 +155,18 @@ class Pedidos(models.Model):
 
     @property
     def total(self):
-        taxa_servico = 0
+
         adicionais = 0
         for adicional in self.adicionais.all():
             adicionais += float(adicional.valor)
-
-        if self.restaurante:
-            subtotal = float(self.subtotal)
-            taxa_servico = float(self.restaurante.taxa_servico / 100 * subtotal)
-
-
 
         cupom = 0
         total = 0
         total += float(self.subtotal if self.subtotal else 0)
         total -= float(self.desconto if self.desconto else 0)
         total += float(adicionais)
-        total += float(taxa_servico)
+        total += float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
+        
 
         if self.cupom:
           total = total
@@ -176,16 +176,16 @@ class Pedidos(models.Model):
         total -= round(float(cupom),2)
 
         return round(total, 2)
-    @property
-    def total_taxa_servico_no_pedido(self):
-      taxa = float(self.restaurante.taxa_servico ) if self.restaurante else 0
-      taxa_total_servico = round(float(self.subtotal) * (taxa/100),2)
+    # @property
+    # def total_taxa_servico_no_pedido(self):
+    #   taxa = float(self.restaurante.taxa_servico ) if self.restaurante else 0
+    #   taxa_total_servico = round(float(self.subtotal) * (taxa/100),2)
 
-      context = ({
-          "porcentagem":taxa,
-          "taxa_de_servico":taxa_total_servico
-      })
-      return context
+    #   context = ({
+    #       "porcentagem":taxa,
+    #       "taxa_de_servico":taxa_total_servico
+    #   })
+    #   return context
 
     @property
     def itens_quantidade(self):
