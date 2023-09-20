@@ -109,8 +109,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
         subtotal = 0.0
         for item_pedido in pedido.itenspedido_set.all():
             subtotal += float(item_pedido.quantidade * item_pedido.preco_item_mais_complementos)
+        
+        if pedido.taxa_de_atendimento:
+            taxa_atendimento = float(pedido.taxa_de_atendimento) if pedido.taxa_de_atendimento else 0
+        
 
-        taxa_atendimento = float(subtotal) * (float(pedido.restaurante.taxa_servico) / 100.0)
+        # taxa_atendimento = float(subtotal) * (float(pedido.restaurante.taxa_servico) / 100.0)
 
 
         # Cria uma lista de pedido criando chave no stripe
