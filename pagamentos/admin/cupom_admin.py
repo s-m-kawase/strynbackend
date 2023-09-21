@@ -7,7 +7,7 @@ class CupomAdmin(admin.ModelAdmin):
     list_display = [
         'id',
         'nome',
-        'valor',
+        'porcentagem',
         'cod_cupom',
         #'validado_ate',
 
@@ -15,12 +15,12 @@ class CupomAdmin(admin.ModelAdmin):
 
     search_fields = [
         'nome',
-        'valor',
+        'porcentagem',
         'id',
     ]
 
     list_filter = [
-        'valor'
+        'porcentagem'
     ]
 
     readonly_fields = [

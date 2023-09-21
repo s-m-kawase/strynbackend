@@ -28,7 +28,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 def criar_cupom(pedido):
     stripe_secret_key = config('STRIPE_SECRET_KEY')
     stripe.api_key = stripe_secret_key
-    if pedido.cupom and pedido.cupom.valor:
+    if pedido.cupom and pedido.cupom.porcentagem:
         percent_off = pedido.cupom.calcular_porcentagem_desconto()
         cupom = stripe.Coupon.create(
             percent_off=percent_off,
@@ -202,13 +202,16 @@ class PedidosViewSet(viewsets.ModelViewSet):
                     subtotal = 0.0
                     for item_pedido in pedido.itenspedido_set.all():
                         subtotal += float(item_pedido.quantidade * item_pedido.preco_item_mais_complementos)
-
-                    taxa = float(subtotal) * (float(pedido.restaurante.taxa_servico) / 100.0)
+                    taxa = 0
+                    if pedido and pedido.taxa_de_atendimento:
+                        taxa = float(subtotal) * (float(pedido.restaurante.taxa_servico) / 100.0)
+                    # taxa = float(subtotal) * (float(pedido.restaurante.taxa_servico) / 100.0)
+                    
 
                     total_com_taxa = float(subtotal) + float(taxa)
 
                     # Aplica o desconto ao valor total
-                    if pedido.cupom and pedido.cupom.valor:
+                    if pedido.cupom and pedido.cupom.porcentagem:
                         porcentagem_desconto = pedido.cupom.calcular_porcentagem_desconto()
                         desconto = total_com_taxa * porcentagem_desconto
                         total_reembolso = total_com_taxa - desconto
