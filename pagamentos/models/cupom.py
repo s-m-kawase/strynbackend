@@ -13,7 +13,7 @@ class Cupom(models.Model):
         null=True, blank=True
     )
 
-    valor = models.DecimalField(
+    porcentagem = models.DecimalField(
         verbose_name='porcentagem do cupom',
         max_digits=10,
         decimal_places=2,
@@ -57,6 +57,13 @@ class Cupom(models.Model):
         verbose_name='Restaurante',
         null=True, blank=True
     )
+
+    def calcular_porcentagem_desconto(self):
+        if self.porcentagem:
+            teste = self.porcentagem / 100
+            return teste
+        else:
+            return 0
 
     def aplicar_cupom(self, pedido):
         if self.status_cupom == 'Valido' and self.validado_ate >= timezone.now():
