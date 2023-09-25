@@ -41,7 +41,15 @@ class CupomViewSet(viewsets.ModelViewSet):
                 "success":success
                 })
         else:
-            return super().create(request, *args, **kwargs)
+            super().create(request, *args, **kwargs)
+            menssage = 'Cupom criado com sucesso' 
+            error = {}
+            success = True
+            return JsonResponse({
+                "menssage":menssage,
+                "error":error,
+                "success":success
+                })
 
 
     @action(methods=['post'], detail=False)
