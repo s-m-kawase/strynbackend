@@ -9,6 +9,8 @@ from datetime import date, datetime
 from rest_framework.pagination import PageNumberPagination
 from pedidos.models import Pedidos
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
+
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -18,7 +20,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class CupomViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     queryset = Cupom.objects.all()
     serializer_class = CupomSerializer
 
@@ -67,11 +69,11 @@ class CupomViewSet(viewsets.ModelViewSet):
 
         else:
             # pegar possivei campo a serem alterados
-            nome = request.data.get('nome')
-            descricao = request.data.get('descricao')
-            porcentage = request.data.get('porcentagem')
-            cod_cupom = request.data.get('cod_cupom')
-            validado_ate = request.data.get('validado_ate')
+            nome = request.data.get('nome',None)
+            descricao = request.data.get('descricao', None)
+            porcentage = request.data.get('porcentagem',None)
+            cod_cupom = request.data.get('cod_cupom', None)
+            validado_ate = request.data.get('validado_ate', None)
             
             # alterando os dados
             if nome:
@@ -93,7 +95,13 @@ class CupomViewSet(viewsets.ModelViewSet):
                 else:
                     cupom.cod_cupom = cod_cupom if cod_cupom else cupom.cod_cupom
             if validado_ate:
+                validado_ate = datetime.strptime(validado_ate, "%Y/%m/%d %H:%M:%S")
                 cupom.validado_ate = validado_ate if validado_ate else cupom.validado_ate
+                if validado_ate > timezone.now():
+                    cupom.status_cupom = 'Valido'
+                else:
+                    cupom.status_cupom = 'Expirado'
+
             cupom.save()
             menssage = 'Cupom alterado com sucesso' 
             error = {}
