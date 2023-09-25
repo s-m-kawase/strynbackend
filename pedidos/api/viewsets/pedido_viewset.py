@@ -310,6 +310,43 @@ class PedidosViewSet(viewsets.ModelViewSet):
       return JsonResponse({"message":'success'})
 
 
+# -------------------------- pix no asaas --------------------------------------
+    def criar_cobranca(request):
+        import requests
+
+        if request.method == 'POST':
+            valor = float(request.POST['valor'])
+            descricao = request.POST['descricao']
+
+            # Defina suas credenciais da API do Asaas
+            api_key = config('ASAAS_API_KEY')
+
+            # Crie uma cobrança no Asaas
+            cobranca_data = {
+                'customer': 'Nome do Cliente',
+                'billingType': 'BOLETO',
+                'dueDate': '2023-12-31',
+                'value': valor,
+                'description': descricao,
+                'externalReference': 'ID_COBRANCA_DJANGO',
+                'paymentType': 'PIX',
+            }
+
+            headers = {
+                'access_token': api_key,
+            }
+
+            response = requests.post('https://www.asaas.com/api/v3/payments', json=cobranca_data, headers=headers)
+
+            if response.status_code == 200:
+                cobranca = response.json()
+                pix_url = cobranca['invoiceUrl']
+
+                # Redireciona para a página de confirmação com o link de pagamento PIX
+                return redirect('pagina_de_confirmacao', pix_url=pix_url)
+
+        return render(request, 'criar_cobranca.html')
+
 #--------------------------- relatorio para grafico------------------------------
 
 
