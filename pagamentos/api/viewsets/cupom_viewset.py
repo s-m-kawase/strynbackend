@@ -50,6 +50,60 @@ class CupomViewSet(viewsets.ModelViewSet):
                 "error":error,
                 "success":success
                 })
+        
+    def update(self, request, *args, **kwargs):
+        id = kwargs.get('pk')
+        cupom = Cupom.objects.get(id=id)
+
+        if not cupom:
+            menssage = 'Falha ao alterar cupom'
+            error = ' Cupom não encontrado'
+            success = False
+            return JsonResponse({
+                "menssage":menssage,
+                "error":error,
+                "success":success
+                }) 
+
+        else:
+            # pegar possivei campo a serem alterados
+            nome = request.data.get('nome')
+            descricao = request.data.get('descricao')
+            porcentage = request.data.get('porcentagem')
+            cod_cupom = request.data.get('cod_cupom')
+            validado_ate = request.data.get('validado_ate')
+            
+            # alterando os dados
+            if nome:
+                cupom.nome = nome if nome else cupom.nome
+            if descricao:
+                cupom.descricao = descricao if descricao else cupom.descricao
+            if porcentage:
+                cupom.porcentagem = porcentage if porcentage else cupom.porcentagem
+            if cod_cupom:
+                if Cupom.objects.filter(cod_cupom=cod_cupom).exists():
+                    menssage = 'Falha ao criar cupom'
+                    error = 'Código de cupom já existe'
+                    success = False
+                    return JsonResponse({
+                        "menssage":menssage,
+                        "error":error,
+                        "success":success
+                        })
+                else:
+                    cupom.cod_cupom = cod_cupom if cod_cupom else cupom.cod_cupom
+            if validado_ate:
+                cupom.validado_ate = validado_ate if validado_ate else cupom.validado_ate
+            cupom.save()
+            menssage = 'Cupom alterado com sucesso' 
+            error = {}
+            success = True
+            return JsonResponse({
+                "menssage":menssage,
+                "error":error,
+                "success":success
+            })
+
 
 
     @action(methods=['post'], detail=False)
