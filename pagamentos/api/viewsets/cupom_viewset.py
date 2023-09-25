@@ -18,7 +18,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class CupomViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     queryset = Cupom.objects.all()
     serializer_class = CupomSerializer
 
@@ -27,6 +27,15 @@ class CupomViewSet(viewsets.ModelViewSet):
     filterset_fields = ['validado_ate']
 
     search_fields = ['nome']
+
+    def create(self, request, *args, **kwargs):
+        cod_cupom = request.data.get('cod_cupom')
+
+        if Cupom.objects.filter(cod_cupom=cod_cupom).exists():
+            return JsonResponse({"error": "Código de cupom já existe"})
+        else:
+            return super().create(request, *args, **kwargs)
+
 
     @action(methods=['post'], detail=False)
     def validar_cupom(self, request):
