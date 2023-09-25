@@ -32,7 +32,14 @@ class CupomViewSet(viewsets.ModelViewSet):
         cod_cupom = request.data.get('cod_cupom')
 
         if Cupom.objects.filter(cod_cupom=cod_cupom).exists():
-            return JsonResponse({"error": "Código de cupom já existe"})
+            menssage = 'Falha ao criar cupom'
+            error = 'Código de cupom já existe'
+            success = False
+            return JsonResponse({
+                "menssage":menssage,
+                "error":error,
+                "success":success
+                })
         else:
             return super().create(request, *args, **kwargs)
 
