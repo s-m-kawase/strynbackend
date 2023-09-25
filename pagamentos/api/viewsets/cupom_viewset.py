@@ -20,7 +20,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class CupomViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
-    permission_classes = ()
+    permission_classes = (IsAuthenticated,)
     queryset = Cupom.objects.all()
     serializer_class = CupomSerializer
 
