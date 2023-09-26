@@ -95,7 +95,7 @@ class CupomViewSet(viewsets.ModelViewSet):
                 else:
                     cupom.cod_cupom = cod_cupom if cod_cupom else cupom.cod_cupom
             if validado_ate:
-                validado_ate = datetime.strptime(validado_ate, "%Y/%m/%d %H:%M:%S")
+                validado_ate = datetime.strptime(validado_ate, "%Y-%m-%dT%H:%M:%S")
                 cupom.validado_ate = validado_ate if validado_ate else cupom.validado_ate
                 if validado_ate > timezone.now():
                     cupom.status_cupom = 'Valido'
