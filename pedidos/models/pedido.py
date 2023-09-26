@@ -134,7 +134,6 @@ class Pedidos(models.Model):
         decimal_places=2,
         max_digits=10,
         blank=True, null=True,
-        default=0.00
     )
 
     # item_pronto = models.BooleanField(
