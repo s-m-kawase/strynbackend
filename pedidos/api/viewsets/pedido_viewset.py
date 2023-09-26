@@ -15,6 +15,7 @@ from decouple import config
 from django.http import HttpResponseBadRequest
 from rest_framework.response import Response
 from django.http import HttpResponse
+import requests
 
 
 
@@ -311,41 +312,40 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
 
 # -------------------------- pix no asaas --------------------------------------
-    def criar_cobranca(request):
-        import requests
+    @action(methods=['get'], detail=True)
+    def criar_cobranca_asaas(request,pk):
+        pedido = Pedidos.objects.get(id=pk)
+        api_key = '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYxODE6OiRhYWNoX2MyYjBjNzVhLTFmOWQtNDljMS04YTYyLTU5OTY2ZGY3OWVkOQ=='
 
-        if request.method == 'POST':
-            valor = float(request.POST['valor'])
-            descricao = request.POST['descricao']
+        # Crie uma cobrança no Asaas (sandbox)
+        cobranca_data = {
+            'customer': {
+                'name': pedido.nome_cliente,
+                'cpfCnpj': pedido  # Substitua pelo CPF ou CNPJ válido do cliente
+            },
+            'billingType': 'BOLETO',
+            'dueDate': '2023-12-31',
+            'value': 100.0,  # Valor da cobrança em reais
+            'description': 'Cobrança de Teste',
+            'externalReference': 'ID_COBRANCA_DE_TESTE',
+            'paymentType': 'PIX',
+        }
 
-            # Defina suas credenciais da API do Asaas
-            api_key = config('ASAAS_API_KEY')
+        headers = {
+            'access_token': api_key,
+        }
 
-            # Crie uma cobrança no Asaas
-            cobranca_data = {
-                'customer': 'Nome do Cliente',
-                'billingType': 'BOLETO',
-                'dueDate': '2023-12-31',
-                'value': valor,
-                'description': descricao,
-                'externalReference': 'ID_COBRANCA_DJANGO',
-                'paymentType': 'PIX',
-            }
+        response = requests.post('https://sandbox.asaas.com/api/v3/payments', json=cobranca_data, headers=headers)
 
-            headers = {
-                'access_token': api_key,
-            }
+        if response.status_code == 200:
+            cobranca = response.json()
+            print("Cobrança criada com sucesso!")
+            print("URL do PIX: ", cobranca['invoiceUrl'])
+        else:
+            print("Falha ao criar a cobrança. Código de status:", response.status_code)
+            print("Resposta da API:", response.text)
 
-            response = requests.post('https://www.asaas.com/api/v3/payments', json=cobranca_data, headers=headers)
-
-            if response.status_code == 200:
-                cobranca = response.json()
-                pix_url = cobranca['invoiceUrl']
-
-                # Redireciona para a página de confirmação com o link de pagamento PIX
-                return redirect('pagina_de_confirmacao', pix_url=pix_url)
-
-        return render(request, 'criar_cobranca.html')
+        
 
 #--------------------------- relatorio para grafico------------------------------
 
