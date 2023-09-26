@@ -313,39 +313,57 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
 # -------------------------- pix no asaas --------------------------------------
     @action(methods=['get'], detail=True)
-    def criar_cobranca_asaas(request,pk):
-        pedido = Pedidos.objects.get(id=pk)
-        api_key = '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYxODE6OiRhYWNoX2MyYjBjNzVhLTFmOWQtNDljMS04YTYyLTU5OTY2ZGY3OWVkOQ=='
+    def criar_cobranca_asaas(self ,request,pk):
+        try:
+            pedido = Pedidos.objects.get(id=pk)
+            api_key = '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYxODE6OiRhYWNoX2MyYjBjNzVhLTFmOWQtNDljMS04YTYyLTU5OTY2ZGY3OWVkOQ=='
 
-        # Crie uma cobrança no Asaas (sandbox)
-        cobranca_data = {
-            'customer': {
-                'name': pedido.nome_cliente,
-                'cpfCnpj': pedido  # Substitua pelo CPF ou CNPJ válido do cliente
-            },
-            'billingType': 'BOLETO',
-            'dueDate': '2023-12-31',
-            'value': 100.0,  # Valor da cobrança em reais
-            'description': 'Cobrança de Teste',
-            'externalReference': 'ID_COBRANCA_DE_TESTE',
-            'paymentType': 'PIX',
-        }
+            data_vencimento = f"{pedido.data_criacao}"
+            # Crie uma cobrança no Asaas (sandbox)
+            cobranca_data = {
+                'customer': {
+                    'name': pedido.nome_cliente,
+                    'cpfCnpj': '51664230890'  
+                },
+                'billingType': 'PIX',
+                'dueDate': data_vencimento,
+                'value': pedido.total,  
+                'description': f'Cobrança do pedido {pedido.id}, feito pelo {pedido.nome_cliente} no valor de R${pedido.total}',
+                'externalReference': pedido.id,
+                'paymentType': 'PIX',
+            }
 
-        headers = {
-            'access_token': api_key,
-        }
+            headers = {
+                'access_token': api_key,
+            }
 
-        response = requests.post('https://sandbox.asaas.com/api/v3/payments', json=cobranca_data, headers=headers)
+            response = requests.post('https://sandbox.asaas.com/api/v3/payments', json=cobranca_data, headers=headers)
 
-        if response.status_code == 200:
-            cobranca = response.json()
-            print("Cobrança criada com sucesso!")
-            print("URL do PIX: ", cobranca['invoiceUrl'])
-        else:
-            print("Falha ao criar a cobrança. Código de status:", response.status_code)
-            print("Resposta da API:", response.text)
-
+            if response.status_code == 200:
+                cobranca = response.json()
+                print("Cobrança criada com sucesso!")
+                print("URL do PIX: ", cobranca['invoiceUrl'])
+                return JsonResponse({
+                    "checkout_url": cobranca['invoiceUrl'],
+                })
+            
+            else:
+                print("Falha ao criar a cobrança. Código de status:", response.status_code)
+                print("Resposta da API:", response.text)
+                return JsonResponse({
+                   "error": "Falha ao criar a cobrança"
+                })
+            
+        except Pedidos.DoesNotExist:
+            return JsonResponse({"error": "Pedido não encontrado"})
         
+        except requests.exceptions.RequestException as e:
+            error_message = str(e)
+        print("Erro durante a solicitação à API:", error_message)
+        return JsonResponse({
+            "error": "Erro interno do servidor",
+            "error_message": error_message
+        })
 
 #--------------------------- relatorio para grafico------------------------------
 
