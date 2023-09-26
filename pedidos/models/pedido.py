@@ -129,10 +129,12 @@ class Pedidos(models.Model):
         null=True, blank=True,
     )
 
-    taxa_de_atendimento = models.IntegerField(
+    taxa_de_atendimento = models.DecimalField(
         verbose_name="Taxa de atendimento ",
+        decimal_places=2,
+        max_digits=10,
         blank=True, null=True,
-        default=0
+        default=0.00
     )
 
     # item_pronto = models.BooleanField(
