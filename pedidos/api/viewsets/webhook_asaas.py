@@ -28,10 +28,8 @@ class AsaasWebhookViewSet(ViewSet):
         event_type = payload.get('event_type')
 
         if event_type == 'PAYMENT_CREATED':
-            # Lide com o evento de pagamento criado aqui
-            # Acesse os dados do pagamento em payload['payment_data']
-            # Faça o processamento necessário e atualize seu sistema
-            pedido_id = payload['payment_data']['pedido_id']
+            payment_data = payload['payment']
+            pedido_id = payment_data['externalReference']
             self.update_pedido_status(pedido_id)
 
         
