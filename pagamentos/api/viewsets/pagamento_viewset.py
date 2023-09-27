@@ -166,7 +166,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         mesano = request.data.get('mesano',None)
 
         sql_query = f"""SELECT
-                            SUM( ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) , 2) ) AS "total_de_vendas"
+                            SUM( ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.porcentagem, 0)/100)) , 2) ) AS "total_de_vendas"
                         FROM pagamentos_pagamento pag
                         LEFT JOIN pedidos_pedidos ped
                         ON pag.pedido_id = ped.id
