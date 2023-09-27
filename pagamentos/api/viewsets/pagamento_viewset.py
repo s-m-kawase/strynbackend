@@ -190,8 +190,8 @@ class PagamentoViewSet(viewsets.ModelViewSet):
 
         sql_query = f"""SELECT
                             ped.data_criacao_f AS "periodo", data_criacao2 AS "data_criacao"
-                            ,ROUND( SUM( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/100)) ) , 2) AS "recebidos_pela_operadora"
-                            ,ROUND( SUM( pag.valor_pago * (COALESCE(cup.valor, 0)/100) ) , 2)AS incentivo
+                            ,ROUND( SUM( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.porcentagem, 0)/100)) ) , 2) AS "recebidos_pela_operadora"
+                            ,ROUND( SUM( pag.valor_pago * (COALESCE(cup.porcentagem, 0)/100) ) , 2)AS incentivo
                             ,SUM( pag.valor_pago ) AS total_repasse
                         FROM pagamentos_pagamento pag
                         LEFT JOIN (
@@ -223,12 +223,13 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     def financeiro_tabela_por_dia(self,request):
         data_selecionada = request.data.get('data',None)
 
-        sql_query = f""" SELECT
+        sql_query = f"""
+                        SELECT
                             ped.data_criacao_f AS periodo
-                            ,ped.id--,pag.codigo_pagamento AS pedido
-                            ,ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.valor, 0)/110)) - (pag.valor_pago * (rest.taxa_servico::numeric(10, 2)/110::numeric(10, 2))), 2)::numeric(10, 2) AS valor_dos_itens
-                            ,ROUND( pag.valor_pago * taxa_servico::numeric(10, 2)/110::numeric(10, 2) , 2) AS taxa_servico
-                            ,ROUND( pag.valor_pago * (COALESCE(cup.valor, 0)::numeric(10, 2) / 100::numeric(10, 2)) , 2) AS incentivo
+                            ,ped.id
+                            ,ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.porcentagem, 0)/110)) - ( taxa_de_atendimento::numeric(10, 2) ), 2)::numeric(10, 2) AS valor_dos_itens
+                            ,ROUND( taxa_de_atendimento::numeric(10, 2) , 2) AS taxa_de_atendimento
+                            ,ROUND( pag.valor_pago * (COALESCE(cup.porcentagem, 0)::numeric(10, 2) / 100::numeric(10, 2)) , 2) AS incentivo
                             ,pag.valor_pago AS total
                         FROM pagamentos_pagamento pag
                         LEFT JOIN (
@@ -237,17 +238,16 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                                 ,TO_CHAR(data_criacao::DATE, 'DD/MM/YYYY') AS data_criacao_f
                                 ,data_criacao
                                 ,cupom_id
+                                ,taxa_de_atendimento
                                 ,restaurante_id
                             FROM pedidos_pedidos
                         ) "ped"
                         ON pag.pedido_id = ped.id
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
-                        LEFT JOIN pedidos_restaurante rest
-                        ON ped.restaurante_id = rest.id
-                        WHERE ped.data_criacao::DATE = '{data_selecionada}'::DATE  --'2023-06-20'::date  --{data_selecionada}
+                        WHERE ped.data_criacao::DATE = '{data_selecionada}'::DATE  --'2023-06-20'::date  --'{data_selecionada}'
                         ORDER BY ped.data_criacao_f DESC
-                          """
+                        """
 
         with connection.cursor() as cursor:
             cursor.execute(sql_query)
