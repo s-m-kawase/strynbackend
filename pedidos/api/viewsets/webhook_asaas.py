@@ -73,7 +73,4 @@ class AsaasWebhookViewSet(ViewSet):
             self.update_pedido_status(pedido)
         
 
-        return JsonResponse({
-            'message': 'Webhook recebido com sucesso',
-            "pedido": pedido
-            })
+        return JsonResponse({'message': f'Webhook recebido com sucesso {pedido}'})
