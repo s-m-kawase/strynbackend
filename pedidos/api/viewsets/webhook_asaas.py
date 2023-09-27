@@ -70,7 +70,9 @@ class AsaasWebhookViewSet(ViewSet):
             payment_data = payload['payment']
             pedido_id = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=pedido_id)
-            self.update_pedido_status(pedido)
+            if pedido:
+                return JsonResponse({'message': 'chegou o pedido'})
+                # self.update_pedido_status(pedido)
         
 
-        return JsonResponse({'message': f'Webhook recebido com sucesso {pedido}'})
+        return JsonResponse({'message': 'Webhook recebido com sucesso'})
