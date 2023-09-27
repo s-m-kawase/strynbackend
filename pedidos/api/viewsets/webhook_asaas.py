@@ -21,26 +21,54 @@ class AsaasWebhookViewSet(ViewSet):
     @action(detail=False, methods=['post'])
     @csrf_exempt
     def webhook(self, request):
-        # Obtenha os dados do webhook do corpo da solicitação
+        
         payload = request.data
 
-        # Verifique se o evento é um evento válido do Asaas
         event_type = payload.get('event_type')
 
         if event_type == 'PAYMENT_CREATED':
             payment_data = payload['payment']
             pedido_id = payment_data['externalReference']
-            self.update_pedido_status(pedido_id)
+            pedido = Pedidos.objects.get(id=pedido_id)
+            email = pedido.email
+            pedido.status_pedido = 'Pago'
+            pedido.hora_status_pago = timezone.now()
+            pedido.save()
+            try:
+                template_email = TemplateEmail.objects.filter(
+                    codigo='confirma_pagamento'
+                ).first()
+
+                if not template_email:
+                    raise ValueError(
+                        "Serviço indisponível, contate seu administrador!"
+                    )
+                mensagem_email = MensagemEmail.objects.create(
+                    template_email=template_email
+                )
+
+                mensagem_email.enviar(pedido, [email])
+
+
+                return JsonResponse(
+                    {
+                        "status": "200",
+                        "message": "Email enviado com sucesso!",
+                    }
+                )
+            except Exception as error:
+                return JsonResponse(
+                    {
+                        "status": "404",
+                        "message": error.args[0],
+                    }
+                )
 
         
 
         return JsonResponse({'message': 'Webhook recebido com sucesso'})
 
-    def update_pedido_status(self, pedido_id):
-        pedido = Pedidos.objects.get(id=pedido_id)
-        pedido.status_pedido = 'Pago'
-        pedido.hora_status_pago = timezone.now()
-        pedido.save()
+        
         
 
 
