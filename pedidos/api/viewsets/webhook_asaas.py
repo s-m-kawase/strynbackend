@@ -63,10 +63,8 @@ class AsaasWebhookViewSet(ViewSet):
     def webhook(self, request):
         
         payload = request.data
-        if payload:
-                return JsonResponse({'message': payload})
 
-        event_type = payload.get('event_type')
+        event_type = payload.get('event')
 
         if event_type == 'PAYMENT_CREATED':
             payment_data = payload['payment']
