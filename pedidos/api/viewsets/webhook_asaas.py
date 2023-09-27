@@ -30,8 +30,10 @@ class AsaasWebhookViewSet(ViewSet):
             payment_data = payload['payment']
             pedido_id = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=pedido_id)
+            print(pedido)
             email = pedido.email
             pedido.status_pedido = 'Pago'
+            print(pedido.status_pedido)
             pedido.hora_status_pago = timezone.now()
             pedido.save()
             try:
