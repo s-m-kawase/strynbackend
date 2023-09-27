@@ -62,7 +62,9 @@ class AsaasWebhookViewSet(ViewSet):
     @csrf_exempt
     def webhook(self, request):
         
-        payload = request.body
+        payload = request.data
+        if payload:
+                return JsonResponse({'message': payload})
 
         event_type = payload.get('event_type')
 
