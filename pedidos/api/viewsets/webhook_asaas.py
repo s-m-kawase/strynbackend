@@ -21,7 +21,7 @@ class AsaasWebhookViewSet(ViewSet):
     def update_pedido_status(self, pedido):
         
         
-        email = pedido.email
+        email = pedido.email_cliente
         pedido.status_pedido = 'Pago'
         print(pedido.status_pedido)
         pedido.hora_status_pago = timezone.now()
