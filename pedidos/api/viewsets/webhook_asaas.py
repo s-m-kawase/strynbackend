@@ -62,7 +62,7 @@ class AsaasWebhookViewSet(ViewSet):
     @csrf_exempt
     def webhook(self, request):
         
-        payload = request.data
+        payload = request.body
 
         event_type = payload.get('event_type')
 
@@ -71,7 +71,7 @@ class AsaasWebhookViewSet(ViewSet):
             pedido_id = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=pedido_id)
             if pedido:
-                return JsonResponse({'message': 'chegou o pedido'})
+                return JsonResponse({'message': f"chegou o pedido: {pedido}"})
                 # self.update_pedido_status(pedido)
         
 
