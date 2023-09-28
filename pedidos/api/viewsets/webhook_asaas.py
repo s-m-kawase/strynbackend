@@ -22,7 +22,7 @@ class AsaasWebhookViewSet(ViewSet):
         email = pedido.email_cliente
         try:
             template_email = TemplateEmail.objects.filter(
-                codigo='cobranca_criada'
+                codigo='criar_cobranca'
             ).first()
 
             if not template_email:
