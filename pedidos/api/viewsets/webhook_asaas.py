@@ -18,8 +18,7 @@ asaas_api = config('ASAAS_API_KEY')
 
 class AsaasWebhookViewSet(ViewSet):
 
-    def cobranca_criada(self, pedido):
-        email = pedido.email_cliente
+    def cobranca_criada(self, pedido, email):
         try:
             template_email = TemplateEmail.objects.filter(
                 codigo='criar_cobranca'
@@ -51,11 +50,9 @@ class AsaasWebhookViewSet(ViewSet):
             )
 
 
-    def update_pedido_status(self, pedido):
+    def update_pedido_status(self, pedido, email):
         
-        email = pedido.email_cliente
         pedido.status_pedido = 'Pago'
-        print(pedido.status_pedido)
         pedido.hora_status_pago = timezone.now()
         pedido.save()
         try:
@@ -102,13 +99,17 @@ class AsaasWebhookViewSet(ViewSet):
             payment_data = payload['payment']
             pedido_id = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=pedido_id)
-            self.cobranca_criada(pedido)
+            email = pedido.email_cliente
+            if email:
+                return JsonResponse({'message': 'pegou e-mail'})
+            self.cobranca_criada(pedido, email)
 
         if event_type == 'PAYMENT_RECEIVED':
             payment_data = payload['payment']
             pedido_id = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=pedido_id)
-            self.update_pedido_status(pedido)
+            email = pedido.email_cliente
+            self.update_pedido_status(pedido, email)
         
 
         return JsonResponse({'message': 'Webhook recebido com sucesso'})
