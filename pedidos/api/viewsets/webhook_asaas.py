@@ -18,8 +18,40 @@ asaas_api = config('ASAAS_API_KEY')
 
 class AsaasWebhookViewSet(ViewSet):
 
+    def cobranca_criada(self, pedido):
+        email = pedido.email_cliente
+        try:
+            template_email = TemplateEmail.objects.filter(
+                codigo='cobranca_criada'
+            ).first()
+
+            if not template_email:
+                raise ValueError(
+                    "Serviço indisponível, contate seu administrador!"
+                )
+            mensagem_email = MensagemEmail.objects.create(
+                template_email=template_email
+            )
+
+            mensagem_email.enviar(pedido, [email])
+
+
+            return JsonResponse(
+                {
+                    "status": "200",
+                    "message": "Email enviado com sucesso!",
+                }
+            )
+        except Exception as error:
+            return JsonResponse(
+                {
+                    "status": "404",
+                    "message": error.args[0],
+                }
+            )
+
+
     def update_pedido_status(self, pedido):
-        
         
         email = pedido.email_cliente
         pedido.status_pedido = 'Pago'
@@ -67,6 +99,12 @@ class AsaasWebhookViewSet(ViewSet):
         event_type = payload.get('event')
 
         if event_type == 'PAYMENT_CREATED':
+            payment_data = payload['payment']
+            pedido_id = payment_data['externalReference']
+            pedido = Pedidos.objects.get(id=pedido_id)
+            self.cobranca_criada(pedido)
+
+        if event_type == 'PAYMENT_RECEIVED':
             payment_data = payload['payment']
             pedido_id = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=pedido_id)
