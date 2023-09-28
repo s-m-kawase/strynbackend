@@ -319,7 +319,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
             api_key = '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYxODE6OiRhYWNoX2MyYjBjNzVhLTFmOWQtNDljMS04YTYyLTU5OTY2ZGY3OWVkOQ=='
 
             data_vencimento = pedido.data_criacao + timedelta(days=1)
-            
+            data_vencimento = f"{data_vencimento}"
+
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
                 'customer': {
