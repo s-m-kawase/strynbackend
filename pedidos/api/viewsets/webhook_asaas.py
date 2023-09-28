@@ -100,8 +100,6 @@ class AsaasWebhookViewSet(ViewSet):
             pedido_id = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=pedido_id)
             email = pedido.email_cliente
-            if email:
-                return JsonResponse({'message': 'pegou e-mail'})
             self.cobranca_criada(pedido, email)
 
         if event_type == 'PAYMENT_RECEIVED':
