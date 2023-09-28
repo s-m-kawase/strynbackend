@@ -318,10 +318,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
             pedido = Pedidos.objects.get(id=pk)
             api_key = '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYxODE6OiRhYWNoX2MyYjBjNzVhLTFmOWQtNDljMS04YTYyLTU5OTY2ZGY3OWVkOQ=='
 
-            data_criacao = datetime.strptime(pedido.data_criacao, '%Y-%m-%d %H:%M:%S')
-
-            # Adicionar um dia à data de criação para obter a data de vencimento
-            data_vencimento = data_criacao + timedelta(days=1)
+            data_vencimento = pedido.data_criacao + timedelta(days=1)
+            
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
                 'customer': {
