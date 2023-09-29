@@ -345,6 +345,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             "successUrl": "https://www.google.com/",
             "autoRedirect": True
         }
+            callback_url = "https://www.google.com/"
 
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
@@ -354,7 +355,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 },
                 'billingType': 'PIX',
                 'dueDate': data_vencimento,
-                'callback': callback_data,  
+                'callback': {
+                    'url':callback_url
+                },  
                 'value': pedido.total,  
                 'description': f'Cobrança do pedido {pedido.id}, feito pelo {pedido.nome_cliente} no valor de R${pedido.total}',
                 'externalReference': pedido.id,
