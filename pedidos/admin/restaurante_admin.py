@@ -66,7 +66,6 @@ class RestauranteAdmin(admin.ModelAdmin):
                     'total_mesa',
                     'num_obrigatorio',
                     'tempo_estimado',
-                    'taxa_servico',
                     'categoria',
                     'link_restaurante',
                     'tempo_ideal',
