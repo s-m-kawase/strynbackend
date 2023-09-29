@@ -355,7 +355,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'paymentType': 'PIX',
                 'split': split_data,
                 "callback":{
-                    "successUrl": success_url,
+                    "successUrl": 'https://www.google.com/',
                 }
             }
 
