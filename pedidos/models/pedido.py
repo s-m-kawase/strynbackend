@@ -1,3 +1,4 @@
+from curses import savetty
 from django.db import models
 from pedidos.models.tempo import TempoEstimado
 from .restaurante import Restaurante
@@ -134,6 +135,14 @@ class Pedidos(models.Model):
         decimal_places=2,
         max_digits=10,
         blank=True, null=True,
+    )
+
+
+    cpf = models.CharField(
+        verbose_name="CPF",
+        max_length=14,
+        null=True,
+        blank=True
     )
 
     # item_pronto = models.BooleanField(
