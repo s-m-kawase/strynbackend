@@ -379,9 +379,17 @@ class PedidosViewSet(viewsets.ModelViewSet):
             else:
                 print("Falha ao criar a cobrança. Código de status:", response.status_code)
                 print("Resposta da API:", response.text)
-                return JsonResponse({
-                   "error": "Falha ao criar a cobrança"
-                })
+                error_message = None
+            try:
+                error_message = response.json()['message']
+            except KeyError:
+                pass
+            return JsonResponse({
+                "error": "Falha ao criar a cobrança",
+                "api_error_message": error_message
+            })
+
+
             
         except Pedidos.DoesNotExist:
             return JsonResponse({"error": "Pedido não encontrado"})
