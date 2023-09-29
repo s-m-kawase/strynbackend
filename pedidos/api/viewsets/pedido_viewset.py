@@ -338,8 +338,13 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 "fixedValue": valor_total * porcentagem
             }
             ]
-
             
+            success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
+
+            callback_data = {
+            "successUrl": "https://www.google.com/",
+            "autoRedirect": True  # Defina como True para ativar o redirecionamento automático
+        }
 
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
@@ -354,6 +359,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'externalReference': pedido.id,
                 'paymentType': 'PIX',
                 'split': split_data,
+                'callback': callback_data  
             }
 
             headers = {

@@ -108,8 +108,6 @@ class AsaasWebhookViewSet(ViewSet):
             pedido = Pedidos.objects.get(id=pedido_id)
             email = pedido.email_cliente
             self.update_pedido_status(pedido, email)
-            url_redirecionamento = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
-            webbrowser.open(url_redirecionamento)
                 
 
         return JsonResponse({'message': 'Webhook recebido com sucesso'})
