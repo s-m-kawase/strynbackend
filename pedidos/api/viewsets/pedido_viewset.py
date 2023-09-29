@@ -339,7 +339,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             }
             ]
 
-            success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
+            
 
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
@@ -354,9 +354,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'externalReference': pedido.id,
                 'paymentType': 'PIX',
                 'split': split_data,
-                "callback":{
-                    "successUrl": 'https://www.google.com/',
-                }
             }
 
             headers = {
