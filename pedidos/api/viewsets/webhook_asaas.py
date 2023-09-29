@@ -11,8 +11,7 @@ from collections import namedtuple
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
-import webbrowser
-
+from django.shortcuts import redirect
 
 asaas_api = config('ASAAS_API_KEY')
 
@@ -108,6 +107,7 @@ class AsaasWebhookViewSet(ViewSet):
             pedido = Pedidos.objects.get(id=pedido_id)
             email = pedido.email_cliente
             self.update_pedido_status(pedido, email)
+            return redirect("https://www.google.com/")
                 
 
         return JsonResponse({'message': 'Webhook recebido com sucesso'})

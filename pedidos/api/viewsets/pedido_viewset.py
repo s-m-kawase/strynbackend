@@ -341,11 +341,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
             
             # success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
 
-            callback_data = {
-            "successUrl": "https://www.google.com/",
-            "autoRedirect": True
-        }
-            callback_url = "https://www.google.com/"
+        #     callback_data = {
+        #     "successUrl": "https://www.google.com/",
+        #     "autoRedirect": True
+        # }
+        #     callback_url = "https://www.google.com/"
 
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
@@ -355,9 +355,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 },
                 'billingType': 'PIX',
                 'dueDate': data_vencimento,
-                'callback': {
-                    'url':callback_url
-                },  
+                # 'callback': {
+                #     'url':callback_url
+                # },  
                 'value': pedido.total,  
                 'description': f'Cobrança do pedido {pedido.id}, feito pelo {pedido.nome_cliente} no valor de R${pedido.total}',
                 'externalReference': pedido.id,
