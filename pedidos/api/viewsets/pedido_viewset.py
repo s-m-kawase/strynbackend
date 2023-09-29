@@ -343,7 +343,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
             callback_data = {
             "successUrl": "https://www.google.com/",
-            "autoRedirect": False
+            "autoRedirect": True
         }
 
             # Crie uma cobrança no Asaas (sandbox)
@@ -379,8 +379,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
             else:
                 print("Falha ao criar a cobrança. Código de status:", response.status_code)
                 print("Resposta da API:", response.text)
-                error_message = None
-            
+            return JsonResponse({
+                "error": "Falha ao criar a cobrança",
+            })
+
 
             
         except Pedidos.DoesNotExist:
