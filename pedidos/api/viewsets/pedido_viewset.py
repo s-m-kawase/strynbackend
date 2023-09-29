@@ -328,6 +328,17 @@ class PedidosViewSet(viewsets.ModelViewSet):
             data_vencimento = pedido.data_criacao + timedelta(days=1)
             data_vencimento = f"{data_vencimento}"
 
+            valor_total = pedido.total
+            porcentagem = 90
+            porcentagem = porcentagem / 100
+            
+            split_data = [
+            {
+                "walletId": "095ca411-db88-491f-9bbd-a997e14a21eb",
+                "fixedValue": valor_total * porcentagem
+            }
+            ]
+
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
                 'customer': {
@@ -340,6 +351,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'description': f'Cobrança do pedido {pedido.id}, feito pelo {pedido.nome_cliente} no valor de R${pedido.total}',
                 'externalReference': pedido.id,
                 'paymentType': 'PIX',
+                'split': split_data  
             }
 
             headers = {
