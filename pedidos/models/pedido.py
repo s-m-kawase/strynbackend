@@ -1,4 +1,3 @@
-from curses import savetty
 from django.db import models
 from pedidos.models.tempo import TempoEstimado
 from .restaurante import Restaurante
