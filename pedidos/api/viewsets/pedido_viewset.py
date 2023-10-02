@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from django.http import HttpResponse
 import requests
 from datetime import datetime, timedelta
+from django.shortcuts import redirect
 
 
 stripe_secret_key = config('STRIPE_SECRET_KEY')
@@ -310,7 +311,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
       return JsonResponse({"message":'success'})
 
-
+    # @action(methods=['get'], detail=False)
+    # def redirect(self,request, pk):
+    #     pedido = Pedidos.objects.get(pk=pk)
+    #     success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
+    #     return redirect(success_url)
 # -------------------------- pix no asaas --------------------------------------
     @action(methods=['get'], detail=True)
     def criar_cobranca_asaas(self ,request,pk):
@@ -354,6 +359,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'externalReference': pedido.id,
                 'paymentType': 'PIX',
                 'split': split_data,
+                "callback":{
+                    "successUrl": "https://www.google.com/",
+                    "autoRedirect": False  
+                }
             }
 
             headers = {
@@ -372,11 +381,13 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 })
             
             else:
-                print("Falha ao criar a cobrança. Código de status:", response.status_code)
-                print("Resposta da API:", response.text)
-            return JsonResponse({
-                "error": "Falha ao criar a cobrança",
-            })
+                error_data = response.json()
+                return JsonResponse({"success": False,"aqui":"if response.status_code == 200:", "error": error_data})
+            #     print("Falha ao criar a cobrança. Código de status:", response.status_code)
+            #     print("Resposta da API:", response.text)
+            # return JsonResponse({
+            #     "error": "Falha ao criar a cobrança",
+            # })
 
 
             
