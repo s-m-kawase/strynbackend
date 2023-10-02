@@ -260,44 +260,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'error': 'Ocorreu um erro ao limpar os itens do pedido.'}, status=404)
 
-
-
-    # @action(detail=True, methods=['get'])
-    # def tela_pedido_confirmado(self, request, pk):
-    #     pedido = Pedidos.objects.get(id=pk)
-
-    #     # Obter os dados do pedido do Stripe usando o intent_payment_id
-    #     intent_payment_id = pedido.payment_intent_id
-    #     try:
-    #         intent = stripe.PaymentIntent.retrieve(intent_payment_id)
-    #         taxa_servico = pedido.total_taxa_servico_no_pedido
-    #         dados_pedido = {
-    #             'id': intent.id,
-    #             'valor': intent.amount / 100,  # Converter para valor em reais
-    #             'status': intent.status,
-    #             'nome_cliente': intent.charges.data[0].billing_details.name,
-    #             'ultimo_numero_cartao': intent.charges.data[0].payment_method_details.card.last4,
-    #             'taxa_de_servico':taxa_servico,
-    #             'itens': [],
-    #         }
-
-            # # Obter os itens do pedido
-            # for item in pedido.itenspedido_set.all():
-            #   item_pedido = {
-            #       'nome': item.item.nome,
-            #       'quantidade': item.multiplicador_item_pedido,
-            #       'valor_unidade': item.valor_unitario_item,
-            #       'valor_total_item':item.preco_item_mais_complementos,
-            #   }
-            #   dados_pedido['itens'].append(item_pedido)
-
-
-            # return Response(dados_pedido)
-
-        # except stripe.error.StripeError as e:
-        #     mensagem_erro = str(e)  # Obtém a mensagem de erro da exceção
-        #     return Response({'error': mensagem_erro}, status=500)
-
     @action(detail=True, methods=['get'])
     def criar_pagamento_na_mesa(self,request,pk):
       pedido = Pedidos.objects.get(id=pk)
@@ -311,11 +273,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
       return JsonResponse({"message":'success'})
 
-    # @action(methods=['get'], detail=False)
-    # def redirect(self,request, pk):
-    #     pedido = Pedidos.objects.get(pk=pk)
-    #     success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
-    #     return redirect(success_url)
+   
 # -------------------------- pix no asaas --------------------------------------
     @action(methods=['get'], detail=True)
     def criar_cobranca_asaas(self ,request,pk):
@@ -345,7 +303,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             }
             ]
             
-
+            success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
                 'customer': {
@@ -360,7 +318,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'paymentType': 'PIX',
                 'split': split_data,
                 "callback":{
-                    "successUrl": "https://www.google.com/",
+                    "successUrl": "success_url",
                     "autoRedirect": False  
                 }
             }
