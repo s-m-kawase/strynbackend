@@ -318,7 +318,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'paymentType': 'PIX',
                 'split': split_data,
                 "callback":{
-                    "successUrl": "success_url",
+                    "successUrl": success_url,
                     "autoRedirect": False  
                 }
             }
