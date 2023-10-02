@@ -107,7 +107,7 @@ class AsaasWebhookViewSet(ViewSet):
             pedido = Pedidos.objects.get(id=pedido_id)
             email = pedido.email_cliente
             self.update_pedido_status(pedido, email)
-            return redirect("https://www.google.com/")
+            redirect("https://www.google.com/")
                 
 
         return JsonResponse({'message': 'Webhook recebido com sucesso'})
