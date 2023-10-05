@@ -319,7 +319,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'billingType': 'PIX',
                 'dueDate': data_vencimento,
                 'value': pedido.total,  
-                'description': f'Cobrança do pedido {pedido.id}, feito pelo {pedido.nome_cliente} no valor de R${pedido.total}',
+                'description': f'Cobrança do pedido {pedido.id}, feito pelo {pedido.nome_cliente}',
                 'externalReference': pedido.id,
                 'paymentType': 'PIX',
                 'split': split_data,
