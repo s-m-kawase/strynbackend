@@ -5,6 +5,7 @@ from rest_framework.viewsets import ViewSet
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from pedidos.models import Pedidos
+from pagamentos.models import Pagamento
 from decouple import config
 from emails.models import MensagemEmail, TemplateEmail
 from collections import namedtuple
@@ -107,7 +108,12 @@ class AsaasWebhookViewSet(ViewSet):
             pedido = Pedidos.objects.get(id=pedido_id)
             email = pedido.email_cliente
             self.update_pedido_status(pedido, email)
-            return redirect("https://www.google.com/")
+            Pagamento.objects.create(
+            pedido=pedido,
+            pagamento="Pagamento pix",
+            valor_pago=pedido.total,
+            codigo_pagamento=f"PIX{pedido}"
+            )
                 
 
         return JsonResponse({'message': 'Webhook recebido com sucesso'})

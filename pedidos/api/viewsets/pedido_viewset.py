@@ -304,11 +304,17 @@ class PedidosViewSet(viewsets.ModelViewSet):
             ]
             
             success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
+
+            if pedido.cliente:
+                cpf = pedido.cliente.cpf
+            else:
+                cpf = pedido.cpf
+
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
                 'customer': {
                     'name': pedido.nome_cliente,
-                    'cpfCnpj': '51664230890'  
+                    'cpfCnpj': cpf  
                 },
                 'billingType': 'PIX',
                 'dueDate': data_vencimento,
