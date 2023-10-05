@@ -325,7 +325,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'split': split_data,
                 "callback":{
                     "successUrl": success_url,
-                    "autoRedirect": False  
+                    "autoRedirect": True  
                 }
             }
 
