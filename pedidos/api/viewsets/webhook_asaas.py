@@ -84,6 +84,39 @@ class AsaasWebhookViewSet(ViewSet):
                     "message": error.args[0],
                 }
             )
+        
+
+    def estorno(self, pedido, email):
+        try:
+                template_email = TemplateEmail.objects.filter(
+                    codigo='reembolso_pedido'
+                ).first()
+
+                if not template_email:
+                    raise ValueError(
+                        "Serviço indisponível, contate seu administrador!"
+                    )
+                mensagem_email = MensagemEmail.objects.create(
+                    template_email=template_email
+                )
+                
+                mensagem_email.enviar(pedido, [email])
+                
+
+                return JsonResponse(
+                    {
+                        "status": "200",
+                        "message": "Email enviado com sucesso!",
+                    }
+                )
+        except Exception as error:
+            return JsonResponse(
+                {
+                    "status": "404",
+                    "message": error.args[0],
+                }
+            )
+        
 
          
 
@@ -114,6 +147,14 @@ class AsaasWebhookViewSet(ViewSet):
             valor_pago=pedido.total,
             codigo_pagamento=f"PIX{pedido}"
             )
+
+        if event_type == 'PAYMENT_REFUNDED':
+            payment_data = payload['payment']
+            pedido_id = payment_data['externalReference']
+            pedido = Pedidos.objects.get(id=pedido_id)
+            email = pedido.email_cliente
+            self.estorno(pedido, email)
+            
                 
 
         return JsonResponse({'message': 'Webhook recebido com sucesso'})
