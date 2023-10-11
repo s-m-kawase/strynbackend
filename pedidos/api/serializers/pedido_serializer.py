@@ -17,7 +17,7 @@ class PedidosSerializer(serializers.ModelSerializer):
     adicionais_read = serializers.SerializerMethodField()
     cupom_read = serializers.SerializerMethodField()
     cliente_read = serializers.SerializerMethodField()
-    tempo_estimado_read = serializers.SerializerMethodField()
+    # tempo_estimado_read = serializers.SerializerMethodField()
     restaurante_read = serializers.SerializerMethodField()
     pagamentos_read = serializers.SerializerMethodField()
     itens_read = serializers.SerializerMethodField()
