@@ -63,8 +63,8 @@ class PedidosSerializer(serializers.ModelSerializer):
     def get_cupom_read(self, obj):
         return CupomSerializer(instance=obj.cupom).data if obj.cupom else None
 
-    def get_tempo_estimado_read(self, obj):
-         return [TempoEstimadoSerializer(instance=obj.tempo_estimado).data] if obj.tempo_estimado else None
+    # def get_tempo_estimado_read(self, obj):
+    #      return [TempoEstimadoSerializer(instance=obj.tempo_estimado).data] if obj.tempo_estimado else None
 
     # def get_cliente_read(self, obj):
     #     return ClienteSerializer(instance=obj.cliente).data if obj.cliente else None
