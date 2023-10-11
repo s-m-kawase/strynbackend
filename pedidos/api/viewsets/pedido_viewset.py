@@ -296,9 +296,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
             porcentagem = pedido.restaurante.pocentagem_para_tranferencia
             porcentagem = porcentagem / 100
 
+                # "walletId": "095ca411-db88-491f-9bbd-a997e14a21eb",
             split_data = [
             {
-                "walletId": "095ca411-db88-491f-9bbd-a997e14a21eb",
+                "walletId": pedido.restaurante.chave_asaas,
                 "fixedValue": valor_total * porcentagem
             }
             ]
