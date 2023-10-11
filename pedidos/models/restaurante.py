@@ -234,6 +234,12 @@ class Restaurante(models.Model):
         blank=True, null=True
     )
 
+    chave_asaas = models.CharField(
+        verbose_name="Chave Connect do Asaas",
+        blank=True, null=True,
+        max_length=50
+    )
+
     # pedido_no_seu_restaurante = models.BooleanField(
     #     verbose_name="Pedido No meu Restaurante",
     #     default=False

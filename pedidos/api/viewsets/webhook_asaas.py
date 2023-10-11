@@ -87,6 +87,8 @@ class AsaasWebhookViewSet(ViewSet):
         
 
     def estorno(self, pedido, email):
+        pedido.status_pedido == 'Cancelado'
+        pedido.save()
         try:
                 template_email = TemplateEmail.objects.filter(
                     codigo='reembolso_pedido'

@@ -279,7 +279,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
     def criar_cobranca_asaas(self ,request,pk):
         try:
             pedido = Pedidos.objects.get(id=pk)
-            success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
+            
             # pegar cpf do cliente se ele tiver cadastrado
             if pedido and pedido.cliente:
                 pedido.cpf = pedido.cliente.cpf
@@ -293,7 +293,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             data_vencimento = f"{data_vencimento}"
 
             valor_total = pedido.total
-            porcentagem = 90
+            porcentagem = pedido.restaurante.pocentagem_para_tranferencia
             porcentagem = porcentagem / 100
 
             split_data = [

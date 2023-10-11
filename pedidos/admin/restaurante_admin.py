@@ -72,6 +72,7 @@ class RestauranteAdmin(admin.ModelAdmin):
                     'tempo_medio',
                     'tempo_limite',
                     'chave_connect',
+                    'chave_asaas',
                     'pocentagem_para_tranferencia',
                     'usuario',
                 ]
