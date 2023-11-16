@@ -310,11 +310,15 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 cpf = pedido.cliente.cpf
             else:
                 cpf = pedido.cpf
-
+            
+            if pedido.nome_cliente:
+                nome = pedido.nome_cliente
+            else:
+                nome = pedido.cliente.nome_cliente
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
                 'customer': {
-                    'name': pedido.nome_cliente,
+                    'name':  nome,
                     'cpfCnpj': cpf  
                 },
                 'billingType': 'PIX',

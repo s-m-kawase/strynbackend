@@ -112,6 +112,8 @@ else:
       )
   }
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
+
 USE_AWS = config('USE_AWS', default=False, cast=bool)
 if USE_AWS:
     AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
