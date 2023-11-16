@@ -281,11 +281,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
             pedido = Pedidos.objects.get(id=pk)
             
             # pegar cpf do cliente se ele tiver cadastrado
-            if pedido and pedido.cliente:
-                pedido.cpf = pedido.cliente.cpf
-            else:
-                pedido.cpf = None
-            pedido.save()
+            # if pedido and pedido.cliente:
+            #     pedido.cpf = pedido.cliente.cpf
+            # else:
+            #     pedido.cpf = None
+            
 
             api_key = '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYxODE6OiRhYWNoX2MyYjBjNzVhLTFmOWQtNDljMS04YTYyLTU5OTY2ZGY3OWVkOQ=='
 
