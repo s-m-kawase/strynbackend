@@ -306,7 +306,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             
             success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
 
-            if pedido.cliente:
+            if pedido:
                 cpf = pedido.cliente.cpf
             else:
                 cpf = pedido.cpf
