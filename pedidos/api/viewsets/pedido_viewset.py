@@ -311,10 +311,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
             else:
                 cpf = pedido.cpf
             
-            if pedido:
-                nome = pedido.nome_cliente
-            else:
+            if pedido.cliente:
                 nome = pedido.cliente.nome_cliente
+            else:
+                nome = pedido.nome_cliente
             # Crie uma cobrança no Asaas (sandbox)
             cobranca_data = {
                 'customer': {
@@ -324,7 +324,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'billingType': 'PIX',
                 'dueDate': data_vencimento,
                 'value': pedido.total,  
-                'description': f'Cobrança do pedido {pedido.id}, feito pelo {pedido.nome_cliente}',
+                'description': f'Cobrança do pedido {pedido.id}, feito pelo {nome}',
                 'externalReference': pedido.id,
                 'paymentType': 'PIX',
                 'split': split_data,
@@ -351,7 +351,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             
             else:
                 error_data = response.json()
-                return JsonResponse({"success": False,"aqui":"if response.status_code == 200:", "error": error_data})
+                return JsonResponse({ "error": error_data})
             #     print("Falha ao criar a cobrança. Código de status:", response.status_code)
             #     print("Resposta da API:", response.text)
             # return JsonResponse({
