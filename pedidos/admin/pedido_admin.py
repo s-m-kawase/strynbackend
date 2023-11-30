@@ -1,6 +1,7 @@
 from pedidos.models.pedido import  Pedidos
 from django.contrib import admin
 from .itens_pedido_inline import ItensPedidoInline
+from ..models import Restaurante
 from nested_admin import nested, NestedStackedInline, NestedModelAdmin
 
 
@@ -37,3 +38,14 @@ class PedidosAdmin(NestedModelAdmin):
     inlines = [
         ItensPedidoInline
     ]
+
+
+    def get_queryset(self, request):
+        queryset = super(PedidosAdmin, self).get_queryset(request)
+
+        user = request.user
+        restaurante = Restaurante.objects.get(usuario=user)
+
+        queryset = queryset.filter(restaurante=restaurante)
+
+        return queryset
