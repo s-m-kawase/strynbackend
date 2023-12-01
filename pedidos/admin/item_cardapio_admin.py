@@ -1,5 +1,6 @@
 from pedidos.models.item_cardapio import ItemCardapio 
 from django.contrib import admin
+from ..models import Restaurante, Cardapio
 
 
 @admin.register(ItemCardapio)
@@ -16,3 +17,24 @@ class ItemCardapioAdmin(admin.ModelAdmin):
     ]
     
     filter_horizontal = ['categoria','grupo_complemento']
+
+
+    def get_queryset(self, request):
+        queryset = super(ItemCardapioAdmin, self).get_queryset(request)
+
+        user = request.user
+        restaurante = Restaurante.objects.get(usuario=user)
+        cardapios = Cardapio.objects.filter(restaurante=restaurante)
+        ids_itens = []
+        ids_categorias = []
+        for cardapio in cardapios:
+            categorias = cardapio.categorias.all()
+            ids_categorias.extend([categoria.id for categoria in categorias])
+
+        itens = ItemCardapio.objects.filter(categoria__in=ids_categorias)
+        ids_itens.extend([item.id for item in itens])
+
+        queryset = queryset.filter(id__in=ids_itens)
+
+
+        return queryset

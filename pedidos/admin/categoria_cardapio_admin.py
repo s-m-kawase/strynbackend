@@ -1,4 +1,5 @@
-from pedidos.models.categoria_cardapio import CategoriaCardapio
+from pedidos.models import CategoriaCardapio
+from ..models import Restaurante, Cardapio
 from django.contrib import admin
 from .ordem_categoria_cardapio_inline import OrdemCategoriaCardapioInline
 
@@ -20,3 +21,20 @@ class CategoriaCardapioAdmin(admin.ModelAdmin):
     ]
 
     inlines = [OrdemCategoriaCardapioInline]
+
+    def get_queryset(self, request):
+        queryset = super(CategoriaCardapioAdmin, self).get_queryset(request)
+
+        user = request.user
+
+        restaurante = Restaurante.objects.get(usuario=user)
+        cardapios = Cardapio.objects.filter(restaurante=restaurante)
+        ids_categorias = []
+        for cardapio in cardapios:
+            cate = cardapio.categorias.all()
+            ids_categorias.extend([categoria.id for categoria in cate])
+        
+        queryset = queryset.filter(id__in=ids_categorias)
+
+
+        return queryset

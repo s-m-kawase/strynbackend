@@ -1,4 +1,4 @@
-from pedidos.models.cardapio import Cardapio
+from pedidos.models.cardapio import Cardapio, Restaurante
 from django.contrib import admin
 from .ordem_categoria_cardapio_inline import OrdemCategoriaCardapioInline
 
@@ -24,3 +24,14 @@ class CardapioAdmin(admin.ModelAdmin):
     list_filter = []
 
     inlines = [OrdemCategoriaCardapioInline]
+
+
+    def get_queryset(self, request):
+        queryset = super(CardapioAdmin, self).get_queryset(request)
+
+        user = request.user
+        restaurante = Restaurante.objects.get(usuario=user)
+
+        queryset = queryset.filter(restaurante=restaurante)
+
+        return queryset
