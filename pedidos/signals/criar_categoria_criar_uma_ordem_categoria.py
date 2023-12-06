@@ -2,12 +2,16 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from pedidos.models import CategoriaCardapio, Cardapio, OrdemCategoriaCardapio
 from pedidos.models.ordem_categoria_cardapio import OrdemCategoriaCardapio
+from ..models import Restaurante
+from crum import get_current_user
 
 
 @receiver(post_save, sender=CategoriaCardapio)
 def criar_ordem_categoria_cardapio(sender, instance, created, **kwargs):
     if created:
-        cardapios = Cardapio.objects.all()
+        user = get_current_user()
+        restaurante = Restaurante.objects.get(usuario=user)
+        cardapios = Cardapio.objects.filter(restaurante=restaurante)
         for cardapio in cardapios:
             ordem_existe = OrdemCategoriaCardapio.objects.filter(categoria=instance, cardapio=cardapio).exists()
             if not ordem_existe:

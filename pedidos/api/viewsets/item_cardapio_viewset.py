@@ -66,4 +66,7 @@ class ItemCardapioViewSet(viewsets.ModelViewSet):
             content_type="application/json"
         )
     
+    def get_queryset(self):
+        query = super().get_queryset()
+        return query
 

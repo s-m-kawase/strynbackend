@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class CategoriaCardapio(models.Model):
@@ -19,8 +20,20 @@ class CategoriaCardapio(models.Model):
         verbose_name='Em promoção ?'
     )
 
+    usuario_criacao = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        verbose_name='Usuário de criação',
+        blank=True,
+        null=True,
+    )
+    
     
 
+    
+    def usuario_logado(self, request):
+        return self.request.user
+    
     def save(self, *args, **kwargs):
         if self.em_promocao is None:
             self.em_promocao = False

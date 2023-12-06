@@ -49,7 +49,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
 
-    filterset_fields = ['status_pedido','restaurante']
+    filterset_fields = ['status_pedido','restaurante','cliente']
 
     search_fields = ['id']
 
