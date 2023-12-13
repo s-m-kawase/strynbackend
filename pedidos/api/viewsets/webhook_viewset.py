@@ -22,7 +22,7 @@ class StripeWebhookViewSet(ViewSet):
   def update_order_status(self, pedido ,session):
     email = session['customer_details']['email']
     if session['status'] == 'complete':
-        pedido.status_pedido = 'Pago'
+        pedido.status_pedido = 'Aguardando Gestor Pedido'
         pedido.hora_status_pago = timezone.now()
         pedido.save()
 
