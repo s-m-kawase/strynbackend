@@ -52,7 +52,7 @@ class AsaasWebhookViewSet(ViewSet):
 
     def update_pedido_status(self, pedido, email):
         
-        pedido.status_pedido = 'Aguardando Gestor Pedido'
+        pedido.status_pedido = 'Aguardando Preparo'
         pedido.hora_status_pago = timezone.now()
         pedido.save()
         try:

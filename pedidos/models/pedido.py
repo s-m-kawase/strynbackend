@@ -22,7 +22,6 @@ class Pedidos(models.Model):
     STATUS_CHOICE = (
         ('Sacola','Sacola'),
         ('Aguardando Pagamento Mesa', 'Aguardando Pagamento Mesa'),
-        ('Aguardando Gestor Pedido', 'Aguardando Gestor Pedido'),
         ('Pago','Pago'),
         ('Aguardando Preparo', 'Aguardando Preparo'),
         ('Em preparo','Em preparo'),
