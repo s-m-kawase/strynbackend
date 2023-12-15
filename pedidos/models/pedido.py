@@ -24,6 +24,7 @@ class Pedidos(models.Model):
         ('Aguardando Pagamento Mesa', 'Aguardando Pagamento Mesa'),
         ('Pago','Pago'),
         ('Aguardando Preparo', 'Aguardando Preparo'),
+        ('Aguardando Confirmação', 'Aguardando Confirmação'),
         ('Em preparo','Em preparo'),
         ('Concluído','Concluído'),
         ('Cancelado','Cancelado'),
