@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from pedidos.models.tempo import TempoEstimado
 from .restaurante import Restaurante
@@ -134,6 +135,7 @@ class Pedidos(models.Model):
         verbose_name="Taxa de atendimento ",
         decimal_places=2,
         max_digits=10,
+        default=0,
         blank=True, null=True,
     )
 
