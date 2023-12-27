@@ -181,9 +181,13 @@ class Pedidos(models.Model):
         
 
         if self.cupom:
-          total = total
-          taxa = float(self.cupom.porcentagem / 100 )if self.cupom else 0
-          cupom = total * taxa
+            if self.cupom.valor_fixo == True:
+                total = total
+                cupom = total - self.cupom.porcentagem
+            else:
+                total = total
+                taxa = float(self.cupom.porcentagem / 100 )if self.cupom else 0
+                cupom = total * taxa
 
         total -= round(float(cupom),2)
 
