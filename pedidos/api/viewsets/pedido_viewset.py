@@ -33,8 +33,9 @@ def criar_cupom(pedido):
     if pedido.cupom and pedido.cupom.porcentagem:
         valor = pedido.cupom.porcentagem
         if pedido.cupom.valor_fixo == True:
+            valor_centavos = int(valor * 100)
             cupom = stripe.Coupon.create(
-            amount_off=valor,
+            amount_off=valor_centavos,
             currency='brl', 
             duration='once',
 )
