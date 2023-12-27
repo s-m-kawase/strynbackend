@@ -31,11 +31,19 @@ def criar_cupom(pedido):
     stripe_secret_key = config('STRIPE_SECRET_KEY')
     stripe.api_key = stripe_secret_key
     if pedido.cupom and pedido.cupom.porcentagem:
-        percent_off = pedido.cupom.calcular_porcentagem_desconto()
-        cupom = stripe.Coupon.create(
-            percent_off=percent_off,
-            duration="once",
-        )
+        valor = pedido.cupom.porcentagem
+        if pedido.cupom.valor_fixo == True:
+            cupom = stripe.Coupon.create(
+            amount_off=valor,
+            currency='brl', 
+            duration='once',
+)
+        else:
+            percent_off = pedido.cupom.calcular_porcentagem_desconto()
+            cupom = stripe.Coupon.create(
+                percent_off=percent_off,
+                duration="once",
+            )
         return cupom
     else:
         return None

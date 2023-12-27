@@ -20,12 +20,10 @@ class Cupom(models.Model):
         blank=True, null=True
     )
 
-    # porcentagem = models.DecimalField(
-    #     verbose_name="porcentagem",
-    #     max_digits=5,
-    #     decimal_places=2,
-    #     blank=True, null=True
-    #     )
+    valor_fixo = models.BooleanField(
+        verbose_name="Ele é valor um valor Fixo? ",
+        default=False
+    )
 
     cod_cupom = models.CharField(
         max_length=200,

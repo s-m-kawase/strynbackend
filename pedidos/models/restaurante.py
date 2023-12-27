@@ -257,3 +257,7 @@ class Restaurante(models.Model):
         app_label = 'pedidos'
         verbose_name = 'Restaurante'
         verbose_name_plural = 'Restaurantes'
+        permissions = [
+            ("pode_ver_cozinha", "Pode Ver Cozinha"),
+            ("pode_ver_gestor_pedido", "Pode Ver Gestor de Pedido"),
+        ]
