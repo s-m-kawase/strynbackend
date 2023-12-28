@@ -147,6 +147,11 @@ class Pedidos(models.Model):
         blank=True
     )
 
+    pagamento_asaas = models.CharField(
+        max_length=500,
+        blank=True, null=True
+    )
+
     # item_pronto = models.BooleanField(
     #     verbose_name="Item pronto",
     #     default=False,

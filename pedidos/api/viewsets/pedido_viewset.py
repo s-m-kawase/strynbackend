@@ -361,14 +361,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
             else:
                 error_data = response.json()
                 return JsonResponse({ "error": error_data})
-            #     print("Falha ao criar a cobrança. Código de status:", response.status_code)
-            #     print("Resposta da API:", response.text)
-            # return JsonResponse({
-            #     "error": "Falha ao criar a cobrança",
-            # })
-
-
-            
         except Pedidos.DoesNotExist:
             return JsonResponse({"error": "Pedido não encontrado"})
         
@@ -379,6 +371,32 @@ class PedidosViewSet(viewsets.ModelViewSet):
             "error": "Erro interno do servidor",
             "error_message": error_message
         })
+    
+    @action(methods=['get'], detail=True)
+    def reembolso_asaas(self ,request,pk):
+        pedido = Pedidos.objects.get(pk=pk)
+        id_do_pagamento = pedido.pagamento_asaas
+        url_api_asaas = f"https://sandbox.asaas.com/api/v3/payments/{id_do_pagamento}/refund"
+        headers = {
+            'Content-Type': 'application/json',
+            'access_token': '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYxODE6OiRhYWNoX2MyYjBjNzVhLTFmOWQtNDljMS04YTYyLTU5OTY2ZGY3OWVkOQ==',
+        }
+
+        dados_reembolso = {
+            'value': pedido.total,  
+            'description': 'Reembolso do pedido', 
+        }
+
+
+        try:
+            resposta = requests.post(url_api_asaas, json=dados_reembolso, headers=headers)
+            if resposta.status_code // 100 == 2:
+                return Response({"message": "Reembolso realizado com sucesso"})
+            else:
+                return Response({"error": f"Falha ao realizar reembolso: {resposta.status_code} - {resposta.text}"})
+        except Exception as e:
+            return Response({"error": f"Erro durante a solicitação de reembolso: {str(e)}"})
+
 
 #--------------------------- relatorio para grafico------------------------------
 
