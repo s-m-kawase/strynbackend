@@ -34,10 +34,12 @@ from apistripe.api.viewset.config_stripe_viewset import ConfigStripeViewSet
 # from apistripe.api.viewset.produto_viewset import ProdutoViewSet
 from pedidos.api.viewsets.webhook_viewset import StripeWebhookViewSet
 from pedidos.api.viewsets.webhook_asaas import AsaasWebhookViewSet
+from core.api.viewsets.permission_viewset import PermissionViewSet
 
 router = routers.DefaultRouter()
 router.register(r'usuario', UserViewSet, basename='usuario'),
 router.register(r'profile', ProfileViewSet, basename='profile'),
+router.register(r'permission', PermissionViewSet, basename='permission')
 
 router.register(r'pagamento', PagamentoViewSet, basename='pagamento'),
 router.register(r'cupom', CupomViewSet, basename='cupom'),
