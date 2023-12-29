@@ -40,7 +40,7 @@ def criar_cupom(pedido):
             duration='once',
 )
         else:
-            percent_off = pedido.cupom.calcular_porcentagem_desconto()
+            percent_off = pedido.cupom.porcentagem
             cupom = stripe.Coupon.create(
                 percent_off=percent_off,
                 duration="once",

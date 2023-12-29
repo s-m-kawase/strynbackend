@@ -1,5 +1,3 @@
-import code
-from os import name
 from rest_framework import filters, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
