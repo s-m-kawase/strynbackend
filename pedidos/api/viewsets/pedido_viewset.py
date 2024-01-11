@@ -302,7 +302,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             data_vencimento = f"{data_vencimento}"
 
             valor_total = float(pedido.total)
-            porcentagem = float(pedido.restaurante.passar_porcentagem_em_decimal)
+            porcentagem = float(pedido.restaurante.pocentagem_para_tranferencia)
             porcentagem = porcentagem / 100
 
                 # "walletId": "095ca411-db88-491f-9bbd-a997e14a21eb",
