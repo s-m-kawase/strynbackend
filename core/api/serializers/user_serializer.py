@@ -3,11 +3,11 @@ from django.contrib.auth.models import User
 from .profile_serializers import ProfileSerializer
 class UserSerializer(serializers.ModelSerializer):
     #profile = ProfileSerializer()
-
+    groups = serializers.SerializerMethodField()
+    
     def get_groups(self, obj):
-        grupos = obj.groups.values_list('name',flat = True)
-        return list(grupos)
-        
+        return [group.name for group in obj.groups.all()]
+            
     def get_permissions_by_user(self, obj):
         permissoes =[] 
         for permissao in obj.user_permissions.values_list('name',flat = True):

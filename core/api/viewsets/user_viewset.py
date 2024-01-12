@@ -1,3 +1,4 @@
+from email.headerregistry import Group
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -108,6 +109,8 @@ class UserViewSet(ModelViewSet):
         dic = UserSerializer(request.user, read_only=True)
         try:
             cliente = Cliente.objects.get(usuario=request.user)
+            # user = request.user
+            # grupos = request.user.groups.all()
             cliente_dados = {
                 "id": cliente.id,
                 "nome": cliente.nome_cliente,
