@@ -30,8 +30,9 @@ class CardapioAdmin(admin.ModelAdmin):
         queryset = super(CardapioAdmin, self).get_queryset(request)
 
         user = request.user
-        restaurante = Restaurante.objects.get(usuario=user)
+        if not user.is_superuser:
+            restaurante = Restaurante.objects.get(usuario=user)
 
-        queryset = queryset.filter(restaurante=restaurante)
+            queryset = queryset.filter(restaurante=restaurante)
 
         return queryset
