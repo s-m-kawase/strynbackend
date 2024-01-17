@@ -1,17 +1,16 @@
+from core.api.serializers.group_serializer import GroupSerializer
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.http.response import JsonResponse
+from pedidos.api.serializers.cliente_serializers import ClienteSerializer
+from pedidos.forms import ClienteForm, UserForm
+from pedidos.models import Cliente
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from core.api.serializers.group_serializer import GroupSerializer
-from pedidos.api.serializers.cliente_serializers import ClienteSerializer
-from pedidos.forms import ClienteForm, UserForm
-from pedidos.models import Cliente
 
 from ..serializers.user_serializer import UserSerializer
 
@@ -117,6 +116,8 @@ class UserViewSet(ModelViewSet):
         dic = UserSerializer(request.user, read_only=True)
         try:
             cliente = Cliente.objects.get(usuario=request.user)
+            # user = request.user
+            # grupos = request.user.groups.all()
             cliente_dados = {
                 "id": cliente.id,
                 "nome": cliente.nome_cliente,
