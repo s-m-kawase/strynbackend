@@ -245,10 +245,10 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         ON pag.pedido_id = ped.id
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
-                        WHERE ped.data_criacao::DATE = '{data_selecionada}'::DATE  --'2023-06-20'::date  --'{data_selecionada}'
+                        WHERE ped.data_criacao::DATE = '{data_selecionada}'
                         ORDER BY ped.data_criacao_f DESC
                         """
-
+# linha 248 frente da variavel ::DATE  --'2023-06-20'::date  --'{data_selecionada}'
         with connection.cursor() as cursor:
             cursor.execute(sql_query)
             result = cursor.fetchall()
