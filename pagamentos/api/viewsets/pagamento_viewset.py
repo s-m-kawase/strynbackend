@@ -245,7 +245,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         ON pag.pedido_id = ped.id
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
-                        WHERE ped.data_criacao::DATE = '{data_selecionada}'
+                        WHERE TO_CHAR(ped.data_criacao::DATE, 'DD/MM/YYYY') = '{data_selecionada}'
                         ORDER BY ped.data_criacao_f DESC
                         """
 # linha 248 frente da variavel ::DATE  --'2023-06-20'::date  --'{data_selecionada}'
