@@ -1,51 +1,37 @@
-from pedidos.models.pedido import  Pedidos
 from django.contrib import admin
-from .itens_pedido_inline import ItensPedidoInline
+from nested_admin import NestedModelAdmin, NestedStackedInline, nested
+from pedidos.models.pedido import Pedidos
+
 from ..models import Restaurante
-from nested_admin import nested, NestedStackedInline, NestedModelAdmin
+from .itens_pedido_inline import ItensPedidoInline
 
 
 @admin.register(Pedidos)
 class PedidosAdmin(NestedModelAdmin):
-    list_display = [
-        'id',
-        'status_pedido',
-        'subtotal',
-        'total'
-    ]
+    list_display = ["id", "status_pedido", "subtotal", "total"]
 
     search_fields = [
-        'id',
+        "id",
     ]
 
-    filter_horizontal = [
+    filter_horizontal = ["adicionais"]
 
-        'adicionais'
-    ]
-
-    readonly_fields = [
-        'data_criacao',
-        'subtotal',
-        'total'
-    ]
+    readonly_fields = ["data_criacao", "subtotal", "total"]
 
     autocomplete_fields = [
-        'cliente',
-        'cupom',
-
+        "cliente",
+        "cupom",
     ]
 
-    inlines = [
-        ItensPedidoInline
-    ]
-
+    inlines = [ItensPedidoInline]
 
     def get_queryset(self, request):
-        queryset = super(PedidosAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            queryset = super(PedidosAdmin, self).get_queryset(request)
 
-        user = request.user
-        restaurante = Restaurante.objects.get(usuario=user)
+            user = request.user
+            restaurante = Restaurante.objects.get(usuario=user)
 
-        queryset = queryset.filter(restaurante=restaurante)
+            queryset = queryset.filter(restaurante=restaurante)
 
-        return queryset
+            return queryset
