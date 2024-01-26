@@ -5,20 +5,16 @@ from pedidos.models import Pedidos,Restaurante
 from pagamentos.models import Pagamento
 from django.db.models import Q
 from ..serializers.pedido_serializer import *
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from django.http.response import JsonResponse
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 import stripe
 from decouple import config
-from django.http import HttpResponseBadRequest
 from rest_framework.response import Response
-from django.http import HttpResponse
 import requests
-from datetime import datetime, timedelta
-from django.shortcuts import redirect
-
+from datetime import timedelta
+from ...models import Cliente
 
 stripe_secret_key = config('STRIPE_SECRET_KEY')
 stripe.api_key = stripe_secret_key
@@ -67,6 +63,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         query = super().get_queryset()
 
         restaurante = self.request.query_params.get('restaurante',None)
+        cliente = self.request.query_params.get('cliente',None)
         hash_pedido = self.request.query_params.get('hash_pedido',None)
         # hash_cliente = self.request.query_params.get('hash_cliente',None)
         status = self.request.query_params.get('status_pedido',None)
@@ -98,9 +95,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
             if status:
               query = query.filter(status_pedido=status)
         else:  
+            cli = Cliente.objects.get(id=cliente)
             if hash_pedido:
                 query = query.filter(status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Confirmação','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'],
-                hash_cliente=hash_pedido
+                hash_cliente=cli.hash_cliente
                 )
             elif restaurante:
               query = query.filter(restaurante=restaurante)
