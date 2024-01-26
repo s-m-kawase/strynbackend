@@ -78,11 +78,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
             )
 
         if usuario.is_authenticated:
-            cli = Cliente.objects.get(id=cliente)
+            # cli = Cliente.objects.get(id=cliente)
             if not usuario.is_superuser:
                 hash_pedido = usuario.cliente.hash_cliente if usuario.cliente else False
                 if hash_pedido:
-                    query = query.filter(Q(hash_cliente=cli.hash_cliente)|
+                    query = query.filter(Q(hash_cliente=hash_pedido)|
                                         Q(cliente__usuario=usuario) |
                                         Q(restaurante__usuario=usuario)).distinct()
                 else:
