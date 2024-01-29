@@ -24,7 +24,8 @@ class CategoriaCardapioAdmin(admin.ModelAdmin):
                 request
             )
 
-            user = request.user
+        user = request.user
+        if not user.is_superuser:
 
             restaurante = Restaurante.objects.get(usuario=user)
             cardapios = Cardapio.objects.filter(restaurante=restaurante)
@@ -32,6 +33,7 @@ class CategoriaCardapioAdmin(admin.ModelAdmin):
             for cardapio in cardapios:
                 cate = cardapio.categorias.all()
                 ids_categorias.extend([categoria.id for categoria in cate])
+
 
             queryset = queryset.filter(id__in=ids_categorias)
 

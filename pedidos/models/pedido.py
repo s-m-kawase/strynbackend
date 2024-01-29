@@ -191,25 +191,18 @@ class Pedidos(models.Model):
                 print("valor total")
                 print(total)
                 print(self.cupom.porcentagem)
-                cupom = total - float(self.cupom.porcentagem)
+                total = total - float(self.cupom.porcentagem)
                 print("valor cupom")
                 print(cupom)
                 print(self.cupom.porcentagem)
 
             else:
                 total = total
-                print("valor total")
-                print(total)
-                print(self.cupom.porcentagem / 100)
-                taxa = float(self.cupom.porcentagem / 100 ) if self.cupom else 0
-                print("valor taxa")
-                print(taxa)
+                taxa = float(self.cupom.porcentagem / 100 ) if self.cupom else 0 
                 cupom = total * taxa
-
+                
             total -= round(float(cupom),2)
-            print("valor final")
-            print(cupom)
-            print(total)
+            
 
         return round(total, 2)
     # @property
