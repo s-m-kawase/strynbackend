@@ -1,21 +1,23 @@
-from email.headerregistry import Group
-from rest_framework.viewsets import ModelViewSet
+from core.api.serializers.group_serializer import GroupSerializer
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from ..serializers.user_serializer import UserSerializer
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import action
 from django.http.response import JsonResponse
-from rest_framework.pagination import PageNumberPagination
-from pedidos.models import Cliente 
 from pedidos.api.serializers.cliente_serializers import ClienteSerializer
 from pedidos.forms import ClienteForm, UserForm
-from django.contrib.auth.hashers import make_password
+from pedidos.models import Cliente
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from ..serializers.user_serializer import UserSerializer
+
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
-    page_size_query_param = 'page_size'
+    page_size_query_param = "page_size"
     max_page_size = 1000
 
 
@@ -25,86 +27,91 @@ class UserViewSet(ModelViewSet):
     permission_classes = ()
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    filterset_fields = ('id',)
+    filterset_fields = ("id",)
 
-    
-    def update(self, request, *args, **kwargs):    
-        user_instance = User.objects.get(pk=kwargs.get('pk'))
+    def update(self, request, *args, **kwargs):
+        user_instance = User.objects.get(pk=kwargs.get("pk"))
         cliente_instance = Cliente.objects.get(usuario=user_instance.id)
 
         user_fields = {}
         cliente_fields = {}
-        
-        if  request.POST.get('username',False):
-            user_fields['username'] = request.POST.get('username')
-        else:
-            user_fields['username'] = user_instance.username
 
-        if request.POST.get('password',False):
-            raw_password = request.POST.get('password')
+        if request.POST.get("username", False):
+            user_fields["username"] = request.POST.get("username")
+        else:
+            user_fields["username"] = user_instance.username
+
+        if request.POST.get("password", False):
+            raw_password = request.POST.get("password")
             hashed_password = make_password(raw_password)
-            user_fields['password'] = hashed_password
+            user_fields["password"] = hashed_password
         else:
-            user_fields['password'] = user_instance.password
+            user_fields["password"] = user_instance.password
 
-        if request.POST.get('nome_cliente',False):
-            cliente_fields['nome_cliente'] = request.POST.get('nome_cliente')
+        if request.POST.get("nome_cliente", False):
+            cliente_fields["nome_cliente"] = request.POST.get("nome_cliente")
         else:
-            cliente_fields['nome_cliente'] = cliente_instance.nome_cliente
+            cliente_fields["nome_cliente"] = cliente_instance.nome_cliente
 
-        if request.POST.get('cpf',False):
-            cliente_fields['cpf'] =request.POST.get('cpf')
+        if request.POST.get("cpf", False):
+            cliente_fields["cpf"] = request.POST.get("cpf")
         else:
-            cliente_fields['cpf'] = cliente_instance.cpf
+            cliente_fields["cpf"] = cliente_instance.cpf
 
-        if request.POST.get('celular',False):
-            cliente_fields['celular'] =request.POST.get('celular')
+        if request.POST.get("celular", False):
+            cliente_fields["celular"] = request.POST.get("celular")
         else:
-            cliente_fields['celular'] = cliente_instance.celular
+            cliente_fields["celular"] = cliente_instance.celular
 
-        if request.POST.get('email',False):
-            cliente_fields['email'] = request.POST.get('email')
+        if request.POST.get("email", False):
+            cliente_fields["email"] = request.POST.get("email")
         else:
-            cliente_fields['email'] = cliente_instance.email
+            cliente_fields["email"] = cliente_instance.email
 
-        user_form = UserForm(user_fields,instance=user_instance)
-        cliente_form = ClienteForm(cliente_fields,request.FILES, instance=cliente_instance)
+        user_form = UserForm(user_fields, instance=user_instance)
+        cliente_form = ClienteForm(
+            cliente_fields, request.FILES, instance=cliente_instance
+        )
 
         success = True
-        message = ''
+        message = ""
         error_messages = {}
 
         if user_form.is_valid() and cliente_form.is_valid():
-                user_form.save()
-                cliente_instance.usuario = user_form.instance
-                cliente_form.save()
-                user_instance.email = cliente_form.instance.email
-                user_instance.save()
-                message = "Cliente alterado com sucesso!"
-                return JsonResponse({
-                        "message": message,
-                        "error":error_messages,
-                        "success": success
-                      })
-        else:
-                error_messages = {}
-                for field, messages in user_form.errors.items():
-                    if field not in error_messages:
-                        error_messages[field] = messages[0]
-
-                for field, messages in cliente_form.errors.items():
-                    if field not in error_messages:
-                        error_messages[field] = messages[0]
-
-                message = "Falha ao alterar usuário!"
-                success = False
-                return JsonResponse({
+            user_form.save()
+            cliente_instance.usuario = user_form.instance
+            cliente_form.save()
+            user_instance.email = cliente_form.instance.email
+            user_instance.save()
+            message = "Cliente alterado com sucesso!"
+            return JsonResponse(
+                {
                     "message": message,
                     "error": error_messages,
-                    "success":success
-                    })
+                    "success": success,
+                }
+            )
+        else:
+            error_messages = {}
+            for field, messages in user_form.errors.items():
+                if field not in error_messages:
+                    error_messages[field] = messages[0]
 
-    @action(methods=['get'], detail=False)
+            for field, messages in cliente_form.errors.items():
+                if field not in error_messages:
+                    error_messages[field] = messages[0]
+
+            message = "Falha ao alterar usuário!"
+            success = False
+            return JsonResponse(
+                {
+                    "message": message,
+                    "error": error_messages,
+                    "success": success,
+                }
+            )
+
+    @action(methods=["get"], detail=False)
     def usuario_logado(self, request):
         dic = UserSerializer(request.user, read_only=True)
         try:
@@ -116,8 +123,12 @@ class UserViewSet(ModelViewSet):
                 "nome": cliente.nome_cliente,
                 "email": cliente.email,
                 "celular": cliente.celular,
-                "foto": cliente.foto_perfil.url if cliente.foto_perfil else None,
-                "hash_cliente": cliente.hash_cliente if cliente.hash_cliente else None,
+                "foto": cliente.foto_perfil.url
+                if cliente.foto_perfil
+                else None,
+                "hash_cliente": cliente.hash_cliente
+                if cliente.hash_cliente
+                else None,
             }
         except Cliente.DoesNotExist:
             cliente_dados = {
@@ -129,16 +140,15 @@ class UserViewSet(ModelViewSet):
                 "hash_cliente": None,
             }
 
-        context = {
-            "usuario":dic.data,
-            "cliente":cliente_dados
-        }
-        return JsonResponse(context, content_type="application/json", safe=False)
-    
-    @action(methods=['put'],detail=True)
-    def alterar_senha(self,request, pk):
-        atual = request.data.get('senha_atual', None)
-        nova = request.data.get('senha_nova', None)
+        context = {"usuario": dic.data, "cliente": cliente_dados}
+        return JsonResponse(
+            context, content_type="application/json", safe=False
+        )
+
+    @action(methods=["put"], detail=True)
+    def alterar_senha(self, request, pk):
+        atual = request.data.get("senha_atual", None)
+        nova = request.data.get("senha_nova", None)
 
         try:
             user = User.objects.get(id=pk)
@@ -147,13 +157,18 @@ class UserViewSet(ModelViewSet):
                 user.save()
                 return JsonResponse({"message": "Senha alterada com sucesso"})
             else:
-                return JsonResponse({"message": "Senha atual incorreta"}, status=400)
+                return JsonResponse(
+                    {"message": "Senha atual incorreta"}, status=400
+                )
         except User.DoesNotExist:
-            return JsonResponse({"message": "Usuario não encontrado"}, status=404)
+            return JsonResponse(
+                {"message": "Usuario não encontrado"}, status=404
+            )
 
-        
-    
-
-    
-
-    
+    @action(detail=False, methods=["get"])
+    def user_groups(self, request):
+        """REtorna os grupos do usuario logado"""
+        user = self.request.user
+        groups = user.groups.all()
+        serializer = GroupSerializer(groups, many=True)
+        return JsonResponse({"groups": serializer.data}, safe=False)
