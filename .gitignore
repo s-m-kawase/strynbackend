@@ -8,5 +8,7 @@
 .venv
 venv/
 env/
+package.json
 
 /media
+stryn/settings.py
