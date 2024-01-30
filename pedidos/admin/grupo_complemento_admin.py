@@ -16,7 +16,7 @@ class GrupoComplementosAdmin(admin.ModelAdmin):
     list_filter = ["complemento"]
 
     def get_queryset(self, request):
-        if request.user.is_superuser:
+        if not request.user.is_superuser:
             queryset = super(GrupoComplementosAdmin, self).get_queryset(
                 request
             )

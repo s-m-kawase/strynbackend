@@ -20,7 +20,7 @@ class ComplementosAdmin(admin.ModelAdmin):
     list_filter = ["status_venda"]
 
     def get_queryset(self, request):
-        if request.user.is_superuser:
+        if not request.user.is_superuser:
             queryset = super(ComplementosAdmin, self).get_queryset(request)
 
             user = request.user

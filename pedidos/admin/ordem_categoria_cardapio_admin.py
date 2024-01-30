@@ -10,7 +10,7 @@ class OrdemCategoriaCardapioAdmin(admin.ModelAdmin):
     search_fields = ["id", "ordem", "cardapio", "categoria"]
 
     def get_queryset(self, request):
-        if request.user.is_superuser:
+        if not request.user.is_superuser:
             queryset = super(OrdemCategoriaCardapioAdmin, self).get_queryset(
                 request
             )

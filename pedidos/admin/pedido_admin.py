@@ -26,7 +26,7 @@ class PedidosAdmin(NestedModelAdmin):
     inlines = [ItensPedidoInline]
 
     def get_queryset(self, request):
-        if request.user.is_superuser:
+        if not request.user.is_superuser:
             queryset = super(PedidosAdmin, self).get_queryset(request)
 
             user = request.user

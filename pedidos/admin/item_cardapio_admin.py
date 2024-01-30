@@ -18,7 +18,7 @@ class ItemCardapioAdmin(admin.ModelAdmin):
     filter_horizontal = ["categoria", "grupo_complemento"]
 
     def get_queryset(self, request):
-        if request.user.is_superuser:
+        if not request.user.is_superuser:
             queryset = super(ItemCardapioAdmin, self).get_queryset(request)
 
             user = request.user
