@@ -187,6 +187,8 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False)
     def financeiro_tabela(self,request):
         mesano = request.data.get('mesano',None)
+        # profile = Profile.objects.get(user=request.user)
+        restaurante =request.user.profile.restaurante
 
         sql_query = f"""SELECT
                             ped.data_criacao_f AS "periodo", data_criacao2 AS "data_criacao"
@@ -207,6 +209,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
                         WHERE to_char(ped.data_criacao::DATE, 'FMMonthYYYY') = '{mesano}'
+                        AND ped.restaurante = {restaurante}
                         GROUP BY ped.data_criacao_f,data_criacao2
                         ORDER BY ped.data_criacao_f DESC
                     """
