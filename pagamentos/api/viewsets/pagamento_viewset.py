@@ -203,7 +203,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                                 ,TO_CHAR(data_criacao::DATE, 'DD/MM/YYYY') as data_criacao2
                                 ,data_criacao
                                 ,cupom_id
-                                ,restaurante
+                                ,restaurante_id as restaurante 
                             FROM pedidos_pedidos
                             ) "ped"
                         ON pag.pedido_id = ped.id
