@@ -188,7 +188,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     def financeiro_tabela(self,request):
         mesano = request.data.get('mesano',None)
         # profile = Profile.objects.get(user=request.user)
-        restaurante =request.user.profile.restaurante
+        restaurante = request.user.profile.restaurante.id
 
         sql_query = f"""SELECT
                             ped.data_criacao_f AS "periodo", data_criacao2 AS "data_criacao"
@@ -203,7 +203,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                                 ,TO_CHAR(data_criacao::DATE, 'DD/MM/YYYY') as data_criacao2
                                 ,data_criacao
                                 ,cupom_id
-                                ,restaurante_nome as restaurante 
+                                ,restaurante_id as restaurante 
                             FROM pedidos_pedidos
                             ) "ped"
                         ON pag.pedido_id = ped.id
