@@ -164,6 +164,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False)
     def financeiro_total_de_venda(self,request):
         mesano = request.data.get('mesano',None)
+        restaurante_id = request.user.profile.restaurante.id
 
         sql_query = f"""SELECT
                             SUM( ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.porcentagem, 0)/100)) , 2) ) AS "total_de_vendas"
@@ -173,6 +174,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
                         WHERE to_char(ped.data_criacao::date, 'YYYY/MM') = to_char(to_date('{mesano}', 'MonthYYYY'), 'YYYY/MM')
+                        AND ped.restaurante_id = {restaurante_id}
                     """
 
         with connection.cursor() as cursor:
@@ -187,7 +189,6 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False)
     def financeiro_tabela(self,request):
         mesano = request.data.get('mesano',None)
-        # profile = Profile.objects.get(user=request.user)
         restaurante = request.user.profile.restaurante.id
 
         sql_query = f"""SELECT
@@ -226,7 +227,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False)
     def financeiro_tabela_por_dia(self,request):
         data_selecionada = request.data.get('data',None)
-
+        restaurante_id = request.user.profile.restaurante.id
         sql_query = f"""
                         SELECT
                             ped.data_criacao_f AS periodo
@@ -250,6 +251,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
                         WHERE TO_CHAR(ped.data_criacao::DATE, 'DD/MM/YYYY') = '{data_selecionada}'
+                        AND ped.restaurante = '{restaurante_id}'
                         ORDER BY ped.data_criacao_f DESC
                         """
 # linha 248 frente da variavel ::DATE  --'2023-06-20'::date  --'{data_selecionada}'
@@ -264,11 +266,11 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False)
     def financeiro_quantidade_venda_mes(self,request):
         mesano = request.data.get('mesano',None)
-
-        sql_query = f"""SELECT
-                            COUNT(id) AS "numero_de_vendas"
+        restaurante_id = request.user.profile.restaurante.id
+        sql_query = f"""select COUNT(id) AS "numero_de_vendas"
                         FROM pedidos_pedidos
-                        WHERE to_char(data_criacao::date, 'FMMonthYYYY') = '{mesano}';
+                        WHERE to_char(data_criacao::date, 'FMMonthYYYY') = '{mesano}'
+                        and restaurante_id in ({restaurante_id});
                       """
 
         with connection.cursor() as cursor:
