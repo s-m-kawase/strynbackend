@@ -20,8 +20,8 @@ class ComplementosAdmin(admin.ModelAdmin):
     list_filter = ["status_venda"]
 
     def get_queryset(self, request):
+        queryset = super(ComplementosAdmin, self).get_queryset(request)
         if not request.user.is_superuser:
-            queryset = super(ComplementosAdmin, self).get_queryset(request)
 
             user = request.user
             restaurante = Restaurante.objects.get(usuario=user)
@@ -42,4 +42,4 @@ class ComplementosAdmin(admin.ModelAdmin):
 
             queryset = queryset.filter(id__in=ids_complementos)
 
-            return queryset
+        return queryset

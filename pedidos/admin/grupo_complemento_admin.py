@@ -16,10 +16,10 @@ class GrupoComplementosAdmin(admin.ModelAdmin):
     list_filter = ["complemento"]
 
     def get_queryset(self, request):
+        queryset = super(GrupoComplementosAdmin, self).get_queryset(
+            request
+        )
         if not request.user.is_superuser:
-            queryset = super(GrupoComplementosAdmin, self).get_queryset(
-                request
-            )
 
             user = request.user
             restaurante = Restaurante.objects.get(usuario=user)
@@ -31,4 +31,4 @@ class GrupoComplementosAdmin(admin.ModelAdmin):
 
             queryset = queryset.filter(id__in=ids_grupos)
 
-            return queryset
+        return queryset

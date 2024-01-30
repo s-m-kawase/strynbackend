@@ -10,10 +10,10 @@ class OrdemCategoriaCardapioAdmin(admin.ModelAdmin):
     search_fields = ["id", "ordem", "cardapio", "categoria"]
 
     def get_queryset(self, request):
-        if not request.user.is_superuser:
-            queryset = super(OrdemCategoriaCardapioAdmin, self).get_queryset(
+        queryset = super(OrdemCategoriaCardapioAdmin, self).get_queryset(
                 request
             )
+        if not request.user.is_superuser:
 
             user = request.user
             restaurante = Restaurante.objects.get(usuario=user)
@@ -28,4 +28,4 @@ class OrdemCategoriaCardapioAdmin(admin.ModelAdmin):
             ids_ordens.extend([ordem.id for ordem in ordens])
 
             queryset = queryset.filter(id__in=ids_ordens)
-            return queryset
+        return queryset

@@ -18,8 +18,8 @@ class ItemCardapioAdmin(admin.ModelAdmin):
     filter_horizontal = ["categoria", "grupo_complemento"]
 
     def get_queryset(self, request):
+        queryset = super(ItemCardapioAdmin, self).get_queryset(request)
         if not request.user.is_superuser:
-            queryset = super(ItemCardapioAdmin, self).get_queryset(request)
 
             user = request.user
             restaurante = Restaurante.objects.get(usuario=user)
@@ -37,4 +37,4 @@ class ItemCardapioAdmin(admin.ModelAdmin):
 
             queryset = queryset.filter(id__in=ids_itens)
 
-            return queryset
+        return queryset

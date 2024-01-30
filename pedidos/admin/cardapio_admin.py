@@ -22,9 +22,7 @@ class CardapioAdmin(admin.ModelAdmin):
     inlines = [OrdemCategoriaCardapioInline]
 
     def get_queryset(self, request):
-        if request.user.is_superuser:
-            queryset = super(CardapioAdmin, self).get_queryset(request)
-
+        queryset = super(CardapioAdmin, self).get_queryset(request)
 
         user = request.user
         if not user.is_superuser:

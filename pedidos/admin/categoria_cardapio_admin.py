@@ -19,10 +19,9 @@ class CategoriaCardapioAdmin(admin.ModelAdmin):
     inlines = [OrdemCategoriaCardapioInline]
 
     def get_queryset(self, request):
-        if request.user.is_superuser:
-            queryset = super(CategoriaCardapioAdmin, self).get_queryset(
-                request
-            )
+        queryset = super(CategoriaCardapioAdmin, self).get_queryset(
+            request
+        )
 
         user = request.user
         if not user.is_superuser:
@@ -37,4 +36,4 @@ class CategoriaCardapioAdmin(admin.ModelAdmin):
 
             queryset = queryset.filter(id__in=ids_categorias)
 
-            return queryset
+        return queryset
