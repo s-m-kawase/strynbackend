@@ -244,7 +244,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                                 ,data_criacao
                                 ,cupom_id
                                 ,taxa_de_atendimento
-                                ,restaurante_id
+                                ,restaurante_id as restaurante
                             FROM pedidos_pedidos
                         ) "ped"
                         ON pag.pedido_id = ped.id
