@@ -54,5 +54,6 @@ class CardapioComOrdemViewSet(viewsets.ModelViewSet):
                   restaurante=restaurante
               )
 
-
+        query = query.filter(categoria__status=True)
+        
         return query
