@@ -233,7 +233,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                             ped.data_criacao_f AS periodo
                             ,ped.id
                             ,ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.porcentagem, 0)/110)) - ( taxa_de_atendimento::numeric(10, 2) ), 2)::numeric(10, 2) AS valor_dos_itens
-                            ,ROUND( taxa_de_atendimento::numeric(10, 2) , 2) AS taxa_de_atendimento
+                            ,ROUND( ped.taxa_de_atendimento::numeric(10, 2) , 2) AS taxa_de_atendimento
                             ,ROUND( pag.valor_pago * (COALESCE(cup.porcentagem, 0)::numeric(10, 2) / 100::numeric(10, 2)) , 2) AS incentivo
                             ,pag.valor_pago AS total
                         FROM pagamentos_pagamento pag
