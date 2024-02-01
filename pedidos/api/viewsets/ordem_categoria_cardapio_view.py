@@ -31,6 +31,10 @@ class OrdemCategoriaCardapioViewSet(viewsets.ModelViewSet):
 
         return Response({'status': 'success'})
     
+    def get_queryset(self):
+        query = super().get_queryset()
+    
+        query = query.filter(categoria__status=True)
 
    
-    
+        return query

@@ -43,7 +43,5 @@ class CategoriaCardapioViewSet(viewsets.ModelViewSet):
             ids_categorias = list(set(ids_categorias))
 
             query = query.filter(id__in=ids_categorias)
-
-        query = query.filter(status=False)
         
         return query
