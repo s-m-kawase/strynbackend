@@ -89,24 +89,24 @@ LOGOUT_REDIRECT_URL = "login"
 
 WSGI_APPLICATION = "stryn.wsgi.application"
 
-# DEV = config('DEV', default=False, cast=bool)
-# if DEV:
-#     default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-#     DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'stryn_local',
-#         'USER': 'postgres',
-#         'PASSWORD':'010209',
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#       }
-#   }
-# else:
-default_dburl = "sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3")
-DATABASES = {
-    "default": config("DATABASE_URL", default=default_dburl, cast=dburl)
-}
+DEV = config('DEV', default=False, cast=bool)
+if DEV:
+    default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'stryn_local',
+        'USER': 'postgres',
+        'PASSWORD':'010209',
+        'HOST': 'localhost',
+        'PORT': '5432'
+      }
+  }
+else:
+    default_dburl = "sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3")
+    DATABASES = {
+        "default": config("DATABASE_URL", default=default_dburl, cast=dburl)
+    }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
 

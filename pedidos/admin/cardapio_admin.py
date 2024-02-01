@@ -31,4 +31,4 @@ class CardapioAdmin(admin.ModelAdmin):
 
             queryset = queryset.filter(restaurante=restaurante)
 
-            return queryset
+        return queryset
