@@ -54,7 +54,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
 
-    filterset_fields = ['status_pedido','restaurante','cliente']
+    filterset_fields = []
 
     search_fields = ['id']
 
@@ -78,7 +78,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
             )
 
         if usuario.is_authenticated:
-            # cli = Cliente.objects.get(id=cliente)
+            cli = Cliente.objects.get(id=cliente)
+            eita = cli.hash_cliente
             if not usuario.is_superuser:
                 hash_pedido = usuario.cliente.hash_cliente if usuario.cliente else False
                 if hash_pedido:
