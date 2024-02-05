@@ -78,8 +78,8 @@ class PedidosViewSet(viewsets.ModelViewSet):
             )
 
         if usuario.is_authenticated:
-            cli = Cliente.objects.get(id=cliente)
-            eita = cli.hash_cliente
+            # cli = Cliente.objects.get(id=cliente)
+            # eita = cli.hash_cliente
             if not usuario.is_superuser:
                 hash_pedido = usuario.cliente.hash_cliente if usuario.cliente else False
                 if hash_pedido:
@@ -90,11 +90,6 @@ class PedidosViewSet(viewsets.ModelViewSet):
                     query = query.filter(Q(cliente__usuario=usuario) |
                                 Q(restaurante__usuario=usuario)).distinct()
                     
-            if restaurante:
-              query = query.filter(restaurante=restaurante)
-
-            if status:
-              query = query.filter(status_pedido=status)
         else:  
             if hash_pedido:
                 query = query.filter(status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Confirmação','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'],
@@ -104,6 +99,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
               query = query.filter(restaurante=restaurante)
             else:
                 query = query.none()
+                
+        if restaurante:
+              query = query.filter(restaurante=restaurante)
+
+        if status:
+            query = query.filter(status_pedido=status)
 
         return query
 

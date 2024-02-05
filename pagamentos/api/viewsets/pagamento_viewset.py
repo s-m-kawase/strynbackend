@@ -50,10 +50,10 @@ class PagamentoViewSet(viewsets.ModelViewSet):
 
                 Q(pedido__numero_mesa=hash_cliente,
                   pagamento='Pagamento na mesa',
-                  pedido__status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'])|
+                  pedido__status_pedido__in=['Em preparo','Aguardando Preparo','Aguardando Confirmação','Pago','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'])|
                 Q(pedido__numero_mesa=hash_cliente,
                   pagamento='Pagamento online',
-                  pedido__status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Concluído','Cancelado','Sacola','Estornado']))
+                  pedido__status_pedido__in=['Em preparo','Aguardando Preparo','Aguardando Confirmação','Pago','Concluído','Cancelado','Sacola','Estornado']))
 
         return query
 
