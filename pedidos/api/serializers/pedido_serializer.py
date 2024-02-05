@@ -36,7 +36,7 @@ class PedidosSerializer(serializers.ModelSerializer):
             "quantidade": item.quantidade,
             "valor_unitario_item": item.valor_unitario_item if item.valor_unitario_item else None,
             "item_pronto": item.item_pronto,
-            #"preco_promocao": item.item.preco_promocao if item.item else None,
+            "preco_promocao": item.item.preco_promocao if item.item else None,
             "valor_total_item": item.total_item,
             "valor_total_complementos": item.total_complementos,
             "preco_total": item.preco_item_mais_complementos,
