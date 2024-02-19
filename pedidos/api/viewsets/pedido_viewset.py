@@ -495,8 +495,13 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def select_data(self,request):
-        sql_query = f"""  SELECT DISTINCT to_char( data_criacao::date, 'FMMonthYYYY')
-                          FROM pedidos_pedidos
+        sql_query = f"""  SELECT month_with_year
+                            FROM (
+                                SELECT DISTINCT to_char(data_criacao::date, 'FMMonthYYYY') AS month_with_year, MIN(data_criacao) AS min_date
+                                FROM pedidos_pedidos
+                                GROUP BY month_with_year
+                            ) AS subquery
+                            ORDER BY min_date desc;
                               """
 
         with connection.cursor() as cursor:
