@@ -164,7 +164,8 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False)
     def financeiro_total_de_venda(self,request):
         mesano = request.data.get('mesano',None)
-        restaurante_id = request.user.profile.restaurante.id
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
 
         sql_query = f"""SELECT
                             SUM( ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.porcentagem, 0)/100)) , 2) ) AS "total_de_vendas"
@@ -189,7 +190,8 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False)
     def financeiro_tabela(self,request):
         mesano = request.data.get('mesano',None)
-        restaurante = request.user.profile.restaurante.id
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
 
         sql_query = f"""SELECT
                             ped.data_criacao_f AS "periodo", data_criacao2 AS "data_criacao"
@@ -211,7 +213,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
                         WHERE to_char(ped.data_criacao::DATE, 'FMMonthYYYY') = '{mesano}'
-                        AND ped.restaurante = '{restaurante}'
+                        AND ped.restaurante = '{restaurante_id}'
                         GROUP BY ped.data_criacao_f,data_criacao2
                         ORDER BY ped.data_criacao_f DESC
                     """
@@ -227,7 +229,9 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False)
     def financeiro_tabela_por_dia(self,request):
         data_selecionada = request.data.get('data',None)
-        restaurante_id = request.user.profile.restaurante.id
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
+
         sql_query = f"""
                         SELECT
                             ped.data_criacao_f AS periodo
@@ -266,7 +270,9 @@ class PagamentoViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False)
     def financeiro_quantidade_venda_mes(self,request):
         mesano = request.data.get('mesano',None)
-        restaurante_id = request.user.profile.restaurante.id
+        usuario = request.user.id
+        restaurante_id = Restaurante.objects.get(usuario=usuario)
+
         sql_query = f"""select COUNT(id) AS "numero_de_vendas"
                         FROM pedidos_pedidos
                         WHERE to_char(data_criacao::date, 'FMMonthYYYY') = '{mesano}'
