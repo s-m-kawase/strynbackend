@@ -213,7 +213,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
                         WHERE to_char(ped.data_criacao::DATE, 'FMMonthYYYY') = '{mesano}'
-                        AND ped.restaurante = '{restaurante_id}'
+                        AND ped.restaurante = '{restaurante_id.id}'
                         GROUP BY ped.data_criacao_f,data_criacao2
                         ORDER BY ped.data_criacao_f DESC
                     """
@@ -255,7 +255,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
                         WHERE TO_CHAR(ped.data_criacao::DATE, 'DD/MM/YYYY') = '{data_selecionada}'
-                        AND ped.restaurante = '{restaurante_id}'
+                        AND ped.restaurante = '{restaurante_id.id}'
                         ORDER BY ped.data_criacao_f DESC
                         """
 # linha 248 frente da variavel ::DATE  --'2023-06-20'::date  --'{data_selecionada}'
@@ -276,7 +276,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         sql_query = f"""select COUNT(id) AS "numero_de_vendas"
                         FROM pedidos_pedidos
                         WHERE to_char(data_criacao::date, 'FMMonthYYYY') = '{mesano}'
-                        and restaurante_id in ({restaurante_id});
+                        and restaurante_id in ({restaurante_id.id});
                       """
 
         with connection.cursor() as cursor:
