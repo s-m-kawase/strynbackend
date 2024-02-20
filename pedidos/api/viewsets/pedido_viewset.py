@@ -81,7 +81,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             # cli = Cliente.objects.get(id=cliente)
             # eita = cli.hash_cliente
             if not usuario.is_superuser:
-                hash_pedido = usuario.cliente.hash_cliente if usuario.cliente else False
+                hash_pedido = usuario.cliente.hash_cliente if hasattr(usuario, 'cliente') else False
                 if hash_pedido:
                     query = query.filter(Q(hash_cliente=hash_pedido)|
                                         Q(cliente__usuario=usuario) |
