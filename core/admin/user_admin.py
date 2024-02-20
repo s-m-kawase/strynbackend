@@ -15,7 +15,7 @@ admin.site.unregister(User)
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     add_form = UserCreateForm
-    inlines = [ProfileInline]
+    # inlines = [ProfileInline]
     list_display=['id', 'username', 'email', 'is_active', 'is_staff', 'is_superuser']
     
     add_fieldsets = (

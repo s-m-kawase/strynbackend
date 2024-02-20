@@ -175,7 +175,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                         LEFT JOIN pagamentos_cupom cup
                         ON ped.cupom_id = cup.id
                         WHERE to_char(ped.data_criacao::date, 'YYYY/MM') = to_char(to_date('{mesano}', 'MonthYYYY'), 'YYYY/MM')
-                        AND ped.restaurante_id = {restaurante_id}
+                        AND ped.restaurante_id = {restaurante_id.id}
                     """
 
         with connection.cursor() as cursor:
