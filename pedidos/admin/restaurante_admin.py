@@ -58,7 +58,7 @@ class RestauranteAdmin(admin.ModelAdmin):
             }
         ),
         (
-            'Dados Funcinamentos',
+            'Dados Funcionamentos',
             {
                 'fields': [
                     'horario_abertura',
