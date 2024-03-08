@@ -70,7 +70,7 @@ router.register(r'webhook_asaas', AsaasWebhookViewSet, basename='webhook_asaas')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('django_app_novadata.urls')),
+    path('', admin.site.urls),
     path ("accounts/",  include ( "django.contrib.auth.urls" ),name='login'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('api/webhook/', StripeWebhookViewSet.as_view({'post': 'webhook'}), name='webhook'),
