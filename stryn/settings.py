@@ -85,7 +85,8 @@ TEMPLATES = [
     },
 ]
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "login"
+LOGOUT_REDIRECT_URL = "/admin/"
+
 
 WSGI_APPLICATION = "stryn.wsgi.application"
 
