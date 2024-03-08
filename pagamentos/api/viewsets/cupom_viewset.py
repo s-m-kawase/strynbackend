@@ -129,18 +129,20 @@ class CupomViewSet(viewsets.ModelViewSet):
           cupom_valido = False
           mensagem = 'Cupom não existe'
 
-
-
-
       if cupom:
-          if cupom.valido_para_aplicar():
-              if cupom.aplicar_cupom(pedido):
-                  cupom_valido = True
-                  mensagem = 'Cupom aplicado com sucesso'
-          else:
-              cupom.marcar_expirado()
-              mensagem = 'Cupom expirado'
-              cupom_valido = False
+        if cupom.valido_para_aplicar():
+            restaurante_do_pedido = pedido.restaurante
+            if cupom.restaurante == restaurante_do_pedido:
+                if cupom.aplicar_cupom(pedido):
+                    cupom_valido = True
+                    mensagem = 'Cupom aplicado com sucesso'
+            else:
+                mensagem = 'Este cupom não é válido para este restaurante'
+                cupom_valido = False
+        else:
+            cupom.marcar_expirado()
+            mensagem = 'Cupom expirado'
+            cupom_valido = False
 
       cupom_serializado = CupomSerializer(cupom).data if cupom else None
 
