@@ -183,6 +183,9 @@
         }
         .color-2{
             color: #5C5D5E !important;
+            background: rgba(62, 115, 221, 0.1);
+            padding: 8px !important;
+            margin-top: 1rem !important;
         }
         .color-3{
             color: #000000 !important;
@@ -317,14 +320,14 @@
 
                                                                 <h1
                                                                   class="title-email color-1"
-                                                                  style="line-height: 1.875rem !important; font-weight: 500 !important;"
-                                                                >
+                                                                  style="line-height: 1.875rem !important; font-weight: 500 !important; display: flex; align-items: center; gap:4px"
+                                                                >   <img style="max-width: 60px;" src="{% static 'emails/img/logo-stryn.png' %}" alt="stryn" />
                                                                     {{titulo_email}}
                                                                 </h1>
 
                                                                 <p
                                                                   class="p-normal-v1 color-2"
-                                                                  style="padding-top: 1rem !important; text-align: start !important; line-height: 24px;"
+                                                                  style=" text-align: start !important; line-height: 24px;"
                                                                 >
 																	{{html_text}}
                                                                 </p>
@@ -344,7 +347,7 @@
                                                                 <table style="width: 100%;" border="0" cellpadding="0" cellspacing="0">
                                                                     <tbody>
                                                                         <tr>
-                                                                            <td align="left" style="box-sizing: border-box; width: 50%;">
+                                                                            <td align="left" style="box-sizing: border-box; width: 50%;   ">
                                                                                 <a
                                                                                   href="{{site.dominio_oficial}}"
                                                                                   class="link-2"
@@ -358,17 +361,17 @@
                                                                                 </a>
                                                                             </td>
                 
-                                                                            <td align="right" style="box-sizing: border-box; width: 50%;">
+                                                                            <td align="right" style="box-sizing: border-box; width: 50%; ">
                                                                                 <a
                                                                                   href="https://novadata.com.br/"
                                                                                   style="display: inline-block !important;"
-                                                                                  title="NDT"
-                                                                                  url-title="NDT"
-                                                                                  ses:tags="linkName:NDT"
+                                                                                  title="STRYN"
+                                                                                  url-title="STRYN"
+                                                                                  ses:tags="linkName:STRYN"
                                                                                   linkesp="1"
                                                                                   skip-validate=""
                                                                                 >
-                                                                                    <img src="{% static 'emails/img/logo_novadata.png' %}" alt="NDT" />
+                                                                                    <img style="max-height: 50px;" src="{% static 'emails/img/logo-stryn.png' %}" alt="STRYN" />
                                                                                 </a>
                                                                             </td>
                                                                         </tr>
