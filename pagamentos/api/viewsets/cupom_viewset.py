@@ -54,64 +54,55 @@ class CupomViewSet(viewsets.ModelViewSet):
                 })
         
     def update(self, request, *args, **kwargs):
-        id = kwargs.get('pk')
-        cupom = Cupom.objects.get(id=id)
+        cupom_id = kwargs.get('pk')
+        cupom = Cupom.objects.filter(id=cupom_id).first()
 
         if not cupom:
-            menssage = 'Falha ao alterar cupom'
-            error = ' Cupom não encontrado'
-            success = False
+            mensagem = 'Falha ao alterar cupom'
+            erro = 'Cupom não encontrado'
+            successo = False
             return JsonResponse({
-                "menssage":menssage,
-                "error":error,
-                "success":success
-                }) 
+                "mensagem": mensagem,
+                "erro": erro,
+                "successo": successo
+            }) 
 
         else:
-            # pegar possivei campo a serem alterados
-            nome = request.data.get('nome',None)
-            descricao = request.data.get('descricao', None)
-            porcentage = request.data.get('porcentagem',None)
+            # Pegar possíveis campos a serem alterados
+            # nome = request.data.get('nome', None)
+            # descricao = request.data.get('descricao', None)
+            # porcentagem = request.data.get('porcentagem', None)
             cod_cupom = request.data.get('cod_cupom', None)
             validado_ate = request.data.get('validado_ate', None)
-            
-            # alterando os dados
-            if nome:
-                cupom.nome = nome if nome else cupom.nome
-            if descricao:
-                cupom.descricao = descricao if descricao else cupom.descricao
-            if porcentage:
-                cupom.porcentagem = porcentage if porcentage else cupom.porcentagem
+            # valor_fixo = request.data.get('valor_fixo', None)
+
+            # Validar os dados
             if cod_cupom:
-                if Cupom.objects.filter(cod_cupom=cod_cupom).exists():
-                    menssage = 'Falha ao criar cupom'
-                    error = 'Código de cupom já existe'
-                    success = False
+                if Cupom.objects.filter(cod_cupom=cod_cupom).exclude(pk=cupom_id).exists():
+                    mensagem = 'Falha ao alterar cupom'
+                    erro = 'Código de cupom já existe'
+                    successo = False
                     return JsonResponse({
-                        "menssage":menssage,
-                        "error":error,
-                        "success":success
-                        })
-                else:
-                    cupom.cod_cupom = cod_cupom if cod_cupom else cupom.cod_cupom
+                        "mensagem": mensagem,
+                        "erro": erro,
+                        "successo": successo
+                    })
             if validado_ate:
-                validado_ate = datetime.strptime(validado_ate, "%Y-%m-%dT%H:%M:%S")
-                cupom.validado_ate = validado_ate if validado_ate else cupom.validado_ate
-                if validado_ate > timezone.now():
-                    cupom.status_cupom = 'Valido'
-                else:
-                    cupom.status_cupom = 'Expirado'
+                try:
+                    validado_ate = datetime.strptime(validado_ate, "%Y-%m-%dT%H:%M")
+                except ValueError:
+                    mensagem = 'Falha ao alterar cupom'
+                    erro = 'Formato de data inválido. Use o formato: "AAAA-MM-DDTHH:MM"'
+                    successo = False
+                    return JsonResponse({
+                        "mensagem": mensagem,
+                        "erro": erro,
+                        "successo": successo
+                    })
 
-            cupom.save()
-            menssage = 'Cupom alterado com sucesso' 
-            error = {}
-            success = True
-            return JsonResponse({
-                "menssage":menssage,
-                "error":error,
-                "success":success
-            })
+            response = super().update(request, *args, **kwargs)
 
+            return response
 
 
     @action(methods=['post'], detail=False)
