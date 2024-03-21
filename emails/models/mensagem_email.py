@@ -69,8 +69,7 @@ class MensagemEmail(models.Model):
         null=True,
     )
 
-    corpo_email_text = models.CharField(
-        max_length=200,
+    corpo_email_text = models.TextField(
         verbose_name="Corpo do email em texto",
         null=True,
     )
