@@ -73,7 +73,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         if cozinha:
             query = query.order_by('hora_status_aguardando_preparo')
         else:
-            query = query.order_by('id')
+            query = query.order_by('status_pedido', 'id')
         if data_inicial and data_final and data_final >= data_inicial:
             query = query.filter(
                 data_criacao__lte=data_final,
