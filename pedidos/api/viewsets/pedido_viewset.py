@@ -71,7 +71,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         cozinha = self.request.query_params.get('cozinha', None)
         usuario = self.request.user
         if cozinha:
-            query = query.order_by('hora_status_aguardando_preparo')
+            query = query.order_by('-hora_status_aguardando_preparo')
         else:
             query = query.order_by('status_pedido', '-id')
         if data_inicial and data_final and data_final >= data_inicial:
