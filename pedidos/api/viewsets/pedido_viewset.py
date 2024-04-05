@@ -60,9 +60,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        query = super().get_queryset()
+        query = super().get_queryset().order_by('id')
         restaurante = self.request.query_params.get('restaurante',None)
         cliente = self.request.query_params.get('cliente',None)
+        tela_cli = self.request.query_params.get('tela_cli',None)
         gestor = self.request.query_params.get('gestor',None)
         hash_pedido = self.request.query_params.get('hash_pedido',None)
         # hash_cliente = self.request.query_params.get('hash_cliente',None)
@@ -73,7 +74,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         usuario = self.request.user
         if cozinha:
             query = query.order_by('hora_status_aguardando_preparo')
-        if cliente:
+        if tela_cli:
             query = query.order_by('id')
         if gestor:
             query = query.order_by('status_pedido', '-id')
