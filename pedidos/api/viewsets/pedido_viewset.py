@@ -1,3 +1,4 @@
+from http import client
 from django.db import connection
 from rest_framework import viewsets ,filters
 import django_filters.rest_framework
@@ -83,6 +84,9 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 data_criacao__lte=data_final,
                 data_criacao__gte=data_inicial
             )
+
+        if cliente:
+            query = query.filter(cliente=cliente)
 
         if usuario.is_authenticated:
             # cli = Cliente.objects.get(id=cliente)
