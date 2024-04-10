@@ -1,4 +1,3 @@
-from http import client
 from django.db import connection
 from rest_framework import viewsets ,filters
 import django_filters.rest_framework
@@ -16,6 +15,7 @@ from rest_framework.response import Response
 import requests
 from datetime import timedelta
 from ...models import Cliente
+from django.contrib.auth.models import User
 
 stripe_secret_key = config('STRIPE_SECRET_KEY')
 stripe.api_key = stripe_secret_key
@@ -67,12 +67,11 @@ class PedidosViewSet(viewsets.ModelViewSet):
         tela_cli = self.request.query_params.get('tela_cli',None)
         gestor = self.request.query_params.get('gestor',None)
         hash_pedido = self.request.query_params.get('hash_pedido',None)
-        # hash_cliente = self.request.query_params.get('hash_cliente',None)
+        admin = self.request.query_params.get('admin',None)
         status = self.request.query_params.get('status_pedido',None)
         data_inicial =  self.request.query_params.get('data_inicial',None)
         data_final = self.request.query_params.get('data_final', None)
         cozinha = self.request.query_params.get('cozinha', None)
-        usuario = self.request.user
         if cozinha:
             query = query.order_by('hora_status_aguardando_preparo')
         if tela_cli:
@@ -85,22 +84,20 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 data_criacao__gte=data_inicial
             )
 
-        if cliente:
-            query = query.filter(cliente=cliente)
-
+        usuario = self.request.user
         if usuario.is_authenticated:
             # cli = Cliente.objects.get(id=cliente)
             # eita = cli.hash_cliente
-            if not usuario.is_superuser:
+            if tela_cli:
                 hash_pedido = usuario.cliente.hash_cliente if hasattr(usuario, 'cliente') else False
                 if hash_pedido:
                     query = query.filter(Q(hash_cliente=hash_pedido)|
-                                        Q(cliente__usuario=usuario) |
-                                        Q(restaurante__usuario=usuario)).distinct()
+                                        Q(cliente__usuario=usuario)).distinct()
                 else:
-                    query = query.filter(Q(cliente__usuario=usuario) |
-                                Q(restaurante__usuario=usuario)).distinct()
-                    
+                    query = query.filter(Q(cliente__usuario=usuario)).distinct()
+            if admin:
+                query = query.filter(restaurante=restaurante)
+                
         else:  
             if hash_pedido:
                 query = query.filter(status_pedido__in=['Em preparo','Aguardando Preparo','Pago','Aguardando Confirmação','Aguardando Pagamento Mesa','Concluído','Cancelado','Sacola','Estornado'],
