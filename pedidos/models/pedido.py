@@ -135,7 +135,6 @@ class Pedidos(models.Model):
         verbose_name="Taxa de atendimento ",
         decimal_places=2,
         max_digits=10,
-        default=0,
         blank=True, null=True,
     )
 
@@ -216,7 +215,6 @@ class Pedidos(models.Model):
         total += float(self.subtotal if self.subtotal else 0)
         total -= float(self.desconto if self.desconto else 0)
         total += float(adicionais)
-        total += float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
         
 
         if self.cupom:
@@ -236,6 +234,7 @@ class Pedidos(models.Model):
                 cupom = total * taxa
                 
             total -= round(float(cupom),2)
+        total += float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
             
 
         return round(total, 2)
