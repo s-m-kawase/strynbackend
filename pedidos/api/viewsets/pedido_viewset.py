@@ -312,17 +312,14 @@ class PedidosViewSet(viewsets.ModelViewSet):
             porcentagem = float(pedido.restaurante.pocentagem_para_tranferencia)
             porcentagem = porcentagem / 100
             valor_fixo = valor_total * porcentagem
+            valor_fixo = valor_fixo + pedido.taxa_de_atendimento
 
                 # "walletId": "095ca411-db88-491f-9bbd-a997e14a21eb",
             split_data = [
             {
                 "walletId": pedido.restaurante.chave_asaas,
                 "fixedValue": valor_fixo
-            },    
-            {
-                "recipient": "Taxa atendimento",  # Você pode nomear o destinatário da gorjeta, se desejar
-                "fixedValue": pedido.taxa_de_atendimento  # Valor fixo para a gorjeta
-            }
+            }    
             ]
             
             success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'
