@@ -308,7 +308,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             data_vencimento = pedido.data_criacao + timedelta(days=1)
             data_vencimento = f"{data_vencimento}"
 
-            valor_total = float(pedido.total)
+            valor_total = float(pedido.total_split)
             porcentagem = float(pedido.restaurante.pocentagem_para_tranferencia)
             porcentagem = porcentagem / 100
             valor_fixo = valor_total * porcentagem
