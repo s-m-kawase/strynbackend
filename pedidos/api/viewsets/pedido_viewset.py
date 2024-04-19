@@ -318,6 +318,10 @@ class PedidosViewSet(viewsets.ModelViewSet):
             {
                 "walletId": pedido.restaurante.chave_asaas,
                 "fixedValue": valor_fixo
+            },    
+            {
+                "recipient": "Taxa atendimento",  # Você pode nomear o destinatário da gorjeta, se desejar
+                "fixedValue": pedido.taxa_de_atendimento  # Valor fixo para a gorjeta
             }
             ]
             
