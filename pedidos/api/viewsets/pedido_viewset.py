@@ -308,18 +308,26 @@ class PedidosViewSet(viewsets.ModelViewSet):
             data_vencimento = pedido.data_criacao + timedelta(days=1)
             data_vencimento = f"{data_vencimento}"
 
-            valor_total = float(pedido.total_split)
+            valor_total = float(pedido.total)
             porcentagem = float(pedido.restaurante.pocentagem_para_tranferencia)
             porcentagem = porcentagem / 100
             valor_fixo = valor_total * porcentagem
-            valor_fixo = valor_fixo + float(pedido.taxa_de_atendimento)
+            # valor_fixo = valor_fixo + float(pedido.taxa_de_atendimento)
+
+            #     # "walletId": "095ca411-db88-491f-9bbd-a997e14a21eb",
+            # split_data = [
+            # {
+            #     "walletId": pedido.restaurante.chave_asaas,
+            #     "fixedValue": valor_fixo
+            # }    
+            # }
 
                 # "walletId": "095ca411-db88-491f-9bbd-a997e14a21eb",
             split_data = [
             {
                 "walletId": pedido.restaurante.chave_asaas,
                 "fixedValue": valor_fixo
-            }    
+            }
             ]
             
             success_url = f'{pedido.restaurante.link_restaurante}/pedidos/?tab=andamento&status_pedido=Pago&id={pedido.id}'

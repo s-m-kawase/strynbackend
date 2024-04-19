@@ -167,41 +167,41 @@ class Pedidos(models.Model):
                 subtotal += item.preco_item_mais_complementos
         return subtotal
 
-    @property
-    def total_split(self):
+    # @property
+    # def total_split(self):
 
-        adicionais = 0
-        for adicional in self.adicionais.all():
-            adicionais += float(adicional.valor)
+    #     adicionais = 0
+    #     for adicional in self.adicionais.all():
+    #         adicionais += float(adicional.valor)
 
-        cupom = 0
-        total = 0
-        total += float(self.subtotal if self.subtotal else 0)
-        total -= float(self.desconto if self.desconto else 0)
-        total += float(adicionais)
-        # total += float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
+    #     cupom = 0
+    #     total = 0
+    #     total += float(self.subtotal if self.subtotal else 0)
+    #     total -= float(self.desconto if self.desconto else 0)
+    #     total += float(adicionais)
+    #     # total += float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
         
 
-        if self.cupom:
-            if self.cupom.valor_fixo == True:
-                total = float(total)
-                print("valor total")
-                print(total)
-                print(self.cupom.porcentagem)
-                total = total - float(self.cupom.porcentagem)
-                print("valor cupom")
-                print(cupom)
-                print(self.cupom.porcentagem)
+    #     if self.cupom:
+    #         if self.cupom.valor_fixo == True:
+    #             total = float(total)
+    #             print("valor total")
+    #             print(total)
+    #             print(self.cupom.porcentagem)
+    #             total = total - float(self.cupom.porcentagem)
+    #             print("valor cupom")
+    #             print(cupom)
+    #             print(self.cupom.porcentagem)
 
-            else:
-                total = total
-                taxa = float(self.cupom.porcentagem / 100 ) if self.cupom else 0 
-                cupom = total * taxa
+    #         else:
+    #             total = total
+    #             taxa = float(self.cupom.porcentagem / 100 ) if self.cupom else 0 
+    #             cupom = total * taxa
                 
-            total -= round(float(cupom),2)
+    #         total -= round(float(cupom),2)
             
 
-        return round(total, 2)
+    #     return round(total, 2)
 
 
     @property
