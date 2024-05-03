@@ -199,7 +199,12 @@ class PedidosViewSet(viewsets.ModelViewSet):
             )
 
         # Redireciona para a URL do checkout do Stripe
-        return Response({'checkout_url': checkout_session.url, 'session_id': checkout_session.id})
+        return Response({
+            'checkout_url': checkout_session.url,
+            'session_id': checkout_session.id,
+            'pedido': pedido.payment_intent_id,
+            'check': checkout_session.payment_intent,
+            })
 
     @action(detail=True, methods=['get'])
     def solicitar_reembolso(self, request, pk):
