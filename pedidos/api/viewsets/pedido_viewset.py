@@ -185,6 +185,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             'pedido_id': str(pedido.id),  # Adiciona o ID do pedido como metadado
         },
         )
+        print(checkout_session)
     
         # Salva o session_id no objeto pedido
         pedido.session_id = checkout_session.id
@@ -204,6 +205,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             'session_id': checkout_session.id,
             'pedido': pedido.payment_intent_id,
             'check': checkout_session.payment_intent,
+            'check_session': checkout_session,
             })
 
     @action(detail=True, methods=['get'])
