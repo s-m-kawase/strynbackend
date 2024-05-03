@@ -203,7 +203,7 @@ class StripeWebhookViewSet(ViewSet):
             session = event['data']['object']
             session_id = event['data']['object']['id']
             pedido = Pedidos.objects.get(session_id=session_id)
-            pedido.payment_intent_id = event['data']['payment_intent']
+            pedido.payment_intent_id = session['payment_intent']
             pedido.save()
             self.update_order_status(pedido, session)
 
