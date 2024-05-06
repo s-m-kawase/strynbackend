@@ -276,19 +276,19 @@ class StripeWebhookViewSet(ViewSet):
                     
                 total_split = int(float(pedido.total_split) * 100)
                 porcentagem_em_decimal = int(float(pedido.restaurante.passar_porcentagem_em_decimal) * 100)
-                taxa_atendimento = int(float(pedido.taxa_de_atendimento if pedido else 0))
+                taxa_atendimento = pedido.taxa_de_atendimento if pedido and pedido.taxa_de_atendimento else 0
 
                 valor_para_conta_conectada = (total_split * porcentagem_em_decimal) / 100
                 valor_para_conta_conectada += taxa_atendimento
                 try:
                     stripe.Transfer.create(
-                        amount=int(valor_para_conta_conectada),
+                        amount=valor_para_conta_conectada,
                         currency='brl',
                         destination=pedido.restaurante.chave_connect,
                         description=f'Transferência para conta conectada {pedido.restaurante.nome}',
                         source_transaction=charge_id,
                         )
-                except stripe.error.StripeError as e:
+                except e:
                     return JsonResponse({"Erro": f"{e}"})
         return Response(status=200)
 
