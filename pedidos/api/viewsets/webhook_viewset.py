@@ -278,7 +278,7 @@ class StripeWebhookViewSet(ViewSet):
                 porcentagem_em_decimal = int(float(pedido.restaurante.passar_porcentagem_em_decimal) * 100)
                 taxa_atendimento = int(float(pedido.taxa_de_atendimento if pedido else 0))
 
-                valor_para_conta_conectada = total_split * porcentagem_em_decimal 
+                valor_para_conta_conectada = (total_split * porcentagem_em_decimal) / 100
                 valor_para_conta_conectada += taxa_atendimento
                 # return JsonResponse({
                 #     "passou aqui":'ate aqui okay',
