@@ -289,7 +289,7 @@ class StripeWebhookViewSet(ViewSet):
                         source_transaction=charge_id,
                         )
                 except stripe.error.StripeError as e:
-                    return JsonResponse({"Erro": "{e}"})
+                    return JsonResponse({"Erro": f"{e}"})
         return Response(status=200)
 
 
