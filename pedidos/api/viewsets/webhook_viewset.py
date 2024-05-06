@@ -274,24 +274,24 @@ class StripeWebhookViewSet(ViewSet):
 
                 # if pedido and not pedido.restaurante.pedido_no_seu_restaurante:
                     
-                valor_para_conta_conectada = int(float(pedido.total_split) * float(pedido.restaurante.passar_porcentagem_em_decimal) * 100)
-                valor_para_conta_conectada = int(float(valor_para_conta_conectada) + float(pedido.taxa_de_atendimento if pedido else 0))
-                return JsonResponse({
-                    "passou aqui":'ate aqui okay',
-                    "valor_para_conta_conectada":valor_para_conta_conectada,
-                    "pedido.total_split":pedido.total_split,
-                    "decimal restaurante":pedido.restaurante.passar_porcentagem_em_decimal * 100,
-                    "spli_final":int(float(valor_para_conta_conectada) + float(pedido.taxa_de_atendimento if pedido else 0)),
-                    "float":float(valor_para_conta_conectada),
-                    "taxa_atendimento":float(pedido.taxa_de_atendimento if pedido else 0)
-                })
-                    # stripe.Transfer.create(
-                    #     amount=valor_para_conta_conectada,
-                    #     currency='brl',
-                    #     destination=pedido.restaurante.chave_connect,
-                    #     description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                    #     source_transaction=charge_id,
-                    #     )
+                valor_para_conta_conectada = float(pedido.total_split) * float(pedido.restaurante.passar_porcentagem_em_decimal) * 100
+                valor_para_conta_conectada = float(valor_para_conta_conectada) + float(pedido.taxa_de_atendimento if pedido else 0)
+                # return JsonResponse({
+                #     "passou aqui":'ate aqui okay',
+                #     "valor_para_conta_conectada":valor_para_conta_conectada,
+                #     "pedido.total_split":pedido.total_split,
+                #     "decimal restaurante":pedido.restaurante.passar_porcentagem_em_decimal * 100,
+                #     "spli_final":int(float(valor_para_conta_conectada) + float(pedido.taxa_de_atendimento if pedido else 0)),
+                #     "float":float(valor_para_conta_conectada),
+                #     "taxa_atendimento":float(pedido.taxa_de_atendimento if pedido else 0)
+                # })
+                stripe.Transfer.create(
+                    amount=valor_para_conta_conectada,
+                    currency='brl',
+                    destination=pedido.restaurante.chave_connect,
+                    description=f'Transferência para conta conectada {pedido.restaurante.nome}',
+                    source_transaction=charge_id,
+                    )
 
         return Response(status=200)
 
