@@ -280,6 +280,17 @@ class StripeWebhookViewSet(ViewSet):
 
                 valor_para_conta_conectada = (total_split * porcentagem_em_decimal) / 100
                 valor_para_conta_conectada += taxa_atendimento
+
+                return JsonResponse({
+                    "int_total_split":total_split,
+                    "float_total_split":float(pedido.total_split) * 100,
+                    "total_split":pedido.total_split,
+                    "int_porcentagem":porcentagem_em_decimal,
+                    "float_porcentagem":float(pedido.restaurante.passar_porcentagem_em_decimal) * 100,
+                    "porcentagem":pedido.restaurante.passar_porcentagem_em_decimal,
+                    "taxa_atendimento":taxa_atendimento,
+                    "calc":((total_split * porcentagem_em_decimal) / 100)+taxa_atendimento,
+                                     })
                 try:
                     stripe.Transfer.create(
                         amount=valor_para_conta_conectada,
