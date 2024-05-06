@@ -274,9 +274,9 @@ class StripeWebhookViewSet(ViewSet):
 
                 # if pedido and not pedido.restaurante.pedido_no_seu_restaurante:
                     
-                total_split = int(float(pedido.total_split) * 100)
-                porcentagem_em_decimal = int(float(pedido.restaurante.passar_porcentagem_em_decimal) * 100)
-                taxa_atendimento = pedido.taxa_de_atendimento if pedido and pedido.taxa_de_atendimento else 0
+                total_split = pedido.total_split
+                porcentagem_em_decimal = pedido.restaurante.pocentagem_para_tranferencia / 100
+                taxa_atendimento = pedido.taxa_de_atendimento if pedido else 0
 
                 valor_para_conta_conectada = (total_split * porcentagem_em_decimal) / 100
                 valor_para_conta_conectada += taxa_atendimento
