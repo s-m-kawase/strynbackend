@@ -289,18 +289,18 @@ class StripeWebhookViewSet(ViewSet):
                     "float_porcentagem":float(pedido.restaurante.passar_porcentagem_em_decimal) * 100,
                     "porcentagem":pedido.restaurante.passar_porcentagem_em_decimal,
                     "taxa_atendimento":taxa_atendimento,
-                    "calc":((total_split * porcentagem_em_decimal) / 100)+taxa_atendimento,
+                    "calc":((total_split * porcentagem_em_decimal) / 100)+taxa_atendimento
                                      })
-                try:
-                    stripe.Transfer.create(
-                        amount=valor_para_conta_conectada,
-                        currency='brl',
-                        destination=pedido.restaurante.chave_connect,
-                        description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                        source_transaction=charge_id,
-                        )
-                except e:
-                    return JsonResponse({"Erro": f"{e}"})
+                # try:
+                #     stripe.Transfer.create(
+                #         amount=valor_para_conta_conectada,
+                #         currency='brl',
+                #         destination=pedido.restaurante.chave_connect,
+                #         description=f'Transferência para conta conectada {pedido.restaurante.nome}',
+                #         source_transaction=charge_id,
+                #         )
+                # except e:
+                #     return JsonResponse({"Erro": f"{e}"})
         return Response(status=200)
 
 
