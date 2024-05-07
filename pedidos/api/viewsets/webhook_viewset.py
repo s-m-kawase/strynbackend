@@ -268,12 +268,11 @@ class StripeWebhookViewSet(ViewSet):
             
         elif event['type'] == 'payment_intent.succeeded':
             payment_intent_id = event['data']['object']['id']
-            try:
-                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-                # charge_id = payment_intent['charges']['data'][0]['id']
-                pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
-                return JsonResponse({"valor": pedido})
-                
+            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+            # charge_id = payment_intent['charges']['data'][0]['id']
+            pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
+            return JsonResponse({"valor": pedido})
+            
                 # if pedido:
                 #     total_split = pedido.total_split
                 #     porcentagem_em_decimal = pedido.restaurante.pocentagem_para_tranferencia / 100
@@ -297,8 +296,7 @@ class StripeWebhookViewSet(ViewSet):
                     #     return JsonResponse({"Erro": str(e)})
                 # else:
                 #     return JsonResponse({"Erro": "Pedido não encontrado."})
-            except Pedidos.DoesNotExist:
-                return JsonResponse({"Erro": "Pedido não encontrado."})
+           
 
         return Response(status=200)
 
