@@ -271,7 +271,11 @@ class StripeWebhookViewSet(ViewSet):
             # # payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
             # # charge_id = payment_intent['charges']['data'][0]['id']
             pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
-            return JsonResponse({"pedido": pedido})
+            return JsonResponse({
+                "pedido_id": pedido.id,
+                "pedido": pedido.payment_intent_id,
+                "payment_intent_id": payment_intent_id,
+                                 })
             
                 # if pedido:
                 #     total_split = pedido.total_split
