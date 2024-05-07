@@ -268,7 +268,7 @@ class StripeWebhookViewSet(ViewSet):
             
         elif event['type'] == 'payment_intent.succeeded':
             payment_intent_id = event['data']['object']['id']
-            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+            # payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
             # charge_id = payment_intent['charges']['data'][0]['id']
             pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
             return JsonResponse({"valor": pedido})
