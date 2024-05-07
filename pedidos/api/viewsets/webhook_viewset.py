@@ -270,7 +270,7 @@ class StripeWebhookViewSet(ViewSet):
             payment_intent_id = event['data']['object']['id']
             try:
                 payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-                charge_id = payment_intent['charges']['data'][0]['id']
+                # charge_id = payment_intent['charges']['data'][0]['id']
                 pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
                 
                 if pedido:
@@ -281,21 +281,21 @@ class StripeWebhookViewSet(ViewSet):
                     valor_para_conta_conectada = total_split * porcentagem_em_decimal
                     valor_para_conta_conectada += taxa_atendimento
                     valor_para_conta_conectada /= 100  # Convertendo para reais
+
+                    return JsonResponse({"valor": valor_para_conta_conectada})
                     
-                    try:
-                        stripe.Transfer.create(
-                            amount=int(valor_para_conta_conectada * 100),  # Valor em centavos
-                            currency='brl',
-                            destination=pedido.restaurante.chave_connect,
-                            description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                            source_transaction=charge_id,
-                        )
-                    except stripe.error.StripeError as e:
-                        return JsonResponse({"Erro": str(e)})
+                    # try:
+                    #     stripe.Transfer.create(
+                    #         amount=int(valor_para_conta_conectada * 100),  # Valor em centavos
+                    #         currency='brl',
+                    #         destination=pedido.restaurante.chave_connect,
+                    #         description=f'Transferência para conta conectada {pedido.restaurante.nome}',
+                    #         source_transaction=charge_id,
+                    #     )
+                    # except stripe.error.StripeError as e:
+                    #     return JsonResponse({"Erro": str(e)})
                 else:
                     return JsonResponse({"Erro": "Pedido não encontrado."})
-            except stripe.error.StripeError as e:
-                return JsonResponse({"Erro": str(e)})
             except Pedidos.DoesNotExist:
                 return JsonResponse({"Erro": "Pedido não encontrado."})
 
