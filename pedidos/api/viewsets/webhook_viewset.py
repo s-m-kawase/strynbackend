@@ -284,7 +284,7 @@ class StripeWebhookViewSet(ViewSet):
                 taxa_atendimento = pedido.taxa_de_atendimento if pedido.taxa_de_atendimento else 0
                 valor_para_conta_conectada = total_split * porcentagem_em_decimal
                 valor_para_conta_conectada += taxa_atendimento
-                valor_para_conta_conectada /= 100  # Convertendo para reais
+                # valor_para_conta_conectada /= 100  # Convertendo para reais
 
                 return JsonResponse({
                 "pedido_id": pedido.id,
