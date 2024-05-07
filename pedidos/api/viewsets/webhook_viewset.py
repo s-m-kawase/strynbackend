@@ -267,40 +267,38 @@ class StripeWebhookViewSet(ViewSet):
           return Response({'mensagem': 'Estorno realizado com sucesso'}, status=200)
             
         elif event['type'] == 'payment_intent.succeeded':
-                payment_intent_id = event['data']['object']['id']
+            payment_intent_id = event['data']['object']['id']
+            try:
                 payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
                 charge_id = payment_intent['charges']['data'][0]['id']
                 pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
-
-                # if pedido and not pedido.restaurante.pedido_no_seu_restaurante:
+                
+                if pedido:
+                    total_split = pedido.total_split
+                    porcentagem_em_decimal = pedido.restaurante.pocentagem_para_tranferencia / 100
+                    taxa_atendimento = pedido.taxa_de_atendimento if pedido.taxa_de_atendimento else 0
                     
-                total_split = pedido.total_split
-                porcentagem_em_decimal = pedido.restaurante.pocentagem_para_tranferencia / 100
-                taxa_atendimento = pedido.taxa_de_atendimento if pedido else 0
+                    valor_para_conta_conectada = total_split * porcentagem_em_decimal
+                    valor_para_conta_conectada += taxa_atendimento
+                    valor_para_conta_conectada /= 100  # Convertendo para reais
+                    
+                    try:
+                        stripe.Transfer.create(
+                            amount=int(valor_para_conta_conectada * 100),  # Valor em centavos
+                            currency='brl',
+                            destination=pedido.restaurante.chave_connect,
+                            description=f'Transferência para conta conectada {pedido.restaurante.nome}',
+                            source_transaction=charge_id,
+                        )
+                    except stripe.error.StripeError as e:
+                        return JsonResponse({"Erro": str(e)})
+                else:
+                    return JsonResponse({"Erro": "Pedido não encontrado."})
+            except stripe.error.StripeError as e:
+                return JsonResponse({"Erro": str(e)})
+            except Pedidos.DoesNotExist:
+                return JsonResponse({"Erro": "Pedido não encontrado."})
 
-                valor_para_conta_conectada = (total_split * porcentagem_em_decimal) / 100
-                valor_para_conta_conectada += taxa_atendimento
-
-                return JsonResponse({
-                    "int_total_split":total_split,
-                    "float_total_split":float(pedido.total_split) * 100,
-                    "total_split":pedido.total_split,
-                    "int_porcentagem":porcentagem_em_decimal,
-                    "float_porcentagem":float(pedido.restaurante.passar_porcentagem_em_decimal) * 100,
-                    "porcentagem":pedido.restaurante.passar_porcentagem_em_decimal,
-                    "taxa_atendimento":taxa_atendimento,
-                    "calc":((total_split * porcentagem_em_decimal) / 100)+taxa_atendimento
-                                     })
-                # try:
-                #     stripe.Transfer.create(
-                #         amount=valor_para_conta_conectada,
-                #         currency='brl',
-                #         destination=pedido.restaurante.chave_connect,
-                #         description=f'Transferência para conta conectada {pedido.restaurante.nome}',
-                #         source_transaction=charge_id,
-                #         )
-                # except e:
-                #     return JsonResponse({"Erro": f"{e}"})
         return Response(status=200)
 
 
