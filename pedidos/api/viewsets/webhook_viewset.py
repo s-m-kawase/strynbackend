@@ -271,23 +271,23 @@ class StripeWebhookViewSet(ViewSet):
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
             charge_id = payment_intent['charges']['data'][0]['id']
             pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
-            return JsonResponse({
-                "pedido_id": pedido.id,
-                "pedido": pedido.payment_intent_id,
-                "payment_intent_id": payment_intent_id,
-                "payment_intent_id": charge_id,
-                                 })
+            # return JsonResponse({
+            #     "pedido_id": pedido.id,
+            #     "pedido": pedido.payment_intent_id,
+            #     "payment_intent_id": payment_intent_id,
+            #     "charge_id": charge_id,
+            #                      })
             
-                # if pedido:
-                #     total_split = pedido.total_split
-                #     porcentagem_em_decimal = pedido.restaurante.pocentagem_para_tranferencia / 100
-                #     taxa_atendimento = pedido.taxa_de_atendimento if pedido.taxa_de_atendimento else 0
-                    
-                #     valor_para_conta_conectada = total_split * porcentagem_em_decimal
-                #     valor_para_conta_conectada += taxa_atendimento
-                #     valor_para_conta_conectada /= 100  # Convertendo para reais
+            if pedido:
+                total_split = pedido.total_split
+                porcentagem_em_decimal = pedido.restaurante.pocentagem_para_tranferencia / 100
+                taxa_atendimento = pedido.taxa_de_atendimento if pedido.taxa_de_atendimento else 0
+                
+                valor_para_conta_conectada = total_split * porcentagem_em_decimal
+                valor_para_conta_conectada += taxa_atendimento
+                valor_para_conta_conectada /= 100  # Convertendo para reais
 
-                #     return JsonResponse({"valor": valor_para_conta_conectada})
+                return JsonResponse({"valor": valor_para_conta_conectada})
                     
                     # try:
                     #     stripe.Transfer.create(
