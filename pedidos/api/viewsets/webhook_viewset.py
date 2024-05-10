@@ -1,20 +1,18 @@
 
 import stripe
-from django.conf import settings
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django.views.decorators.csrf import csrf_exempt
-from django.core.mail import send_mail
 from pedidos.models import Pedidos
 from decouple import config
 from emails.models import MensagemEmail, TemplateEmail
-from collections import namedtuple
 from django.http import JsonResponse
 from django.utils import timezone
 
 
 stripe.api_key = config('STRIPE_SECRET_KEY')
+stripe.api_version = '2022-08-01'
 # endpoint_secret = config('STRIPE_WEBHOOK_SECRET')
 
 class StripeWebhookViewSet(ViewSet):
@@ -271,30 +269,30 @@ class StripeWebhookViewSet(ViewSet):
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
             charge_id = payment_intent['charges']['data'][0]['id']
             pedido = Pedidos.objects.get(payment_intent_id=payment_intent_id)
-            # return JsonResponse({
-            #     "pedido_id": pedido.id,
-            #     "pedido": pedido.payment_intent_id,
-            #     "payment_intent_id": payment_intent_id,
-            #     "charge_id": charge_id,
-            #                      })
+            return JsonResponse({
+                "pedido_id": pedido.id,
+                "pedido": pedido.payment_intent_id,
+                "payment_intent_id": payment_intent_id,
+                "charge_id": charge_id,
+                                 })
             
-            if pedido:
-                total_split = pedido.total_split
-                porcentagem_em_decimal = pedido.restaurante.pocentagem_para_tranferencia / 100
-                taxa_atendimento = pedido.taxa_de_atendimento if pedido.taxa_de_atendimento else 0
+            # if pedido:
+            #     total_split = pedido.total_split
+            #     porcentagem_em_decimal = pedido.restaurante.pocentagem_para_tranferencia / 100
+            #     taxa_atendimento = pedido.taxa_de_atendimento if pedido.taxa_de_atendimento else 0
                 # valor_para_conta_conectada = total_split * porcentagem_em_decimal
                 # valor_para_conta_conectada += taxa_atendimento
                 # valor_para_conta_conectada /= 100  # Convertendo para reais
 
-                return JsonResponse({
-                "pedido_id": pedido.id,
-                "pedido": pedido.payment_intent_id,
-                "charge_id": charge_id,
-                "total_split": total_split,
-                "porcentagem_em_decimal": porcentagem_em_decimal,
-                "taxa_atendimento": taxa_atendimento,
-                # "valor_para_conta_conectada": valor_para_conta_conectada,
-                })
+                # return JsonResponse({
+                # "pedido_id": pedido.id,
+                # "pedido": pedido.payment_intent_id,
+                # "charge_id": charge_id,
+                # "total_split": total_split,
+                # "porcentagem_em_decimal": porcentagem_em_decimal,
+                # "taxa_atendimento": taxa_atendimento,
+                # # "valor_para_conta_conectada": valor_para_conta_conectada,
+                # })
                     
                     # try:
                     #     stripe.Transfer.create(
