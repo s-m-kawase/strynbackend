@@ -7,6 +7,7 @@ from .complemento_serializer import ComplementosSerializer
 class ItensPedidoComplementosSerializer(serializers.ModelSerializer):
     # property
     total = serializers.ReadOnlyField()
+    valor_total_item = serializers.ReadOnlyField()
 
     complemento_read = serializers.SerializerMethodField()
     item_pedido_read = serializers.SerializerMethodField()

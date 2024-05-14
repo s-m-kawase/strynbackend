@@ -37,6 +37,12 @@ class ItensPedidoComplementos(models.Model):
         blank=True, null= True,
     )
 
+    @property
+    def valor_total_item(self):
+        self.valor_unitario = float(self.complemento.preco)
+        result = self.valor_unitario * float(self.quantidade)
+        return result
+
     
     def calcular_valor_total_complemento(self):
         self.valor_unitario = float(self.complemento.preco)
