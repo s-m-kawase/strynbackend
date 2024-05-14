@@ -56,9 +56,9 @@ class PedidosSerializer(serializers.ModelSerializer):
                  "quantidade": complemento.quantidade if complemento.quantidade else None,
                  "total":  (complemento.complemento.preco if complemento.complemento else 0) * (complemento.quantidade if complemento.quantidade else 0)}
 
-                for complemento in item.itenspedidocomplementos_set.all()
+                for complemento in item.itenspedidocomplementos_set.all().order_by('id')
                 ]
-        } for item in obj.itenspedido_set.all()]
+        } for item in obj.itenspedido_set.all().order_by('id')]
 
     def get_pagamentos_read(self, obj):
         from pagamentos.api.serializers.pagamento_serializers import PagamentoSerializer
