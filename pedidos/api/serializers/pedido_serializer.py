@@ -27,6 +27,11 @@ class PedidosSerializer(serializers.ModelSerializer):
         return [AdicionalSerializer(instance=adicionais).data for adicionais in obj.adicionais.all()]
 
     def get_itens_read(self, obj):
+        for item in obj.itenspedido_set.all():
+            for complemento in item.itenspedidocomplementos_set.all():
+                valor_total = (complemento.complemento.preco if complemento.complemento else 0) * (complemento.quantidade if complemento.quantidade else 0)
+                complemento.valor_total = valor_total
+                complemento.save()
         return [{
             "id": item.id if item.item else None,
             "id_item_cardapio": item.item.id if item.item else None,
