@@ -319,7 +319,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             porcentagem = float(pedido.restaurante.pocentagem_para_tranferencia)
             porcentagem = porcentagem / 100
             valor_fixo = valor_total * porcentagem
-            valor_fixo = valor_fixo + float(pedido.taxa_de_atendimento)
+            valor_fixo = valor_fixo + float(pedido.taxa_de_atendimento if pedido.taxa_de_atendimento else 0)
 
             #     # "walletId": "095ca411-db88-491f-9bbd-a997e14a21eb",
             # split_data = [
