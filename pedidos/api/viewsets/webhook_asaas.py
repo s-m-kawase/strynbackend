@@ -137,6 +137,7 @@ class AsaasWebhookViewSet(ViewSet):
             email = pedido.email_cliente
             pedido.pagamento_asaas = payment_data['id']
             pedido.save()
+            return JsonResponse({"ok":'ate aqui apareceu'})
             self.cobranca_criada(pedido, email)
 
         if event_type == 'PAYMENT_RECEIVED':
