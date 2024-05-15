@@ -358,7 +358,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
                 'dueDate': data_vencimento,
                 'value': pedido.total,  
                 'description': f'Cobrança do pedido {pedido.id}, feito pelo {nome}',
-                'externalReference': pedido.id,
+                'externalReference': f"{pedido.id}",
                 'paymentType': 'PIX',
                 'split': split_data,
                 "callback":{
