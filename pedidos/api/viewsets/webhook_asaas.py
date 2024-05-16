@@ -135,6 +135,7 @@ class AsaasWebhookViewSet(ViewSet):
             ped = payment_data['externalReference']
             return JsonResponse({
                 "payment_data":payment_data['externalReference'],
+                "ped":ped,
                 })
             try:
                 pedido = Pedidos.objects.get(id=ped) 
