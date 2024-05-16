@@ -139,7 +139,7 @@ class AsaasWebhookViewSet(ViewSet):
             #     "pedido":pedido_data,
             #                                 })
             
-            email = pedido_data['email_cliente']
+            email = pedido.email_cliente
             pedido.pagamento_asaas = payment_data['id']
             pedido.save()
             # return JsonResponse({"pedido":pedido,"email":email})
