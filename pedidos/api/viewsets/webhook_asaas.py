@@ -12,8 +12,7 @@ from collections import namedtuple
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
-from django.shortcuts import redirect
-
+from django.core import serializers
 asaas_api = config('ASAAS_API_KEY')
 
 class AsaasWebhookViewSet(ViewSet):
@@ -133,10 +132,11 @@ class AsaasWebhookViewSet(ViewSet):
         if event_type == 'PAYMENT_CREATED':
             payment_data = payload['payment']
             ped = payment_data['externalReference']
-            pedido = Pedidos.objects.get(id=ped)    
+            pedido = Pedidos.objects.get(id=ped)  
+            pedido_data = serializers.serialize('json', [pedido])  
             return JsonResponse({
                 "payment_data":payment_data['externalReference'],
-                "pedido":pedido,
+                "pedido":pedido_data,
                                             })
             # pedido = Pedidos.objects.get(id=pedido_id)
             # email = pedido.email_cliente
