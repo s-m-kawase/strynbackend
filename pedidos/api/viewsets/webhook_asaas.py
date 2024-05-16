@@ -134,16 +134,16 @@ class AsaasWebhookViewSet(ViewSet):
             ped = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=ped)  
             pedido_data = serializers.serialize('json', [pedido])  
-            return JsonResponse({
-                "payment_data":payment_data['externalReference'],
-                "pedido":pedido_data,
-                                            })
-            # pedido = Pedidos.objects.get(id=pedido_id)
-            # email = pedido.email_cliente
-            # pedido.pagamento_asaas = payment_data['id']
-            # pedido.save()
-            # # return JsonResponse({"pedido":pedido,"email":email})
-            # self.cobranca_criada(pedido, email)
+            # return JsonResponse({
+            #     "payment_data":payment_data['externalReference'],
+            #     "pedido":pedido_data,
+            #                                 })
+            
+            email = pedido_data['email_cliente']
+            pedido.pagamento_asaas = payment_data['id']
+            pedido.save()
+            # return JsonResponse({"pedido":pedido,"email":email})
+            self.cobranca_criada(pedido, email)
 
         if event_type == 'PAYMENT_RECEIVED':
             payment_data = payload['payment']
