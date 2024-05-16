@@ -143,18 +143,19 @@ class AsaasWebhookViewSet(ViewSet):
 
         if event_type == 'PAYMENT_RECEIVED':
             payment_data = payload['payment']
+            return JsonResponse({"payment_data":payment_data})
             pedido_id = payment_data['externalReference']
             teste = payment_data['id']
             pedido2 = Pedidos.objects.get(pagamento_asaas=teste)
             pedido1 = Pedidos.objects.get(id=pedido_id)
             email1 = pedido1.email_cliente
             email2 = pedido2.email_cliente
-            return JsonResponse({
-                "pedido1":pedido1,
-                "email1":email1,
-                "pedido2":pedido2,
-                "email2":email2
-                                 })
+            # return JsonResponse({
+                # "pedido1":pedido1,
+                # "email1":email1,
+                # "pedido2":pedido2,
+                # "email2":email2
+                #                  })
             # self.update_pedido_status(pedido, email)
             # Pagamento.objects.create(
             # pedido=pedido,
