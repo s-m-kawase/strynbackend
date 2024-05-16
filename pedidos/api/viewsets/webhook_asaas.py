@@ -139,14 +139,14 @@ class AsaasWebhookViewSet(ViewSet):
                 return JsonResponse({"error": "Pedido não encontrado"}, status=404)
             return JsonResponse({
                 "payment_data":payment_data['externalReference'],
-                "pedido":Pedidos.objects.get(id=pedido_id),
+                "pedido":pedido,
                                             })
-            pedido = Pedidos.objects.get(id=pedido_id)
-            email = pedido.email_cliente
-            pedido.pagamento_asaas = payment_data['id']
-            pedido.save()
-            # return JsonResponse({"pedido":pedido,"email":email})
-            self.cobranca_criada(pedido, email)
+            # pedido = Pedidos.objects.get(id=pedido_id)
+            # email = pedido.email_cliente
+            # pedido.pagamento_asaas = payment_data['id']
+            # pedido.save()
+            # # return JsonResponse({"pedido":pedido,"email":email})
+            # self.cobranca_criada(pedido, email)
 
         if event_type == 'PAYMENT_RECEIVED':
             payment_data = payload['payment']
