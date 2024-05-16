@@ -132,9 +132,9 @@ class AsaasWebhookViewSet(ViewSet):
 
         if event_type == 'PAYMENT_CREATED':
             payment_data = payload['payment']
-            pedido_id = payment_data['externalReference']
+            ped = payment_data['externalReference']
             try:
-                pedido = Pedidos.objects.get(id=pedido_id) 
+                pedido = Pedidos.objects.get(id=ped) 
             except Pedidos.DoesNotExist:
                 return JsonResponse({"error": "Pedido não encontrado"}, status=404)
             return JsonResponse({
