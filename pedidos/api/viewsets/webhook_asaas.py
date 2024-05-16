@@ -138,21 +138,30 @@ class AsaasWebhookViewSet(ViewSet):
             email = pedido.email_cliente
             pedido.pagamento_asaas = payment_data['id']
             pedido.save()
-            return JsonResponse({"ok":'ate aqui apareceu'})
+            return JsonResponse({"pedido":pedido,"email":email})
             self.cobranca_criada(pedido, email)
 
         if event_type == 'PAYMENT_RECEIVED':
             payment_data = payload['payment']
             pedido_id = payment_data['externalReference']
-            pedido = Pedidos.objects.get(id=pedido_id)
-            email = pedido.email_cliente
-            self.update_pedido_status(pedido, email)
-            Pagamento.objects.create(
-            pedido=pedido,
-            pagamento="Pagamento pix",
-            valor_pago=pedido.total,
-            codigo_pagamento=f"PIX{pedido}"
-            )
+            teste = payment_data['id']
+            pedido2 = Pedidos.objects.get(pagamento_asaas=teste)
+            pedido1 = Pedidos.objects.get(id=pedido_id)
+            email1 = pedido1.email_cliente
+            email2 = pedido2.email_cliente
+            return JsonResponse({
+                "pedido1":pedido1,
+                "email1":email1,
+                "pedido2":pedido2,
+                "email2":email2
+                                 })
+            # self.update_pedido_status(pedido, email)
+            # Pagamento.objects.create(
+            # pedido=pedido,
+            # pagamento="Pagamento pix",
+            # valor_pago=pedido.total,
+            # codigo_pagamento=f"PIX{pedido}"
+            # )
 
         if event_type == 'PAYMENT_REFUNDED':
             payment_data = payload['payment']
