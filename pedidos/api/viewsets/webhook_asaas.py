@@ -133,13 +133,13 @@ class AsaasWebhookViewSet(ViewSet):
             payment_data = payload['payment']
             ped = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=ped)  
-            pedido_data = serializers.serialize('json', [pedido])  
+            # pedido_data = serializers.serialize('json', [pedido])  
             # return JsonResponse({
             #     "payment_data":payment_data['externalReference'],
             #     "pedido":pedido_data,
             #                                 })
             
-            email = pedido.email_cliente
+            email = pedido.email_cliente if pedido.email_cliente else pedido.cliente.email
             pedido.pagamento_asaas = payment_data['id']
             pedido.save()
             try:
@@ -179,6 +179,7 @@ class AsaasWebhookViewSet(ViewSet):
             pedido = Pedidos.objects.get(id=pedido_id)
             pedido.status_pedido = 'Aguardando Confirmação'
             pedido.hora_status_pago = timezone.now()
+            email = pedido.email_cliente if pedido.email_cliente else pedido.cliente.email
             pedido.save()
             try:
                 template_email = TemplateEmail.objects.filter(
@@ -213,7 +214,7 @@ class AsaasWebhookViewSet(ViewSet):
             payment_data = payload['payment']
             pedido_id = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=pedido_id)
-            email = pedido.email_cliente
+            email = pedido.email_cliente if pedido.email_cliente else pedido.cliente.email
             pedido.status_pedido == 'Cancelado'
             pedido.save()
             try:
