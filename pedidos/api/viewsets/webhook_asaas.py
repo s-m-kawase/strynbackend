@@ -142,38 +142,112 @@ class AsaasWebhookViewSet(ViewSet):
             email = pedido.email_cliente
             pedido.pagamento_asaas = payment_data['id']
             pedido.save()
-            # return JsonResponse({"pedido":pedido,"email":email})
-            self.cobranca_criada(pedido, email)
+            try:
+                template_email = TemplateEmail.objects.filter(
+                    codigo='criar_cobranca'
+                ).first()
+
+                if not template_email:
+                    raise ValueError(
+                        "Serviço indisponível, contate seu administrador!"
+                    )
+                mensagem_email = MensagemEmail.objects.create(
+                    template_email=template_email
+                )
+
+                mensagem_email.enviar(pedido, [email])
+
+
+                return JsonResponse(
+                    {
+                        "status": "200",
+                        "message": "Email enviado com sucesso!",
+                    }
+                )
+            except Exception as error:
+                return JsonResponse(
+                    {
+                        "status": "404",
+                        "message": error.args[0],
+                    }
+                )
+            # self.cobranca_criada(pedido, email)
 
         if event_type == 'PAYMENT_RECEIVED':
             payment_data = payload['payment']
-            return JsonResponse({"oi":'ok'})
-            # pedido_id = payment_data['externalReference']
-            # teste = payment_data['id']
-            # pedido2 = Pedidos.objects.get(pagamento_asaas=teste)
-            # pedido1 = Pedidos.objects.get(id=pedido_id)
-            # email1 = pedido1.email_cliente
-            # email2 = pedido2.email_cliente
-            # return JsonResponse({
-                # "pedido1":pedido1,
-                # "email1":email1,
-                # "pedido2":pedido2,
-                # "email2":email2
-                #                  })
-            # self.update_pedido_status(pedido, email)
-            # Pagamento.objects.create(
-            # pedido=pedido,
-            # pagamento="Pagamento pix",
-            # valor_pago=pedido.total,
-            # codigo_pagamento=f"PIX{pedido}"
-            # )
+            pedido_id = payment_data['externalReference']
+            pedido = Pedidos.objects.get(id=pedido_id)
+            pedido.status_pedido = 'Aguardando Confirmação'
+            pedido.hora_status_pago = timezone.now()
+            pedido.save()
+            try:
+                template_email = TemplateEmail.objects.filter(
+                    codigo='confirma_pagamento'
+                ).first()
+
+                if not template_email:
+                    raise ValueError(
+                        "Serviço indisponível, contate seu administrador!"
+                    )
+                mensagem_email = MensagemEmail.objects.create(
+                    template_email=template_email
+                )
+
+                mensagem_email.enviar(pedido, [email])
+
+            except Exception as error:
+                return JsonResponse(
+                    {
+                        "status": "404",
+                        "message": error.args[0],
+                    }
+                )
+            Pagamento.objects.create(
+            pedido=pedido,
+            pagamento="Pagamento pix",
+            valor_pago=pedido.total,
+            codigo_pagamento=f"PIX{pedido}"
+            )
 
         if event_type == 'PAYMENT_REFUNDED':
             payment_data = payload['payment']
             pedido_id = payment_data['externalReference']
             pedido = Pedidos.objects.get(id=pedido_id)
             email = pedido.email_cliente
-            self.estorno(pedido, email)
+            pedido.status_pedido == 'Cancelado'
+            pedido.save()
+            try:
+                    template_email = TemplateEmail.objects.filter(
+                        codigo='reembolso_pedido'
+                    ).first()
+
+                    if not template_email:
+                        raise ValueError(
+                            "Serviço indisponível, contate seu administrador!"
+                        )
+                    mensagem_email = MensagemEmail.objects.create(
+                        template_email=template_email
+                    )
+                    
+                    mensagem_email.enviar(pedido, [email])
+                    
+
+                    return JsonResponse(
+                        {
+                            "status": "200",
+                            "message": "Email enviado com sucesso!",
+                        }
+                    )
+            except Exception as error:
+                return JsonResponse(
+                    {
+                        "status": "404",
+                        "message": error.args[0],
+                    }
+                )
+        
+
+            # self.estorno(pedido, email)
             
                 
 
