@@ -8,3 +8,9 @@ from django.utils import timezone
 def marcar_expirado_cupom(sender, instance, **kwargs):
     if instance.validado_ate and instance.validado_ate < timezone.now():
         instance.marcar_expirado()
+
+
+@receiver(post_save, sender=Cupom)
+def marcar_valido_cupom(sender, instance, **kwargs):
+    if instance.validado_ate and instance.validado_ate < timezone.now():
+        instance.marcar_expirado()

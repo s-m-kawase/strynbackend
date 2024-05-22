@@ -10,6 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 from pedidos.models import Pedidos
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from dateutil.parser import parse
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -73,7 +74,10 @@ class CupomViewSet(viewsets.ModelViewSet):
             # descricao = request.data.get('descricao', None)
             # porcentagem = request.data.get('porcentagem', None)
             cod_cupom = request.data.get('cod_cupom', None)
-            # validado_ate = request.data.get('validado_ate', None)
+            data_atualizacao = request.data.get('validado_ate', None)
+            data_atualizacao = parse(data_atualizacao)
+            # data_atualizacao = datetime.strptime(data_atualizacao, '%Y-%m-%d %H:%M:%S')
+
             # valor_fixo = request.data.get('valor_fixo', None)
 
             # Validar os dados
@@ -87,18 +91,12 @@ class CupomViewSet(viewsets.ModelViewSet):
                         "erro": erro,
                         "successo": successo
                     })
-            # if validado_ate:
-            #     try:
-            #         validado_ate = datetime.strptime(validado_ate, "%Y-%m-%dT%H:%M")
-            #     except ValueError:
-            #         mensagem = 'Falha ao alterar cupom'
-            #         erro = 'Formato de data inválido. Use o formato: "AAAA-MM-DDTHH:MM"'
-            #         successo = False
-            #         return JsonResponse({
-            #             "mensagem": mensagem,
-            #             "erro": erro,
-            #             "successo": successo
-            #         })
+                
+            if data_atualizacao > cupom.validado_ate:
+                cupom.status_cupom = 'Valido'
+                cupom.save()
+            
+                
 
             response = super().update(request, *args, **kwargs)
 
