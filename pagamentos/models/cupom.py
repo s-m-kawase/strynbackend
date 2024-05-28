@@ -77,6 +77,10 @@ class Cupom(models.Model):
             self.status_cupom = 'Expirado'
             self.save()
 
+    def revalidar(self):
+            self.status_cupom = 'Valido'
+            self.save()
+
 
 
     def valido_para_aplicar(self):

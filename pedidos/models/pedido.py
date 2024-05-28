@@ -5,6 +5,7 @@ from .restaurante import Restaurante
 from pagamentos.models.cupom import Cupom
 from pagamentos.models.adicional import Adicional
 from django.db.models import Sum
+from emails.models import MensagemEmail, TemplateEmail
 
 class Pedidos(models.Model):
 
@@ -260,6 +261,23 @@ class Pedidos(models.Model):
     @property
     def valor_pago(self):
         self.pagamento_set.all().aggregate(valor=Sum('valor_pago'))['valor']
+
+    def email_aguardando_pagamento_mesa(self):
+        #try:
+            
+            template_email = TemplateEmail.objects.filter(codigo='email_aguardando_pagamento_mesa').first()
+
+            """ if not template_email:
+                raise ValueError(
+                    "Serviço indisponível, contate seu administrador!"
+                ) """
+            mensagem_email = MensagemEmail.objects.create(template_email=template_email)
+
+            mensagem_email.enviar(self)
+
+        #except Exception as error:
+        #    print("Error")
+
 
     def efetuar_pedido(self):
         pass
