@@ -263,20 +263,20 @@ class Pedidos(models.Model):
         self.pagamento_set.all().aggregate(valor=Sum('valor_pago'))['valor']
 
     def email_aguardando_pagamento_mesa(self):
-        #try:
+        try:
             
             template_email = TemplateEmail.objects.filter(codigo='email_aguardando_pagamento_mesa').first()
 
-            """ if not template_email:
+            if not template_email:
                 raise ValueError(
                     "Serviço indisponível, contate seu administrador!"
-                ) """
+                )
             mensagem_email = MensagemEmail.objects.create(template_email=template_email)
 
-            mensagem_email.enviar(self)
+            mensagem_email.enviar(self, [self.email_cliente])
 
-        #except Exception as error:
-        #    print("Error")
+        except Exception as error:
+            print("Error")
 
 
     def efetuar_pedido(self):
