@@ -199,7 +199,7 @@ class Pedidos(models.Model):
                 
             total -= round(float(cupom),2)
 
-        total -= 2.09
+        total -= 1.99
             
 
         return round(total, 2)
