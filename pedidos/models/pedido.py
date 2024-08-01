@@ -1,4 +1,3 @@
-from email.policy import default
 from django.db import models
 from pedidos.models.tempo import TempoEstimado
 from .restaurante import Restaurante
@@ -199,6 +198,8 @@ class Pedidos(models.Model):
                 cupom = total * taxa
                 
             total -= round(float(cupom),2)
+
+        total -= 2.09
             
 
         return round(total, 2)
