@@ -201,6 +201,67 @@ class Pedidos(models.Model):
         return round(total, 2)
 
 
+    
+    def taxa_restaurante(self, conta, gorjeta):
+        #(((valor da conta/total)*total)*3.99)+0.39
+
+        total = conta+gorjeta
+
+        taxa = (((conta/total)*total)*0.0399)+0.39
+
+        return float(taxa)
+    
+    
+    def taxa_gorjeta(self, conta, gorjeta):
+        #(((gorjeta/total)*total)*3.99)
+
+        total = conta+gorjeta
+
+        taxa = (((gorjeta/total)*total)*0.0399)
+
+        return float(taxa)
+        
+
+    @property
+    def total_split_stripe2(self):
+        # Essa função refere-se ao valor que será repassado ao restaurante e ao garçom/gorjeta
+        # 90% do valor da conta - tarifas será do restaurante (3.99% + 0,39)
+        # 100% da gorjeta - tarifas será do restaurante (3.99%)
+
+        # Calculo da Conta
+        adicionais = 0
+        for adicional in self.adicionais.all():
+            adicionais += float(adicional.valor)
+
+        cupom = conta = 0
+        conta += float(self.subtotal if self.subtotal else 0)
+        conta -= float(self.desconto if self.desconto else 0)
+        conta += float(adicionais)
+        
+
+        if self.cupom:
+            if self.cupom.valor_fixo == True:
+                conta = float(conta)
+                conta = conta - float(self.cupom.porcentagem)
+
+            else:
+                conta = conta
+                taxa = float(self.cupom.porcentagem / 100 ) if self.cupom else 0 
+                cupom = conta * taxa
+                
+            conta -= round(float(cupom), 2)
+        
+        conta_taxada =  conta - self.taxa_gorjeta(conta, self.taxa_de_atendimento)
+        # Calculo da gorjeta
+        gorjeta = float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
+        
+        gorjeta_taxada =  gorjeta - self.taxa_gorjeta(conta, self.taxa_de_atendimento)
+        
+        #Resultado 
+        total = gorjeta_taxada + conta_taxada
+        
+        return round(total, 2)
+
     @property
     def total_split(self):
 
