@@ -177,7 +177,6 @@ class Pedidos(models.Model):
         total += float(self.subtotal if self.subtotal else 0)
         total -= float(self.desconto if self.desconto else 0)
         total += float(adicionais)
-        total += float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
         
 
         if self.cupom:
@@ -192,8 +191,11 @@ class Pedidos(models.Model):
                 
             total -= round(float(cupom),2)
 
+        #total -= float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
+        
         #3,99% + R$ 0,39
         total -= ((total*0.0399) + 0.39)
+        
             
 
         return round(total, 2)
