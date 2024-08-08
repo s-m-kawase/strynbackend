@@ -249,13 +249,14 @@ class Pedidos(models.Model):
                 taxa = float(self.cupom.porcentagem / 100 ) if self.cupom else 0 
                 cupom = conta * taxa
                 
-            conta -= round(float(cupom), 2)
+            conta -= float(cupom)
         
-        conta_taxada =  conta - self.taxa_gorjeta(conta, self.taxa_de_atendimento)
         # Calculo da gorjeta
         gorjeta = float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
         
-        gorjeta_taxada =  gorjeta - self.taxa_gorjeta(conta, self.taxa_de_atendimento)
+        # Calculo da taxa
+        gorjeta_taxada =  gorjeta - self.taxa_gorjeta(conta, gorjeta)
+        conta_taxada =  (conta - self.taxa_gorjeta(conta, gorjeta)) * 0.9
         
         #Resultado 
         total = gorjeta_taxada + conta_taxada
