@@ -173,8 +173,7 @@ class Pedidos(models.Model):
         for adicional in self.adicionais.all():
             adicionais += float(adicional.valor)
 
-        cupom = 0
-        total = 0
+        cupom = total = 0
         total += float(self.subtotal if self.subtotal else 0)
         total -= float(self.desconto if self.desconto else 0)
         total += float(adicionais)
@@ -184,13 +183,7 @@ class Pedidos(models.Model):
         if self.cupom:
             if self.cupom.valor_fixo == True:
                 total = float(total)
-                print("valor total")
-                print(total)
-                print(self.cupom.porcentagem)
                 total = total - float(self.cupom.porcentagem)
-                print("valor cupom")
-                print(cupom)
-                print(self.cupom.porcentagem)
 
             else:
                 total = total
@@ -222,13 +215,7 @@ class Pedidos(models.Model):
         if self.cupom:
             if self.cupom.valor_fixo == True:
                 total = float(total)
-                print("valor total")
-                print(total)
-                print(self.cupom.porcentagem)
                 total = total - float(self.cupom.porcentagem)
-                print("valor cupom")
-                print(cupom)
-                print(self.cupom.porcentagem)
 
             else:
                 total = total
