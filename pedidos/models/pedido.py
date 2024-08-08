@@ -256,7 +256,7 @@ class Pedidos(models.Model):
         
         # Calculo da taxa
         gorjeta_taxada =  gorjeta - self.taxa_gorjeta(conta, gorjeta)
-        conta_taxada =  (conta - self.taxa_gorjeta(conta, gorjeta)) * 0.9
+        conta_taxada =  (conta - self.taxa_restaurante(conta, gorjeta)) * 0.9
         
         #Resultado 
         total = gorjeta_taxada + conta_taxada
