@@ -256,7 +256,8 @@ class Pedidos(models.Model):
         
         # Calculo da taxa
         gorjeta_taxada =  gorjeta - self.taxa_gorjeta(conta, gorjeta)
-        conta_taxada =  (conta - self.taxa_restaurante(conta, gorjeta))
+        percentual_restaurante = float(self.restaurante.pocentagem_para_tranferencia / 100)
+        conta_taxada =  (conta - self.taxa_restaurante(conta, gorjeta))*percentual_restaurante
         
         #Resultado 
         total = gorjeta_taxada + conta_taxada

@@ -278,10 +278,14 @@ class StripeWebhookViewSet(ViewSet):
             
             if pedido:
                 valor_para_conta_conectada = pedido.total_split_stripe2
+                
+                ### Comentado 
                 #porcentagem_em_decimal = pedido.restaurante.pocentagem_para_tranferencia / 100
                 #taxa_atendimento = pedido.taxa_de_atendimento if pedido.taxa_de_atendimento else 0
                 #valor_para_conta_conectada = float(total_split) * float(porcentagem_em_decimal)
                 #valor_para_conta_conectada += float(taxa_atendimento)
+                ### Fim do comentario
+
                 # valor_para_conta_conectada /= 100  # Convertendo para reais
 
                 # return JsonResponse({
