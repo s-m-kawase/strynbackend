@@ -277,14 +277,19 @@ class StripeWebhookViewSet(ViewSet):
             #                      })
             
             if pedido:
-                total_split = pedido.total_split_stripe
+                ### Tipo Formula 1
+                """ total_split = pedido.total_split_stripe
                 
-                ### Comentado 
                 porcentagem_em_decimal = pedido.restaurante.pocentagem_para_tranferencia / 100
                 taxa_atendimento = pedido.taxa_de_atendimento if pedido.taxa_de_atendimento else 0
                 valor_para_conta_conectada = float(total_split) * float(porcentagem_em_decimal)
-                valor_para_conta_conectada += float(taxa_atendimento)
-                ### Fim do comentario
+                valor_para_conta_conectada += float(taxa_atendimento) """
+                ### Fim da formula tipo 1
+
+                ### Tipo Formula 2
+                valor_para_conta_conectada = pedido.total_split_stripe2
+                ### Fim da formula tipo 2
+
 
                 # valor_para_conta_conectada /= 100  # Convertendo para reais
 
