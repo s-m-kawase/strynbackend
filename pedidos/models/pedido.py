@@ -280,7 +280,7 @@ class Pedidos(models.Model):
         conta_taxada =  (conta*percentual_restaurante) - self.taxa_restaurante(conta, gorjeta, percentual_restaurante, valor_total)
         ### conta_taxada = (100*0.9) - 4.38 = 85.62
         #Resultado 
-        total = gorjeta_taxada + conta_taxada
+        total = float(gorjeta_taxada + conta_taxada)
         ### total = 14.4015 + 85.62 = 100.0215
         return round(total, 2)
 
