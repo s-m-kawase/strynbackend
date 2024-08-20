@@ -16,7 +16,7 @@ class PedidosAdmin(NestedModelAdmin):
 
     filter_horizontal = ["adicionais"]
 
-    readonly_fields = ["data_criacao", "subtotal", "total", "total_split_stripe2"]
+    readonly_fields = ["data_criacao", "subtotal", "total"]
 
     autocomplete_fields = [
         "cliente",
