@@ -202,7 +202,7 @@ class Pedidos(models.Model):
 
 
     
-    def taxa_restaurante(self, conta=100, gorjeta=15):
+    def taxa_restaurante(self, conta, gorjeta):
         #(((valor da conta/total)*total)*3.99)+0.39
 
         """ total = conta+gorjeta
@@ -217,7 +217,7 @@ class Pedidos(models.Model):
         return float(taxa)
     
     
-    def taxa_gorjeta(self, conta=100, gorjeta=15):
+    def taxa_gorjeta(self, conta, gorjeta):
         #(((gorjeta/total)*total)*3.99)
 
         """ total = conta+gorjeta
