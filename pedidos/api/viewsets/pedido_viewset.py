@@ -315,10 +315,20 @@ class PedidosViewSet(viewsets.ModelViewSet):
             data_vencimento = pedido.data_criacao + timedelta(days=1)
             data_vencimento = f"{data_vencimento}"
 
+            ### valor_total é o valor total do pedido fora a taxa de atendimento (gorjeta)
             valor_total = float(pedido.total_split)
+
+            ### porcentagem é o percentual que vai ser passado para o restaurante
             porcentagem = float(pedido.restaurante.pocentagem_para_tranferencia)
             porcentagem = porcentagem / 100
-            valor_fixo = valor_total * porcentagem
+
+            ### valor_fixo é o valor que vai ser transferido para o restaurante
+            valor_fixo = (valor_total * porcentagem)
+            
+            ### valor_fixo é descontado 1.99 dos percentual a ser passado ao restaurante
+            valor_fixo -=1.99
+
+            ### valor_fixo é somado a taxa de atendimento (gorjeta)
             valor_fixo = valor_fixo + float(pedido.taxa_de_atendimento if pedido.taxa_de_atendimento else 0)
 
             #     # "walletId": "095ca411-db88-491f-9bbd-a997e14a21eb",

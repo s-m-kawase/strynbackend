@@ -202,22 +202,30 @@ class Pedidos(models.Model):
 
 
     
-    def taxa_restaurante(self, conta, gorjeta):
+    def taxa_restaurante(self, conta=100, gorjeta=15):
         #(((valor da conta/total)*total)*3.99)+0.39
 
-        total = conta+gorjeta
+        """ total = conta+gorjeta
 
-        taxa = (((conta/total)*total)*0.0399)+0.39
+        taxa = (((conta/total)*total)*0.0399)+0.39 """
+
+        
+        ### valor = 6.3
+        taxa = (conta * 0.0399) + 0.39
+        ### taxa = 4,38
 
         return float(taxa)
     
     
-    def taxa_gorjeta(self, conta, gorjeta):
+    def taxa_gorjeta(self, conta=100, gorjeta=15):
         #(((gorjeta/total)*total)*3.99)
 
-        total = conta+gorjeta
+        """ total = conta+gorjeta
 
-        taxa = (((gorjeta/total)*total)*0.0399)
+        taxa = (((gorjeta/total)*total)*0.0399) """
+
+        taxa = (gorjeta * 0.0399)
+        ### taxa = 15*0.0399 = 0.5985
 
         return float(taxa)
         
@@ -234,11 +242,14 @@ class Pedidos(models.Model):
             adicionais += float(adicional.valor)
 
         cupom = conta = 0
+        ### Adicionando o subtotal (Valores dos produtos)
         conta += float(self.subtotal if self.subtotal else 0)
+        ### Adicionando o desconto
         conta -= float(self.desconto if self.desconto else 0)
+        ### Adicionando os adicionais
         conta += float(adicionais)
         
-
+        ### Descontando o valor do cupom
         if self.cupom:
             if self.cupom.valor_fixo == True:
                 conta = float(conta)
@@ -250,23 +261,32 @@ class Pedidos(models.Model):
                 cupom = conta * taxa
                 
             conta -= float(cupom)
-        
-        # Calculo da gorjeta
-        gorjeta = float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
-        
-        # Calculo da taxa
-        gorjeta_taxada =  gorjeta - self.taxa_gorjeta(conta, gorjeta)
+        ### conta = 100
+        ### 90
         percentual_restaurante = float(self.restaurante.pocentagem_para_tranferencia / 100)
-        conta_taxada =  (conta - self.taxa_restaurante(conta, gorjeta))*percentual_restaurante
-        
+        ### percentual_restaurante =0.9
+
+        # Calculo da gorjeta 
+        gorjeta = float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
+        ### gorjeta = 15
+
+        valor_total = conta + gorjeta
+        ### valor_total = 115
+
+        # Calculo da taxa
+        gorjeta_taxada =  gorjeta - self.taxa_gorjeta(conta, gorjeta, percentual_restaurante, valor_total)
+        ### gorjeta_taxada = 15 - 0.5985 = 14.4015
+
+        conta_taxada =  (conta*percentual_restaurante) - self.taxa_restaurante(conta, gorjeta, percentual_restaurante, valor_total)
+        ### conta_taxada = (100*0.9) - 4.38 = 85.62
         #Resultado 
         total = gorjeta_taxada + conta_taxada
-        
+        ### total = 14.4015 + 85.62 = 100.0215
         return round(total, 2)
 
     @property
     def total_split(self):
-
+        ### Valor do pedido fora a taxa de atendimento (gorjeta)
         adicionais = 0
         for adicional in self.adicionais.all():
             adicionais += float(adicional.valor)
@@ -289,15 +309,15 @@ class Pedidos(models.Model):
                 cupom = total * taxa
                 
             total -= round(float(cupom),2)
-
-        total -= 1.99
+        
+        
             
-
+        ### (100*0.9) - 1.99 + 15 = 88.01 + 15 = 103.01
         return round(total, 2)
 
     @property
     def total(self):
-
+        ### Valor final do pedido + a taxa de atendimento (gorjeta)
         adicionais = 0
         for adicional in self.adicionais.all():
             adicionais += float(adicional.valor)
@@ -322,8 +342,9 @@ class Pedidos(models.Model):
             total -= round(float(cupom),2)
         total += float(self.taxa_de_atendimento if self.taxa_de_atendimento else 0)
             
-
+        ### 100
         return round(total, 2)
+    
     # @property
     # def total_taxa_servico_no_pedido(self):
     #   taxa = float(self.restaurante.taxa_servico ) if self.restaurante else 0
