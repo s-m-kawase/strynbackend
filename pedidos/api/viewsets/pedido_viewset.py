@@ -19,6 +19,8 @@ from django.contrib.auth.models import User
 
 stripe_secret_key = config('STRIPE_SECRET_KEY')
 stripe.api_key = stripe_secret_key
+
+ASAAS_API_KEY= config('ASAAS_API_KEY')
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
@@ -310,7 +312,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
             #     pedido.cpf = None
             
 
-            api_key = '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYxODE6OiRhYWNoX2MyYjBjNzVhLTFmOWQtNDljMS04YTYyLTU5OTY2ZGY3OWVkOQ=='
+            api_key = ASAAS_API_KEY
 
             data_vencimento = pedido.data_criacao + timedelta(days=1)
             data_vencimento = f"{data_vencimento}"
@@ -413,7 +415,7 @@ class PedidosViewSet(viewsets.ModelViewSet):
         url_api_asaas = f"https://sandbox.asaas.com/api/v3/payments/{id_do_pagamento}/refund"
         headers = {
             'Content-Type': 'application/json',
-            'access_token': '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYxODE6OiRhYWNoX2MyYjBjNzVhLTFmOWQtNDljMS04YTYyLTU5OTY2ZGY3OWVkOQ==',
+            'access_token': ASAAS_API_KEY,
         }
 
         dados_reembolso = {
