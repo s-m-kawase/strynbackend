@@ -247,7 +247,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                                 ,TO_CHAR(data_criacao::DATE, 'DD/MM/YYYY') AS data_criacao_f
                                 ,data_criacao
                                 ,cupom_id
-                                ,taxa_de_atendimento
+                                ,COALESCE(taxa_de_atendimento, 0) AS taxa_de_atendimento
                                 ,restaurante_id as restaurante
                             FROM pedidos_pedidos
                         ) "ped"
