@@ -232,31 +232,43 @@ class PagamentoViewSet(viewsets.ModelViewSet):
         usuario = request.user.id
         restaurante_id = Restaurante.objects.get(usuario=usuario)
 
-        sql_query = f"""
-                        SELECT
+        sql_query = f"""SELECT 
                             ped.data_criacao_f AS periodo
                             ,ped.id
                             ,ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.porcentagem, 0)/110)) - ( taxa_de_atendimento::numeric(10, 2) ), 2)::numeric(10, 2) AS valor_dos_itens
                             ,ROUND( ped.taxa_de_atendimento::numeric(10, 2) , 2) AS taxa_de_atendimento
                             ,ROUND( pag.valor_pago * (COALESCE(cup.porcentagem, 0)::numeric(10, 2) / 100::numeric(10, 2)) , 2) AS incentivo
                             ,pag.valor_pago AS total
-                        FROM pagamentos_pagamento pag
-                        LEFT JOIN (
-                            SELECT
-                                id
-                                ,TO_CHAR(data_criacao::DATE, 'DD/MM/YYYY') AS data_criacao_f
-                                ,data_criacao
-                                ,cupom_id
-                                ,COALESCE(taxa_de_atendimento, 0) AS taxa_de_atendimento
-                                ,restaurante_id as restaurante
-                            FROM pedidos_pedidos
-                        ) "ped"
-                        ON pag.pedido_id = ped.id
-                        LEFT JOIN pagamentos_cupom cup
-                        ON ped.cupom_id = cup.id
-                        WHERE TO_CHAR(ped.data_criacao::DATE, 'DD/MM/YYYY') = '{data_selecionada}'
-                        AND ped.restaurante = '{restaurante_id.id}'
-                        ORDER BY ped.data_criacao_f DESC
+                            ,round(case
+                            when pagamento = 'Pagamento online' then 0.0399*pag.valor_pago  + 0.39 
+                            when pagamento = 'Pagamento na mesa' then 0
+                            when pagamento = 'Pagamento pix' then 1.99 end,2) as taxa
+                            ,ROUND(ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.porcentagem, 0)/110)) - ( taxa_de_atendimento::numeric(10, 2) ), 2)::numeric(10, 2)  * (1-(pocentagem_para_tranferencia/100)),2) as repasse_stryn
+                            ,ROUND((pag.valor_pago  - 
+                            round(case
+                            when pagamento = 'Pagamento online' then 0.0399*pag.valor_pago  + 0.39 
+                            when pagamento = 'Pagamento na mesa' then 0
+                            when pagamento = 'Pagamento pix' then 1.99 end,2)
+                            ) * (1-(pocentagem_para_tranferencia/100)) ,2) as repasse_restaurante
+                                FROM pagamentos_pagamento pag
+                                LEFT JOIN (
+                                    SELECT
+                                        id
+                                        ,TO_CHAR(data_criacao::DATE, 'DD/MM/YYYY') AS data_criacao_f
+                                        ,data_criacao
+                                        ,cupom_id
+                                        ,COALESCE(taxa_de_atendimento, 0) AS taxa_de_atendimento
+                                        ,restaurante_id as restaurante
+                                    FROM pedidos_pedidos
+                                ) "ped"
+                                ON pag.pedido_id = ped.id
+                                LEFT JOIN pagamentos_cupom cup
+                                ON ped.cupom_id = cup.id
+                            LEFT JOIN pedidos_restaurante
+                            on ped.restaurante = pedidos_restaurante.id
+                                WHERE TO_CHAR(ped.data_criacao::DATE, 'DD/MM/YYYY') = '{data_selecionada}'
+                                AND ped.restaurante = '{restaurante_id.id}'
+                                ORDER BY ped.data_criacao_f DESC
                         """
 # linha 248 frente da variavel ::DATE  --'2023-06-20'::date  --'{data_selecionada}'
         with connection.cursor() as cursor:
