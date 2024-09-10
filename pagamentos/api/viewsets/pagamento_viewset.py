@@ -244,12 +244,12 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                             when pagamento = 'Pagamento na mesa' then 0
                             when pagamento = 'Pagamento pix' then 1.99 end,2) as taxa
                             ,ROUND(ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.porcentagem, 0)/110)) - ( taxa_de_atendimento::numeric(10, 2) ), 2)::numeric(10, 2)  * (1-(pocentagem_para_tranferencia/100)),2) as repasse_stryn
-                            ,ROUND((pag.valor_pago  - 
+                            ,ROUND((ROUND(pag.valor_pago - ROUND( pag.valor_pago - (pag.valor_pago * (COALESCE(cup.porcentagem, 0)/110)) - ( taxa_de_atendimento::numeric(10, 2) ), 2)::numeric(10, 2)  * (1-(pocentagem_para_tranferencia/100)),2)  - 
                             round(case
                             when pagamento = 'Pagamento online' then 0.0399*pag.valor_pago  + 0.39 
                             when pagamento = 'Pagamento na mesa' then 0
                             when pagamento = 'Pagamento pix' then 1.99 end,2)
-                            ) * (pocentagem_para_tranferencia/100) ,2) as repasse_restaurante
+                            ) ,2) as repasse_restaurante
                                 FROM pagamentos_pagamento pag
                                 LEFT JOIN (
                                     SELECT
@@ -266,9 +266,9 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                                 ON ped.cupom_id = cup.id
                             LEFT JOIN pedidos_restaurante
                             on ped.restaurante = pedidos_restaurante.id
-                                WHERE TO_CHAR(ped.data_criacao::DATE, 'DD/MM/YYYY') = '{data_selecionada}'
-                                AND ped.restaurante = '{restaurante_id.id}'
-                                ORDER BY ped.data_criacao_f DESC
+                        WHERE TO_CHAR(ped.data_criacao::DATE, 'DD/MM/YYYY') = '{data_selecionada}'
+                        AND ped.restaurante = '{restaurante_id.id}'
+                        ORDER BY ped.data_criacao_f DESC
                         """
 # linha 248 frente da variavel ::DATE  --'2023-06-20'::date  --'{data_selecionada}'
         with connection.cursor() as cursor:
