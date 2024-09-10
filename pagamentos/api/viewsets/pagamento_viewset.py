@@ -249,7 +249,7 @@ class PagamentoViewSet(viewsets.ModelViewSet):
                             when pagamento = 'Pagamento online' then 0.0399*pag.valor_pago  + 0.39 
                             when pagamento = 'Pagamento na mesa' then 0
                             when pagamento = 'Pagamento pix' then 1.99 end,2)
-                            ) * (1-(pocentagem_para_tranferencia/100)) ,2) as repasse_restaurante
+                            ) * (pocentagem_para_tranferencia/100) ,2) as repasse_restaurante
                                 FROM pagamentos_pagamento pag
                                 LEFT JOIN (
                                     SELECT
