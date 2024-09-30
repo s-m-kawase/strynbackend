@@ -1,4 +1,5 @@
 {% extends "admin/base_site.html" %}
+{% load templates_tags_admin %}
 {% load static %}
 
 {% block title %}Stryn - {% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} {% endblock %}
@@ -9,4 +10,13 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{% static 'core/favicons/favicon-32x32.png' %}">
 <link rel="icon" type="image/png" sizes="16x16" href="{% static 'core/favicons/favicon-16x16.png' %}">
 <link rel="icon" type="image/ico" href="{% static 'core/favicons/favicon.ico' %}">
+{% endblock %}
+
+{% block branding %}
+{% customizados_logo_admin as customizados_logo_admin %}
+{% if customizados_logo_admin %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}"><img height="45px;" src="{{customizados_logo_admin.logo.url}}"></a></h1>
+{% else %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+{% endif %}
 {% endblock %}
