@@ -1,0 +1,12 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Stryn - {% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} {% endblock %}
+
+{% block extrahead %}
+<link rel="icon" type="image/png" sizes="128x128" href="{% static 'core/favicons/favicon-128x128.png' %}">
+<link rel="icon" type="image/png" sizes="96x96" href="{% static 'core/favicons/favicon-96x96.png' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'core/favicons/favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'core/favicons/favicon-16x16.png' %}">
+<link rel="icon" type="image/ico" href="{% static 'core/favicons/favicon.ico' %}">
+{% endblock %}

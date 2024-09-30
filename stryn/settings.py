@@ -215,3 +215,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = "Hub Nova Data <hub@novadata.com.br>"
+
+
+AUTHENTICATION_BACKENDS = [
+    "global_functions.authentication.LoginUsernameEmail",
+]
