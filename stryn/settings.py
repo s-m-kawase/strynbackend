@@ -15,6 +15,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "stryn.herokuapp.com",
     "stryn.dokku.outboxsistemas.com",
+    "admin.strynmenu.com.br"
 ]
 
 INSTALLED_APPS = [
