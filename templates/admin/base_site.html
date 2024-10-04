@@ -2,6 +2,9 @@
 {% load templates_tags_admin %}
 {% load static %}
 
+{% block title %}Stryn - {{ title }} {% endblock %}
+
+
 {% block branding %}
 {% customizados_logo_admin as customizados_logo_admin %}
 {% if customizados_logo_admin %}
