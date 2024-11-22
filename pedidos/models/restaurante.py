@@ -12,6 +12,12 @@ class Restaurante(models.Model):
         null=True,
     )
 
+    slug = models.SlugField(
+        verbose_name='Slug do Restaurante',
+        null=True,
+        help_text='Slug é um atalho para o nome do restaurante, sem espaços e caracteres especiais.'
+    )
+
     usuario = models.ManyToManyField(
         User,
         verbose_name='Usuários',

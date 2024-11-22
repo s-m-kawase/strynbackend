@@ -22,7 +22,7 @@ class RestauranteViewSet(viewsets.ModelViewSet):
 
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
 
-    filterset_fields = ['horario_abertura','horario_encerramento']
+    filterset_fields = ['horario_abertura','horario_encerramento', 'slug']
 
     search_fields = ['nome']
 

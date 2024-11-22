@@ -33,6 +33,7 @@ class RestauranteAdmin(admin.ModelAdmin):
             {
                 'fields': [
                     'nome',
+                    'slug',
                     'descricao',
                     'razao_social',
                     'inscricao_estadual',
