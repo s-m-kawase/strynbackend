@@ -69,4 +69,21 @@ class ItemCardapioViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         query = super().get_queryset()
         return query
+    
+    @action(methods=['get', 'post'], detail=False)
+    def ordenacao(self, request):
+        
+        item_cardapio = request.data.getlist('itemcardapios', [])
+    
+        for i, item in enumerate(item_cardapio):
+            ItemCardapio.objects.filter(id=item).update(ordem=i)
+            
+
+        context = {
+            "success": True
+        }
+
+        return Response(
+            context
+        )
 

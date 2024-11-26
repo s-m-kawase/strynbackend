@@ -6,8 +6,8 @@ from pedidos.models import CategoriaCardapio
 from ..serializers.categoria_cardapio_serializer import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
-
-
+from rest_framework.decorators import action
+from rest_framework.response import Response
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
@@ -45,3 +45,19 @@ class CategoriaCardapioViewSet(viewsets.ModelViewSet):
             query = query.filter(id__in=ids_categorias)
         
         return query
+    
+    @action(methods=['get', 'post'], detail=False)
+    def ordenacao(self, request):
+        
+        item_cardapio = request.data.getlist('itemcardapios', [])
+    
+        for i, item in enumerate(item_cardapio):
+            
+            item_cardapio[i] = int(item)
+        context = {
+            
+        }
+
+        return Response(
+            context
+        )

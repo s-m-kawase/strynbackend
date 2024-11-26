@@ -65,12 +65,18 @@ class ItemCardapio(models.Model):
         verbose_name='Não, este item não tem complementos',
         default=True,
     )
+    
     preco_promocao = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         verbose_name='Preço da Promoção',
         null=True,
         default=0
+    )
+
+    ordem = models.IntegerField(
+        verbose_name='Ordem',
+        default=0,
     )
 
     @property
