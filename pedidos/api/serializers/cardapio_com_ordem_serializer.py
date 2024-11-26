@@ -8,7 +8,7 @@ from pedidos.models.ordem_categoria_cardapio import OrdemCategoriaCardapio
 class CardapioComOrdemSerializer(serializers.ModelSerializer):
     ordens = serializers.SerializerMethodField()
     restaurante_read = serializers.SerializerMethodField()
-
+    
     def get_restaurante_read(self,obj):
         return RestauranteSerializer(instance=obj.restaurante).data
 
