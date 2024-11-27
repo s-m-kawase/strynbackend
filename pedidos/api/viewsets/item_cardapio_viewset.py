@@ -28,7 +28,7 @@ class ItemCardapioViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
     # permission_classes = (IsAdminOrReadOnly,)
     permission_classes = ()
-    queryset = ItemCardapio.objects.all()
+    queryset = ItemCardapio.objects.all().order_by("ordem", 'id')
     serializer_class = ItemCardapioSerializer
 
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]

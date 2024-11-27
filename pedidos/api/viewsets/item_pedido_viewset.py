@@ -14,7 +14,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 class ItensPedidoViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
     permission_classes = ()
-    queryset = ItensPedido.objects.all().order_by("ordem", 'id')
+    queryset = ItensPedido.objects.all()
     serializer_class = ItensPedidoSerializer
 
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
