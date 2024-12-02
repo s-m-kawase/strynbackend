@@ -27,7 +27,7 @@ class CategoriaCardapioViewSet(viewsets.ModelViewSet):
 
     filter_backends = [filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
 
-    filterset_fields = ['status','restaurante','cardapio', 'restaurante__slug']
+    filterset_fields = ['status']
 
     search_fields = ['nome']
 
@@ -43,7 +43,12 @@ class CategoriaCardapioViewSet(viewsets.ModelViewSet):
             ids_categorias = list(set(ids_categorias))
 
             query = query.filter(id__in=ids_categorias)
-        
+        cardapio = self.request.GET.get("cardapio",None)
+        restaurante__slug = self.request.GET.get("restaurante__slug",None)
+        if cardapio and restaurante__slug:
+            categorias = Cardapio.objects.filter(restaurante__slug=restaurante__slug, id=cardapio).values_list('categorias', flat=True)
+            query = query.filter(id__in=categorias)
+
         return query
     
     @action(methods=['get', 'post'], detail=False)
