@@ -37,7 +37,6 @@ class CardapioViewSet(viewsets.ReadOnlyModelViewSet):
         parametro = self.request.query_params
         cardapio = parametro.get('cardapio',None)
         restaurante = parametro.get('restaurante',None)
-        restaurante__slug = parametro.get('restaurante__slug',None)
 
         # Verifica se o usuário é anônimo
         if self.request.user.is_authenticated:
@@ -55,11 +54,7 @@ class CardapioViewSet(viewsets.ReadOnlyModelViewSet):
                   id=cardapio,
                   restaurante=restaurante
               )
-            elif cardapio and restaurante__slug:
-              query = query.filter(
-                  id=cardapio,
-                  restaurante__slug=restaurante__slug
-              )
+            
 
 
         return query
