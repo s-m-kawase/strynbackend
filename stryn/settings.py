@@ -15,6 +15,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "stryn.herokuapp.com",
     "stryn.dokku.outboxsistemas.com",
+    "stryn-back-teste.dokku-testes.novadata.com.br",
     "admin.strynmenu.com.br"
 ]
 
