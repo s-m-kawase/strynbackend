@@ -33,9 +33,6 @@ class CategoriaCardapio(models.Model):
         default=0,
     )
     
-    
-
-    
     def usuario_logado(self, request):
         return self.request.user
     

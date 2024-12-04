@@ -41,8 +41,9 @@ class CategoriaCardapioViewSet(viewsets.ModelViewSet):
                 for categoria in cardapio.categorias.all():
                     ids_categorias.append(categoria.id)
             ids_categorias = list(set(ids_categorias))
-
             query = query.filter(id__in=ids_categorias)
+            
+
         cardapio = self.request.GET.get("cardapio",None)
         restaurante__slug = self.request.GET.get("restaurante__slug",None)
         if cardapio and restaurante__slug:
