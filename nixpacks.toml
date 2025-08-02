@@ -1,5 +1,10 @@
 [phases.setup]
-nixPkgs = ["python312", "postgresql"]
+nixPkgs = [
+  "python312",   # Python 3.12
+  "postgresql",  # Cliente Postgres
+  "pkg-config",  # Necessário para dependências nativas
+  "libpq"        # Bibliotecas do Postgres
+]
 
 [phases.install]
 cmds = [
@@ -15,4 +20,5 @@ cmds = [
 ]
 
 [start]
-cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT}"
+cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT} --workers=3 --timeout=180 --log-file -"
+
