@@ -1,23 +1,26 @@
 [phases.setup]
+# Instala apenas o essencial para rodar Django com PostgreSQL
 nixPkgs = [
-  "python312" # force rebuild
-  "postgresql",  # Cliente Postgres
-  "pkg-config",  # Necessário para dependências nativas
-  "libpq"        # Bibliotecas do Postgres
+  "python312",    # Python 3.12
+  "postgresql"    # Inclui pg_config para psycopg2-binary
 ]
 
 [phases.install]
+# Cria e ativa o ambiente virtual e instala dependências
 cmds = [
-  "python -m venv /opt/venv",
-  ". /opt/venv/bin/activate",
-  "python -m pip install --upgrade pip",
-  "python -m pip install -r requirements.txt"
+  "python -m venv /opt/venv",                  # Cria virtualenv
+  ". /opt/venv/bin/activate",                  # Ativa virtualenv
+  "python -m pip install --upgrade pip",       # Atualiza pip
+  "python -m pip install -r requirements.txt"  # Instala dependências
 ]
 
 [phases.build]
+# Coleta arquivos estáticos para produção
 cmds = [
   "python manage.py collectstatic --noinput"
 ]
 
 [start]
-cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT} --workers=3 --timeout=180 --log-file -"
+# Comando para iniciar o servidor
+cmd = "gunicorn stryn.wsgi:application --workers=3 --timeout=180 --bind 0.0.0.0:${PORT} --log-file -"
+
