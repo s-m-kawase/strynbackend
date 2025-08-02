@@ -1,8 +1,8 @@
 [phases.setup]
 nixPkgs = [
-  "python312",   # Usa Python 3.12 (compatível com seu projeto)
-  "gcc",         # Compilador necessário para extensões em C
-  "libffi",      # Biblioteca usada pelo pacote cffi
-  "pkg-config"   # Ferramenta para localizar bibliotecas no sistema
+  "python312",       # Usa Python 3.12
+  "gcc",             # Compilador para cffi e psycopg2
+  "libffi",          # Necessário para cffi
+  "pkg-config",      # Auxilia a encontrar libs
+  "postgresql_16"    # Fornece pg_config para psycopg2
 ]
-
