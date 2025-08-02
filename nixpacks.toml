@@ -1,6 +1,6 @@
 [phases.setup]
 nixPkgs = [
-  "python312",   # Python 3.12
+  "python312" # force rebuild
   "postgresql",  # Cliente Postgres
   "pkg-config",  # Necessário para dependências nativas
   "libpq"        # Bibliotecas do Postgres
@@ -21,4 +21,3 @@ cmds = [
 
 [start]
 cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT} --workers=3 --timeout=180 --log-file -"
-
