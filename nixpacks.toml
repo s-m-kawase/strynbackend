@@ -1,17 +1,23 @@
 [phases.setup]
-nixPkgs = ["python312Full", "postgresql", "libffi", "pkg-config", "gcc"]
+nixPkgs = [
+  "python312Full",   # Python 3.12 completo
+  "postgresql",      # Para compilar e acessar Postgres
+  "libffi",          # Necessário para cffi e cryptography
+  "pkg-config",      # Ajuda o pip a encontrar bibliotecas
+  "gcc"              # Compilador para pacotes C
+]
 
 [phases.install]
 cmds = [
-  "python -m venv /opt/venv",
-  ". /opt/venv/bin/activate",
-  "python -m pip install --upgrade pip",
-  "python -m pip install -r requirements.txt"
+  "python -m venv /opt/venv",                    # Cria ambiente virtual
+  ". /opt/venv/bin/activate",                    # Ativa ambiente virtual
+  "python -m pip install --upgrade pip",         # Atualiza pip
+  "python -m pip install -r requirements.txt"    # Instala dependências
 ]
 
 [phases.build]
 cmds = [
-  "python manage.py collectstatic --noinput"
+  "python manage.py collectstatic --noinput"     # Coleta arquivos estáticos
 ]
 
 [start]
