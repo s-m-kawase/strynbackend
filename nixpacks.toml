@@ -1,9 +1,9 @@
 [phases.setup]
 nixPkgs = [
-  "python312Full",   # Python 3.12 completo com pip incluído
-  "postgresql",      # Para pg_config
-  "libffi",          # Para compilar cffi
-  "gcc"              # Compilador C necessário para psycopg2 e cffi
+  "python312Full",   # Python 3.12 completo + pip
+  "postgresql",      # Necessário para psycopg2
+  "libffi",          # Necessário para cffi
+  "gcc"              # Compilador C
 ]
 
 [phases.install]
