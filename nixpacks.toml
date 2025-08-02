@@ -3,7 +3,10 @@ nixPkgs = ["python312Full", "postgresql", "libffi", "gcc"]
 
 [phases.install]
 cmds = [
-  "pip install -r requirements.txt"
+  "python -m venv /opt/venv",
+  ". /opt/venv/bin/activate",
+  "python -m pip install --upgrade pip",
+  "python -m pip install -r requirements.txt"
 ]
 
 [phases.build]
@@ -12,4 +15,4 @@ cmds = [
 ]
 
 [start]
-cmd = "gunicorn stryn.wsgi:application --workers=3 --timeout=180 --bind 0.0.0.0:${PORT} --log-file -"
+cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT} --workers=3 --timeout=180 --log-file -"
