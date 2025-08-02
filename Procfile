@@ -1,1 +1,1 @@
-web: gunicorn stryn.wsgi
+web: gunicorn stryn.wsgi:application --log-file -
