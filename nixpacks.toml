@@ -1,2 +1,8 @@
 [phases.setup]
-nixPkgs = ["python312", "gcc", "libffi", "pkg-config"]
+nixPkgs = [
+  "python312",   # Usa Python 3.12 (compatível com seu projeto)
+  "gcc",         # Compilador necessário para extensões em C
+  "libffi",      # Biblioteca usada pelo pacote cffi
+  "pkg-config"   # Ferramenta para localizar bibliotecas no sistema
+]
+
