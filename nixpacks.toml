@@ -1,10 +1,15 @@
 [phases.setup]
-nixPkgs = ["python312", "postgresql"]
+nixPkgs = [
+  "python312Full",   # Python 3.12 completo com pip incluído
+  "postgresql",      # Para pg_config
+  "libffi",          # Para compilar cffi
+  "gcc"              # Compilador C necessário para psycopg2 e cffi
+]
 
 [phases.install]
 cmds = [
-  "python -m pip install --upgrade pip",
-  "python -m pip install -r requirements.txt"
+  "pip install --upgrade pip",
+  "pip install -r requirements.txt"
 ]
 
 [phases.build]
@@ -13,4 +18,4 @@ cmds = [
 ]
 
 [start]
-cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT} --workers=3 --timeout=180"
+cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT} --workers=3 --timeout=180 --log-file -"
