@@ -3,9 +3,7 @@ nixPkgs = ["python312Full", "postgresql", "libffi", "gcc"]
 
 [phases.install]
 cmds = [
-  "python -m ensurepip --upgrade",
-  "python -m pip install --upgrade pip",
-  "python -m pip install -r requirements.txt"
+  "pip install -r requirements.txt"
 ]
 
 [phases.build]
