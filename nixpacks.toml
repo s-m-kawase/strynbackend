@@ -1,8 +1,17 @@
 [phases.setup]
-nixPkgs = [
-  "python312",       # Usa Python 3.12
-  "gcc",             # Compilador para cffi e psycopg2
-  "libffi",          # Necessário para cffi
-  "pkg-config",      # Auxilia a encontrar libs
-  "postgresql_16"    # Fornece pg_config para psycopg2
+nixPkgs = ["python312", "postgresql"]
+
+[phases.install]
+cmds = [
+  "pip install --upgrade pip",
+  "pip install -r requirements.txt"
 ]
+
+[phases.build]
+cmds = [
+  "python manage.py collectstatic --noinput"
+]
+
+[start]
+cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT}"
+
