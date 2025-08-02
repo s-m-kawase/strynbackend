@@ -3,9 +3,8 @@ nixPkgs = ["python312", "postgresql"]
 
 [phases.install]
 cmds = [
-  "python -m ensurepip --upgrade",          # garante que pip exista
-  "python -m pip install --upgrade pip",    # atualiza pip
-  "python -m pip install -r requirements.txt"  # instala dependências
+  "python -m pip install --upgrade pip",
+  "python -m pip install -r requirements.txt"
 ]
 
 [phases.build]
@@ -14,4 +13,4 @@ cmds = [
 ]
 
 [start]
-cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT}"
+cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT} --workers=3 --timeout=180"
