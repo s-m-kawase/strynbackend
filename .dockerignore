@@ -1,0 +1,14 @@
+# Ignorar env local
+.env
+venv/
+venv-stryn/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+db.sqlite3
+*.log
+media/
+staticfiles/
+
