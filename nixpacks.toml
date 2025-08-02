@@ -3,11 +3,7 @@ nixPkgs = ["python312", "postgresql"]
 
 [phases.install]
 cmds = [
-  "python -m ensurepip --upgrade",           # garante que o pip existe
-  "python -m venv /opt/venv",                # cria ambiente virtual
-  ". /opt/venv/bin/activate",                # ativa venv
-  "python -m pip install --upgrade pip",     # atualiza pip
-  "python -m pip install -r requirements.txt" # instala dependências
+  "pip install -r requirements.txt"
 ]
 
 [phases.build]
@@ -17,4 +13,3 @@ cmds = [
 
 [start]
 cmd = "gunicorn stryn.wsgi:application --bind 0.0.0.0:${PORT}"
-
