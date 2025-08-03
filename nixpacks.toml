@@ -3,7 +3,7 @@ nixPkgs = ["python312Full", "postgresql", "libffi", "libffi.dev", "pkg-config", 
 
 [phases.install]
 cmds = [
-  "export PKG_CONFIG_PATH=/nix/store/0qiyy7llb8ldillvlvjz1pyawhs5cvpk-libffi-3.4.6/lib/pkgconfig:$PKG_CONFIG_PATH",
+  "export PKG_CONFIG_PATH=/nix/store/rhl22j48423aazmhjkwndpr1syzq5l46-libffi-3.4.6-dev/lib/pkgconfig:$PKG_CONFIG_PATH",
   "python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt"
 ]
 
