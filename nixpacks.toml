@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["python312Full", "postgresql", "libffi", "pkg-config", "gcc"]
+nixPkgs = ["python312Full", "postgresql", "libffi", "libffi-dev", "pkg-config", "gcc"]
 
 [phases.install]
 cmds = [
