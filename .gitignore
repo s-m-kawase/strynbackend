@@ -1,15 +1,11 @@
-# Não manda os bancos
 *.sqlite3
-
-# Não manda os arquivos cache do Python
-*pyc
-
+*.pyc
 .env
 .venv
 venv/
 env/
 package.json
 .DS_Store
-
 /media
-stryn/settings.py
+/static
+__pycache__/
