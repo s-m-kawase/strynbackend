@@ -9,6 +9,7 @@
 venv/
 env/
 package.json
+.DS_Store
 
 /media
 stryn/settings.py
